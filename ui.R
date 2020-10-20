@@ -1,6 +1,7 @@
 library(shiny)
 library(ggplot2)
 library(plotly)
+library(shinyBS)
 
 ui <- fluidPage(
     theme = "ui.css",
@@ -19,31 +20,36 @@ ui <- fluidPage(
                     HTML('<div class="param-label">S<sub>m</sub></div>'),
                     tags$div(
                         class = "param-wrapper",
-                        sliderInput("sm", label = "", min = 0, max = 100, value = 20, ticks = FALSE)
+                        sliderInput("sm", label = "", min = 0, max = 100, value = 20, ticks = FALSE),
+                        bsTooltip("sm", "The Sm variable", placement = "bottom", trigger = "hover")
                     ),
 
                     HTML('<div class="param-label">J<sub>m</sub></div>'),
                     tags$div(
                         class = "param-wrapper",
-                        sliderInput("jm", label = "", min = 0, max = 100, value = 30, ticks = FALSE)
+                        sliderInput("jm", label = "", min = 0, max = 100, value = 30, ticks = FALSE),
+                        bsTooltip("jm", "The Jm variable", placement = "bottom", trigger = "hover")
                     ),
 
                     tags$div(class = "param-label", "J"),
                     tags$div(
                         class = "param-wrapper",
-                        sliderInput("j", label = "", min = 0, max = 100, value = 50, ticks = FALSE)
+                        sliderInput("j", label = "", min = 0, max = 100, value = 50, ticks = FALSE),
+                        bsTooltip("j", "The J variable", placement = "bottom", trigger = "hover")
                     ),
 
                     tags$div(class = "param-label", "m"),
                     tags$div(
                         class = "param-wrapper",
-                        sliderInput("m", label = "", min = 0, max = 100, value = 10, ticks = FALSE)
+                        sliderInput("m", label = "", min = 0, max = 100, value = 10, ticks = FALSE),
+                        bsTooltip("m", "The m variable", placement = "bottom", trigger = "hover")
                     ),
 
                     HTML('<div class="param-label greek">&#957;</div>'),
                     tags$div(
                         class = "param-wrapper",
-                        sliderInput("nu", label = "", min = 0, max = 100, value = 80, ticks = FALSE)
+                        sliderInput("nu", label = "", min = 0, max = 100, value = 80, ticks = FALSE),
+                        bsTooltip("nu", "The v (nu) variable", placement = "bottom", trigger = "hover")
                     )
                 )
             ),
@@ -52,7 +58,10 @@ ui <- fluidPage(
                 class = "control-set but-group",
                 actionButton("play", label = "\u23F5"),
                 actionButton("pause", label = "\u23F8"),
-                actionButton("rewind", label = "\u27f2")
+                actionButton("rewind", label = "\u27f2"),
+                bsTooltip("play", "Play the simulation", placement = "bottom", trigger = "hover"),
+                bsTooltip("pause", "Pause the simulation", placement = "bottom", trigger = "hover"),
+                bsTooltip("rewind", "Rewind the simulation", placement = "bottom", trigger = "hover")
             ),
 
             tags$div(
@@ -74,7 +83,14 @@ ui <- fluidPage(
 
                     tags$div(class = "plot-row-4 plot-col-1", "genetic div"),
                     tags$div(class = "plot-row-4 plot-col-2", checkboxInput("geneDistCheck", label = "")),
-                    tags$div(class = "plot-row-4 plot-col-3", checkboxInput("geneTimeCheck", label = ""))
+                    tags$div(class = "plot-row-4 plot-col-3", checkboxInput("geneTimeCheck", label = "")),
+
+                    bsTooltip("abundDistCheck", "Display the abundance distribution plot", placement = "bottom", trigger = "hover"),
+                    bsTooltip("abundTimeCheck", "Display the abundance time plot", placement = "bottom", trigger = "hover"),
+                    bsTooltip("abundDistCheck", "Display the trait distribution plot", placement = "bottom", trigger = "hover"),
+                    bsTooltip("traitTimeCheck", "Display the trait time plot", placement = "bottom", trigger = "hover"),
+                    bsTooltip("geneDistCheck", "Display the genetic diversity distribution plot", placement = "bottom", trigger = "hover"),
+                    bsTooltip("geneTimeCheck", "Display the genetic diversity time plot", placement = "bottom", trigger = "hover"),
                 )
             ),
 
