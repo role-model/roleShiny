@@ -14,44 +14,77 @@ ui <- fluidPage(
                 class = "control-set",
                 h3("Parameters"),
 
-                tags$div(
-                    class = "param-group",
+                tags$div(class = "show-hide", bsButton("commonParams", label = "Common Parameters", type = "toggle", value = TRUE)),
+                bsTooltip("commonParams", "Show/hide common parameters", placement = "bottom", trigger = "hover"),
 
-                    HTML('<div class="param-label">S<sub>m</sub></div>'),
+                conditionalPanel(
+                    "input.commonParams",
+
                     tags$div(
-                        class = "param-wrapper",
-                        sliderInput("sm", label = "", min = 0, max = 100, value = 20, ticks = FALSE),
-                        bsTooltip("sm", "The Sm variable", placement = "bottom", trigger = "hover")
+                        class = "param-group param-1",
+
+                        HTML('<div class="param-label">S<sub>m</sub></div>'),
+                        tags$div(
+                            class = "param-wrapper",
+                            sliderInput("sm", label = "", min = 0, max = 100, value = 20, ticks = FALSE),
+                            bsTooltip("sm", "The Sm variable", placement = "bottom", trigger = "hover")
+                        ),
+
+                        HTML('<div class="param-label">J<sub>m</sub></div>'),
+                        tags$div(
+                            class = "param-wrapper",
+                            sliderInput("jm", label = "", min = 0, max = 100, value = 30, ticks = FALSE),
+                            bsTooltip("jm", "The Jm variable", placement = "bottom", trigger = "hover")
+                        ),
+
+                        tags$div(class = "param-label", "J"),
+                        tags$div(
+                            class = "param-wrapper",
+                            sliderInput("j", label = "", min = 0, max = 100, value = 50, ticks = FALSE),
+                            bsTooltip("j", "The J variable", placement = "bottom", trigger = "hover")
+                        ),
+
+                        tags$div(class = "param-label", "m"),
+                        tags$div(
+                            class = "param-wrapper",
+                            sliderInput("m", label = "", min = 0, max = 100, value = 10, ticks = FALSE),
+                            bsTooltip("m", "The m variable", placement = "bottom", trigger = "hover")
+                        ),
+
+                        HTML('<div class="param-label greek">&#957;</div>'),
+                        tags$div(
+                            class = "param-wrapper",
+                            sliderInput("nu", label = "", min = 0, max = 100, value = 80, ticks = FALSE),
+                            bsTooltip("nu", "The &#957; (nu) variable", placement = "bottom", trigger = "hover")
+                        ),
+
                     ),
+                ),
 
-                    HTML('<div class="param-label">J<sub>m</sub></div>'),
+                tags$div(class = "show-hide", bsButton("extraParams", label = "Extra Parameters", type = "toggle")),
+                bsTooltip("extraParams", "Show/hide extra parameters", placement = "bottom", trigger = "hover"),
+
+                conditionalPanel(
+                    "input.extraParams",
+
                     tags$div(
-                        class = "param-wrapper",
-                        sliderInput("jm", label = "", min = 0, max = 100, value = 30, ticks = FALSE),
-                        bsTooltip("jm", "The Jm variable", placement = "bottom", trigger = "hover")
+                        class = "param-group param-2",
+
+                        HTML('<div class="param-label">A<sub>m</sub></div>'),
+                        tags$div(
+                            class = "param-wrapper",
+                            sliderInput("am", label = "", min = 0, max = 100, value = 20, ticks = FALSE),
+                            bsTooltip("am", "The Am variable", placement = "bottom", trigger = "hover")
+                        ),
+
+                        HTML('<div class="param-label">B<sub>m</sub></div>'),
+                        tags$div(
+                            class = "param-wrapper",
+                            sliderInput("bm", label = "", min = 0, max = 100, value = 30, ticks = FALSE),
+                            bsTooltip("bm", "The Bm variable", placement = "bottom", trigger = "hover")
+                        ),
                     ),
-
-                    tags$div(class = "param-label", "J"),
-                    tags$div(
-                        class = "param-wrapper",
-                        sliderInput("j", label = "", min = 0, max = 100, value = 50, ticks = FALSE),
-                        bsTooltip("j", "The J variable", placement = "bottom", trigger = "hover")
-                    ),
-
-                    tags$div(class = "param-label", "m"),
-                    tags$div(
-                        class = "param-wrapper",
-                        sliderInput("m", label = "", min = 0, max = 100, value = 10, ticks = FALSE),
-                        bsTooltip("m", "The m variable", placement = "bottom", trigger = "hover")
-                    ),
-
-                    HTML('<div class="param-label greek">&#957;</div>'),
-                    tags$div(
-                        class = "param-wrapper",
-                        sliderInput("nu", label = "", min = 0, max = 100, value = 80, ticks = FALSE),
-                        bsTooltip("nu", "The v (nu) variable", placement = "bottom", trigger = "hover")
-                    )
-                )
+                ),
             ),
 
             tags$div(
@@ -118,33 +151,33 @@ ui <- fluidPage(
 
             fluidRow(
                 conditionalPanel(
-                    "input.abundDistCheck == true",
+                    "input.abundDistCheck",
                     column(5, plotlyOutput("abundDist"))
                 ),
                 conditionalPanel(
-                    "input.abundTimeCheck == true",
+                    "input.abundTimeCheck",
                     column(7, plotlyOutput("abundTime"))
                 )
             ),
 
             fluidRow(
                 conditionalPanel(
-                    "input.traitDistCheck == true",
+                    "input.traitDistCheck",
                     column(5, plotlyOutput("traitDist"))
                 ),
                 conditionalPanel(
-                    "input.traitTimeCheck == true",
+                    "input.traitTimeCheck",
                     column(7, plotlyOutput("traitTime"))
                 )
             ),
 
             fluidRow(
                 conditionalPanel(
-                    "input.geneDistCheck == true",
+                    "input.geneDistCheck",
                     column(5, plotlyOutput("geneDist")),
                 ),
                 conditionalPanel(
-                    "input.geneTimeCheck == true",
+                    "input.geneTimeCheck",
                     column(7, plotlyOutput("geneTime")),
                 )
             )

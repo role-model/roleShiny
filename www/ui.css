@@ -5,10 +5,24 @@ h3 { margin-bottom: 16px; }
 .well { padding: 0; background: white; border: none; }
 .control-set { border-radius: 16px; margin: 8px; padding: 8px 16px; background-color: rgb(245, 245, 245); }
 
-.param-group { display: grid; grid-template-columns: 4rem 1fr; align-items: center; }
+.param-group { display: grid; grid-template-columns: 4rem 1fr; align-items: center; transition: ease 0.75s; }
 .param-label { grid-column: 1; font-style: italic; font-size: large; text-align: center; }
 .param-wrapper { grid-column: 2; }
 .param-wrapper label { display: none; }
+
+.show-hide { margin-bottom: 12px; }
+.show-hide button {
+    border: none;
+    background-color: rgb(245, 245, 245);
+    color: #23527c;
+    font-size: larger;
+}
+.show-hide .active {
+    border: none;
+    background-color: rgb(245, 245, 245);
+    box-shadow: none;
+    color: #23527c;
+}
 
 .plot-group {
   display: grid; grid-template-columns: 3fr; align-items: center; gap: 1rem; max-width: 320px;

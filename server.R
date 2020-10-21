@@ -11,24 +11,24 @@ server <- function(input, output) {
     # nu <- reactive({rnorm(input$nu)})
 
     output$abundDist <- renderPlotly({
-        plot_ly(iris, x = ~Petal.Length, y = ~Sepal.Length, type = "scatter")
+        plot_ly(iris, x = ~Petal.Length, y = ~Sepal.Length, type = "scatter", mode = "markers")
     })
     output$abundTime <- renderPlotly({
-        plot_ly(iris, x = ~Petal.Length, y = ~Sepal.Length, type = "scatter", color = ~Species)
+        plot_ly(iris, x = ~Petal.Length, y = ~Sepal.Length, type = "scatter", mode = "markers", color = ~Species)
     })
 
     output$traitDist <- renderPlotly({
-        plot_ly(iris, x = ~Petal.Length, y = ~Sepal.Length, type = "scatter")
+        plot_ly(iris, x = ~Petal.Length, y = ~Sepal.Length, type = "scatter", mode = "markers")
     })
     output$traitTime <- renderPlotly({
-        plot_ly(iris, x = ~Petal.Length, y = ~Sepal.Length, type = "scatter", color = ~Species)
+        plot_ly(iris, x = ~Petal.Length, y = ~Sepal.Length, type = "scatter", mode = "markers", color = ~Species)
     })
 
     output$geneDist <- renderPlotly({
-        plot_ly(iris, x = ~Petal.Length, y = ~Sepal.Length, type = "scatter")
+        plot_ly(iris, x = ~Petal.Length, y = ~Sepal.Length, type = "scatter", mode = "markers")
     })
     output$geneTime <- renderPlotly({
-        plot_ly(iris, x = ~Petal.Length, y = ~Sepal.Length, type = "scatter", color = ~Species)
+        plot_ly(iris, x = ~Petal.Length, y = ~Sepal.Length, type = "scatter", mode = "markers", color = ~Species)
     })
 
 }
