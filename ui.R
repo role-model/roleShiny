@@ -6,6 +6,8 @@ library(shinyBS)
 ui <- fluidPage(
     theme = "ui.css",
 
+    tags$script(src = "ui.js"),
+
     sidebarLayout(
 
         sidebarPanel(
@@ -19,6 +21,7 @@ ui <- fluidPage(
 
                 conditionalPanel(
                     "input.commonParams",
+                    class = "cond-panel",
 
                     tags$div(
                         class = "param-group param-1",
@@ -55,7 +58,7 @@ ui <- fluidPage(
                         tags$div(
                             class = "param-wrapper",
                             sliderInput("nu", label = "", min = 0, max = 100, value = 80, ticks = FALSE),
-                            bsTooltip("nu", "The &#957; (nu) variable", placement = "bottom", trigger = "hover")
+                            bsTooltip("nu", "The &#957; variable", placement = "bottom", trigger = "hover")
                         ),
 
                     ),
@@ -66,6 +69,7 @@ ui <- fluidPage(
 
                 conditionalPanel(
                     "input.extraParams",
+                    class = "cond-panel",
 
                     tags$div(
                         class = "param-group param-2",
@@ -152,10 +156,12 @@ ui <- fluidPage(
             fluidRow(
                 conditionalPanel(
                     "input.abundDistCheck",
+                    class = "cond-panel",
                     column(5, plotlyOutput("abundDist"))
                 ),
                 conditionalPanel(
                     "input.abundTimeCheck",
+                    class = "cond-panel",
                     column(7, plotlyOutput("abundTime"))
                 )
             ),
@@ -163,10 +169,12 @@ ui <- fluidPage(
             fluidRow(
                 conditionalPanel(
                     "input.traitDistCheck",
+                    class = "cond-panel",
                     column(5, plotlyOutput("traitDist"))
                 ),
                 conditionalPanel(
                     "input.traitTimeCheck",
+                    class = "cond-panel",
                     column(7, plotlyOutput("traitTime"))
                 )
             ),
@@ -174,10 +182,12 @@ ui <- fluidPage(
             fluidRow(
                 conditionalPanel(
                     "input.geneDistCheck",
+                    class = "cond-panel",
                     column(5, plotlyOutput("geneDist")),
                 ),
                 conditionalPanel(
                     "input.geneTimeCheck",
+                    class = "cond-panel",
                     column(7, plotlyOutput("geneTime")),
                 )
             )
