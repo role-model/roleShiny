@@ -1,7 +1,8 @@
-library(shiny)
 library(ggplot2)
 library(plotly)
+library(shiny)
 library(shinyBS)
+
 
 ui <- fluidPage(
     theme = "ui.css",
@@ -95,10 +96,10 @@ ui <- fluidPage(
                 class = "control-set but-group",
                 actionButton("play", label = "\u23F5"),
                 actionButton("pause", label = "\u23F8"),
-                actionButton("rewind", label = "\u27f2"),
+                actionButton("next", label = "\u23ed"),
                 bsTooltip("play", "Play the simulation", placement = "bottom", trigger = "hover"),
                 bsTooltip("pause", "Pause the simulation", placement = "bottom", trigger = "hover"),
-                bsTooltip("rewind", "Rewind the simulation", placement = "bottom", trigger = "hover")
+                bsTooltip("next", "Step simulation forward", placement = "bottom", trigger = "hover")
             ),
 
             tags$div(
