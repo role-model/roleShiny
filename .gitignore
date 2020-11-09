@@ -3,6 +3,7 @@
 .RData
 .Ruserdata
 .DS_Store
+.idea/
 
 # R Environment Variables
 .Renviron
@@ -20,4 +21,3 @@ docs/
 junk*
 old/
 roleR/
-

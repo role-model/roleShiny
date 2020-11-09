@@ -24,5 +24,4 @@ roleDownloadsUI <- function(id) {
                 actionLink("downPlots", "click to download plots"))
         )
     )
-
 }
