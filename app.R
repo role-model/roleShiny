@@ -17,7 +17,7 @@ ui <- fluidPage(
 
     sidebarLayout(
         sidebarPanel(
-            roleParamsUI("roleParams"),
+            roleParamsUI("roleControls"),
             roleControlButtonsUI("roleControls"),
             rolePlotSelectsUI("roleControls"),
             roleDownloadsUI("roleControls"),

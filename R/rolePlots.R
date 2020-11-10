@@ -1,6 +1,7 @@
 library(shiny)
 library(shinyBS)
 library(plotly)
+library(roleR)
 
 
 source("R/util.R")
@@ -27,9 +28,8 @@ rolePlotsUI <- function(id, prefix) {
 }
 
 
-rolePlotsServer <- function(id, name, paramsNS = "roleParams") {
+rolePlotsServer <- function(id, name) {
     moduleServer(id, function(input, output, session) {
-        paramNs <- NS(paramsNS)
         output[[name]] <- renderPlotly({
             params <- list(
                 species_meta = input$sm,
@@ -37,8 +37,10 @@ rolePlotsServer <- function(id, name, paramsNS = "roleParams") {
                 individuals_local = input$j,
                 dispersal_prob = input$m,
                 speciation_local = input$nu)
-            # accum <- roleSim(params, nstep = input$nstep, nsim = input$nsim)
-            plot_ly(iris, x = ~Petal.Length, y = ~Sepal.Length, type = "scatter", mode = "markers", color = ~Species)
+            roleComm <- roleSim(params, nstep = input$nstep, nsim = input$nsim)
+            lists <- list(meta_comm = roleComm$meta_comm, local_comm = roleComm$local_comm)
+            df <- as.data.frame(lists)
+            plot_ly(df, x = ~local_comm, y = ~meta_comm, type = "scatter", mode = "markers")
         })
     })
 }

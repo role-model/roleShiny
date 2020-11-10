@@ -24,6 +24,7 @@ roleParamsUI <- function(id) {
                 class = "param-group",
 
                 roleParamUI(
+                    id,
                     "sm",
                     label = "S<sub>m",
                     min = 0,
@@ -31,6 +32,7 @@ roleParamsUI <- function(id) {
                     value = 100,
                     tip = "The species metaparameter"),
                 roleParamUI(
+                    id,
                     "jm",
                     label = "J<sub>m",
                     min =  0,
@@ -38,6 +40,7 @@ roleParamsUI <- function(id) {
                     value = 10000,
                     tip = "The individuals metaparameter"),
                 roleParamUI(
+                    id,
                     "j",
                     label = "J",
                     min = 0,
@@ -45,6 +48,7 @@ roleParamsUI <- function(id) {
                     value = 100,
                     tip = "The individuals local parameter"),
                 roleParamUI(
+                    id,
                     "m",
                     label = "m",
                     min = 0,
@@ -52,13 +56,14 @@ roleParamsUI <- function(id) {
                     value = 0.1,
                     tip = "The dispersal probability"),
                 roleParamUI(
+                    id,
                     "nu",
                     label = "&#957;",
                     min = 0,
                     max = 1.0,
                     value = 0.01,
                     tip = "The speciation local parameter",
-                    isGreek = TRUE),
+                    isGreek = TRUE)
             ),
         ),
 
@@ -73,6 +78,7 @@ roleParamsUI <- function(id) {
                 class = "param-group param-2",
 
                 roleParamUI(
+                    id,
                     "nstep",
                     label = "n<sub>step</sub>",
                     min = 1,
@@ -80,6 +86,7 @@ roleParamsUI <- function(id) {
                     value = 10,
                     tip = "The number of steps"),
                 roleParamUI(
+                    id,
                     "nsim",
                     label = "n<sub>sim</sub>",
                     min = 1,
