@@ -24,18 +24,21 @@ ui <- fluidPage(
         ),
         mainPanel(
             h1("Rules of Life Engine model"),
-            rolePlotsUI("roleControls", "abund"),
-            rolePlotsUI("roleControls", "trait"),
-            rolePlotsUI("roleControls", "gene"),
+            rolePlotsUI("roleControls", prefix = "abund"),
+            rolePlotsUI("roleControls", prefix = "trait"),
+            rolePlotsUI("roleControls", prefix = "gene"),
         )
     )
 )
 
 
 server <- function(input, output, session) {
-    rolePlotsServer("roleControls", "abund")
-    rolePlotsServer("roleControls", "trait")
-    rolePlotsServer("roleControls", "gene")
+    rolePlotsServer("roleControls", name = "abundDist")
+    rolePlotsServer("roleControls", name = "abundTime")
+    rolePlotsServer("roleControls", name = "traitDist")
+    rolePlotsServer("roleControls", name = "traitTime")
+    rolePlotsServer("roleControls", name = "geneDist")
+    rolePlotsServer("roleControls", name = "geneTime")
 }
 
 

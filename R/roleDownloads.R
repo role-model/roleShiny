@@ -25,3 +25,9 @@ roleDownloadsUI <- function(id) {
         )
     )
 }
+
+
+roleDownloadsServer <- function(id) {
+    moduleServer(id, function(input, output, session) {
+    })
+}

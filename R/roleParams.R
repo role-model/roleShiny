@@ -23,11 +23,42 @@ roleParamsUI <- function(id) {
             tags$div(
                 class = "param-group",
 
-                roleParamUI("sm", label = "S<sub>m", max = 10000, tip = "The species metaparameter"),
-                roleParamUI("jm", label = "J<sub>m", max = 100000, value = 10000, tip = "The individuals metaparameter"),
-                roleParamUI("j", label = "J",  tip = "The individuals local parameter"),
-                roleParamUI("m", label = "m", max = 1.0, value = 0.1, tip = "The dispersal probability"),
-                roleParamUI("nu", label = "&#957;", max = 1.0, value = 0.01, tip = "The speciation local parameter", isGreek = TRUE),
+                roleParamUI(
+                    "sm",
+                    label = "S<sub>m",
+                    min = 0,
+                    max = 10000,
+                    value = 100,
+                    tip = "The species metaparameter"),
+                roleParamUI(
+                    "jm",
+                    label = "J<sub>m",
+                    min =  0,
+                    max = 100000,
+                    value = 10000,
+                    tip = "The individuals metaparameter"),
+                roleParamUI(
+                    "j",
+                    label = "J",
+                    min = 0,
+                    max = 100000,
+                    value = 100,
+                    tip = "The individuals local parameter"),
+                roleParamUI(
+                    "m",
+                    label = "m",
+                    min = 0,
+                    max = 1.0,
+                    value = 0.1,
+                    tip = "The dispersal probability"),
+                roleParamUI(
+                    "nu",
+                    label = "&#957;",
+                    min = 0,
+                    max = 1.0,
+                    value = 0.01,
+                    tip = "The speciation local parameter",
+                    isGreek = TRUE),
             ),
         ),
 
@@ -41,9 +72,27 @@ roleParamsUI <- function(id) {
             tags$div(
                 class = "param-group param-2",
 
-                roleParamUI("nstep", label = "n<sub>step</sub>", min = 1, max = 100, value = 10, tip = "The number of steps"),
-                roleParamUI("nsim", label = "n<sub>sim</sub>", min = 1, max = 20, value = 1, tip = "The number of simulations to run"),
+                roleParamUI(
+                    "nstep",
+                    label = "n<sub>step</sub>",
+                    min = 1,
+                    max = 100,
+                    value = 10,
+                    tip = "The number of steps"),
+                roleParamUI(
+                    "nsim",
+                    label = "n<sub>sim</sub>",
+                    min = 1,
+                    max = 20,
+                    value = 1,
+                    tip = "The number of simulations to run"),
             ),
         ),
     )
+}
+
+
+roleParamsServer <- function(id) {
+    moduleServer(id, function(input, output, session) {
+    })
 }
