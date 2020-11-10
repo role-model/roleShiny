@@ -25,7 +25,7 @@ roleParamsUI <- function(id) {
 
                 roleParamUI(
                     id,
-                    "sm",
+                    name = "sm",
                     label = "S<sub>m",
                     min = 0,
                     max = 10000,
@@ -33,7 +33,7 @@ roleParamsUI <- function(id) {
                     tip = "The species metaparameter"),
                 roleParamUI(
                     id,
-                    "jm",
+                    name = "jm",
                     label = "J<sub>m",
                     min =  0,
                     max = 100000,
@@ -41,7 +41,7 @@ roleParamsUI <- function(id) {
                     tip = "The individuals metaparameter"),
                 roleParamUI(
                     id,
-                    "j",
+                    name = "j",
                     label = "J",
                     min = 0,
                     max = 100000,
@@ -49,7 +49,7 @@ roleParamsUI <- function(id) {
                     tip = "The individuals local parameter"),
                 roleParamUI(
                     id,
-                    "m",
+                    name = "m",
                     label = "m",
                     min = 0,
                     max = 1.0,
@@ -57,7 +57,7 @@ roleParamsUI <- function(id) {
                     tip = "The dispersal probability"),
                 roleParamUI(
                     id,
-                    "nu",
+                    name = "nu",
                     label = "&#957;",
                     min = 0,
                     max = 1.0,
@@ -79,7 +79,7 @@ roleParamsUI <- function(id) {
 
                 roleParamUI(
                     id,
-                    "nstep",
+                    name = "nstep",
                     label = "n<sub>step</sub>",
                     min = 1,
                     max = 100,
@@ -87,7 +87,7 @@ roleParamsUI <- function(id) {
                     tip = "The number of steps"),
                 roleParamUI(
                     id,
-                    "nsim",
+                    name = "nsim",
                     label = "n<sub>sim</sub>",
                     min = 1,
                     max = 20,

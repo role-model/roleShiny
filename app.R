@@ -1,6 +1,5 @@
 library(shiny)
 library(shinyBS)
-library(ggplot2)
 library(plotly)
 
 
@@ -33,12 +32,12 @@ ui <- fluidPage(
 
 
 server <- function(input, output, session) {
-    rolePlotsServer("roleControls", name = "abundDist")
-    rolePlotsServer("roleControls", name = "abundTime")
-    rolePlotsServer("roleControls", name = "traitDist")
-    rolePlotsServer("roleControls", name = "traitTime")
-    rolePlotsServer("roleControls", name = "geneDist")
-    rolePlotsServer("roleControls", name = "geneTime")
+    rolePlotsServer("roleControls", name = "abundDist", func = roleSim)
+    rolePlotsServer("roleControls", name = "abundTime", func = roleSim)
+    rolePlotsServer("roleControls", name = "traitDist", func = roleSim)
+    rolePlotsServer("roleControls", name = "traitTime", func = roleSim)
+    rolePlotsServer("roleControls", name = "geneDist", func = roleSim)
+    rolePlotsServer("roleControls", name = "geneTime", func = roleSim)
 }
 
 
