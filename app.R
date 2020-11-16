@@ -10,34 +10,57 @@ source("R/roleDownloads.R")
 source("R/rolePlots.R")
 
 
+id <- "roleControls"
+
+
 ui <- fluidPage(
     theme = "ui.css",
     tags$script(src = "ui.js"),
 
     sidebarLayout(
         sidebarPanel(
-            roleParamsUI("roleControls"),
-            roleControlButtonsUI("roleControls"),
-            rolePlotSelectsUI("roleControls"),
-            roleDownloadsUI("roleControls"),
+            roleParamsUI(id),
+            roleControlButtonsUI(id),
+            rolePlotSelectsUI(id),
+            roleDownloadsUI(id),
         ),
         mainPanel(
             h1("Rules of Life Engine model"),
-            rolePlotsUI("roleControls", prefix = "abund"),
-            rolePlotsUI("roleControls", prefix = "trait"),
-            rolePlotsUI("roleControls", prefix = "gene"),
+            rolePlotsUI(
+                id,
+                name1 = "abundDist",
+                name2 = "abundTime",
+                check1 = "input.abundDistChk",
+                check2 = "input.abundTimeChk"),
+            rolePlotsUI(
+                id,
+                name1 = "traitDist",
+                name2 = "traitTime",
+                check1 = "input.traitDistChk",
+                check2 = "input.traitTimeChk"),
+            rolePlotsUI(
+                id,
+                name1 = "geneDist",
+                name2 = "geneTime",
+                check1 = "input.geneDistChk",
+                check2 = "input.geneTimeChk"),
         )
     )
 )
 
 
 server <- function(input, output, session) {
-    rolePlotsServer("roleControls", name = "abundDist", func = roleSim)
-    rolePlotsServer("roleControls", name = "abundTime", func = roleSim)
-    rolePlotsServer("roleControls", name = "traitDist", func = roleSim)
-    rolePlotsServer("roleControls", name = "traitTime", func = roleSim)
-    rolePlotsServer("roleControls", name = "geneDist", func = roleSim)
-    rolePlotsServer("roleControls", name = "geneTime", func = roleSim)
+    roleParamsServer(id)
+    roleControlButtonsServer(id)
+    rolePlotSelectsServer(id)
+    roleDownloadsServer(id)
+
+    rolePlotsServer(id, name = "abundDist", func = roleSim)
+    rolePlotsServer(id, name = "abundTime", func = roleSim)
+    rolePlotsServer(id, name = "traitDist", func = roleSim)
+    rolePlotsServer(id, name = "traitTime", func = roleSim)
+    rolePlotsServer(id, name = "geneDist", func = roleSim)
+    rolePlotsServer(id, name = "geneTime", func = roleSim)
 }
 
 

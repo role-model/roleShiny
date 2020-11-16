@@ -5,23 +5,22 @@ source("R/util.R")
 
 
 roleDownloadsUI <- function(id) {
-    ns <- NS(id)
-
     tags$div(
         class = "control-set",
 
         h3("Downloads"),
+
         tags$div(
             class = "down-group",
             tags$div(
                 class = "down-link",
-                actionLink("downSim", "click to download simulation")),
+                actionLink("downSimLink", "click to download simulation")),
             tags$div(
                 class = "down-link",
-                actionLink("downScript", "click to download script")),
+                actionLink("downScriptLink", "click to download script")),
             tags$div(
                 class = "down-link",
-                actionLink("downPlots", "click to download plots"))
+                actionLink("downPlotsLink", "click to download plots"))
         )
     )
 }
@@ -29,5 +28,14 @@ roleDownloadsUI <- function(id) {
 
 roleDownloadsServer <- function(id) {
     moduleServer(id, function(input, output, session) {
+        downSim <- observeEvent(input$downSimLink, {
+            print(input$downSimLink)
+        })
+        downScript <- observeEvent(input$downScriptLink, {
+            print(input$downScriptLink)
+        })
+        downPlots <- observeEvent(input$downPlotsLink, {
+            print(input$downPlotsLink)
+        })
     })
 }
