@@ -1,5 +1,6 @@
 library(shiny)
 library(shinyBS)
+library(shinyjs)
 library(plotly)
 
 
@@ -16,6 +17,7 @@ id <- "roleControls"
 ui <- fluidPage(
     theme = "ui.css",
     tags$script(src = "ui.js"),
+    useShinyjs(),
 
     sidebarLayout(
         sidebarPanel(
@@ -51,8 +53,8 @@ ui <- fluidPage(
 
 server <- function(input, output, session) {
     roleParamsServer(id)
-    roleControlButtonsServer(id)
-    rolePlotSelectsServer(id)
+    selectCount <- rolePlotSelectsServer(id)
+    roleControlButtonsServer(id, selectCount)
     roleDownloadsServer(id)
 
     rolePlotsServer(id, name = "abundDist", func = roleSim)

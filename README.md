@@ -6,6 +6,7 @@ shiny app for the RoLE model
 - cran libraries
   - shiny
   - shinyBS
+  - shinyjs
   - plotly
 
 - GitHub libraries
