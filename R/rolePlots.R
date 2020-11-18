@@ -11,17 +11,13 @@ rolePlotsUI <- function(id, name1, name2, check1, check2) {
     ns <- NS(id)
 
     fluidRow(
-        conditionalPanel(
-            check1,
-            class = "cond-panel",
-            ns = ns,
-            column(5, plotlyOutput(ns(name1)))
+
+        conditionalPanel(check1, class = "cond-panel", ns = ns,
+                         column(5, plotlyOutput(ns(name1)))
         ),
-        conditionalPanel(
-            check2,
-            class = "cond-panel",
-            ns = ns,
-            column(7, plotlyOutput(ns(name2)))
+
+        conditionalPanel(check2, class = "cond-panel", ns = ns,
+                         column(7, plotlyOutput(ns(name2)))
         )
     )
 }

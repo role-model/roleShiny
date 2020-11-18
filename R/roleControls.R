@@ -3,6 +3,7 @@ library(shinyBS)
 library(shinyjs)
 
 source("R/util.R")
+source("R/roleControlActions.R")
 
 
 roleControlButtonsUI <- function(id) {
@@ -23,7 +24,9 @@ roleControlButtonsServer <- function(id, selectCount) {
     moduleServer(id, function(input, output, session) {
         canPlay <- reactiveVal(TRUE)
         canPause <- reactiveVal(FALSE)
-        canNext <- reactiveVal(FALSE)
+        canNext <- reactiveVal(TRUE)
+
+        buttonStates <- list("canPlay" = canPlay, "canPause" = canPause, "canNext" = canNext)
 
         observe({
             shinyjs::toggleState("playBtn", canPlay() && selectCount() > 0)
@@ -32,21 +35,17 @@ roleControlButtonsServer <- function(id, selectCount) {
         })
 
         observeEvent(input$playBtn, {
-            canPlay(FALSE)
-            canPause(TRUE)
-            canNext(FALSE)
-        })
+            play(buttonStates)
+        }, ignoreInit = TRUE)
 
         observeEvent(input$pauseBtn, {
-            canPlay(TRUE)
-            canPause(FALSE)
-            canNext(TRUE)
-        })
+            pause(buttonStates)
+        }, ignoreInit = TRUE)
 
         observeEvent(input$nextBtn, {
-            canPlay(TRUE)
-            canPause(FALSE)
-            canNext(TRUE)
-        })
+            next_(buttonStates)
+        }, ignoreInit = TRUE)
+
+        buttonStates
     })
 }

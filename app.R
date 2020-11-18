@@ -5,7 +5,7 @@ library(plotly)
 
 
 source("R/roleParams.R")
-source("R/roleControlButtons.R")
+source("R/roleControls.R")
 source("R/rolePlotSelects.R")
 source("R/roleDownloads.R")
 source("R/rolePlots.R")
@@ -52,9 +52,9 @@ ui <- fluidPage(
 
 
 server <- function(input, output, session) {
-    roleParamsServer(id)
     selectCount <- rolePlotSelectsServer(id)
-    roleControlButtonsServer(id, selectCount)
+    buttonStates <- roleControlButtonsServer(id, selectCount)
+    roleParamsServer(id, buttonStates)
     roleDownloadsServer(id)
 
     rolePlotsServer(id, name = "abundDist", func = roleSim)

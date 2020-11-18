@@ -41,8 +41,7 @@ rolePlotSelectsUI <- function(id) {
 
 setSelectCount <- function(selectCount, checkBox) {
     bump <- if (checkBox) 1 else -1
-    count = max(0, selectCount() + bump)
-    selectCount(count)
+    selectCount(selectCount() + bump)
 }
 
 
@@ -52,27 +51,27 @@ rolePlotSelectsServer <- function(id) {
 
         observeEvent(input$abundDistChk, {
             setSelectCount(selectCount, input$abundDistChk)
-        })
+        }, ignoreInit = TRUE)
 
         observeEvent(input$abundTimeChk, {
             setSelectCount(selectCount, input$abundDistChk)
-        })
+        }, ignoreInit = TRUE)
 
         observeEvent(input$traitDistChk, {
             setSelectCount(selectCount, input$traitDistChk)
-        })
+        }, ignoreInit = TRUE)
 
         observeEvent(input$traitTimeChk, {
             setSelectCount(selectCount, input$traitTimeChk)
-        })
+        }, ignoreInit = TRUE)
 
         observeEvent(input$geneDistChk, {
             setSelectCount(selectCount, input$geneDistChk)
-        })
+        }, ignoreInit = TRUE)
 
         observeEvent(input$geneTimeChk, {
             setSelectCount(selectCount, input$geneTimeChk)
-        })
+        }, ignoreInit = TRUE)
 
         selectCount
     })
