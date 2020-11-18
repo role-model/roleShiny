@@ -2,7 +2,7 @@ library(shiny)
 library(shinyBS)
 
 source("R/util.R")
-source("R/roleControlActions.R")
+source("R/roleAppState.R")
 
 
 roleParam <- function(id, name, label = "", min = 0, max = 100000, value = 100, tip = "", isGreek = FALSE) {
@@ -79,14 +79,14 @@ roleParamsUI <- function(id, button) {
 }
 
 
-roleParamsServer <- function(id, buttonStates) {
+roleParamsServer <- function(id, appState) {
     moduleServer(id, function(input, output, session) {
-        observeEvent(input$sm, {pause(buttonStates)}, ignoreInit = TRUE)
-        observeEvent(input$jm, {pause(buttonStates)}, ignoreInit = TRUE)
-        observeEvent(input$j, {pause(buttonStates)}, ignoreInit = TRUE)
-        observeEvent(input$m, {pause(buttonStates)}, ignoreInit = TRUE)
-        observeEvent(input$nu, {pause(buttonStates)}, ignoreInit = TRUE)
-        observeEvent(input$nstep, {pause(buttonStates)}, ignoreInit = TRUE)
-        observeEvent(input$nsim, {pause(buttonStates)}, ignoreInit = TRUE)
+        observeEvent(input$sm, {pause(appState)}, ignoreInit = TRUE)
+        observeEvent(input$jm, {pause(appState)}, ignoreInit = TRUE)
+        observeEvent(input$j, {pause(appState)}, ignoreInit = TRUE)
+        observeEvent(input$m, {pause(appState)}, ignoreInit = TRUE)
+        observeEvent(input$nu, {pause(appState)}, ignoreInit = TRUE)
+        observeEvent(input$nstep, {pause(appState)}, ignoreInit = TRUE)
+        observeEvent(input$nsim, {pause(appState)}, ignoreInit = TRUE)
     })
 }

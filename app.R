@@ -3,12 +3,12 @@ library(shinyBS)
 library(shinyjs)
 library(plotly)
 
-
 source("R/roleParams.R")
 source("R/roleControls.R")
 source("R/rolePlotSelects.R")
 source("R/roleDownloads.R")
 source("R/rolePlots.R")
+source("R/roleAppState.R")
 
 
 id <- "roleControls"
@@ -28,33 +28,33 @@ ui <- fluidPage(
         ),
         mainPanel(
             h1("Rules of Life Engine model"),
-            rolePlotsUI(
-                id,
-                name1 = "abundDist",
-                name2 = "abundTime",
-                check1 = "input.abundDistChk",
-                check2 = "input.abundTimeChk"),
-            rolePlotsUI(
-                id,
-                name1 = "traitDist",
-                name2 = "traitTime",
-                check1 = "input.traitDistChk",
-                check2 = "input.traitTimeChk"),
-            rolePlotsUI(
-                id,
-                name1 = "geneDist",
-                name2 = "geneTime",
-                check1 = "input.geneDistChk",
-                check2 = "input.geneTimeChk"),
+
+            rolePlotsUI( id,  name1 = "abundDist", name2 = "abundTime",
+                         check1 = "input.abundDistChk", check2 = "input.abundTimeChk"),
+
+            rolePlotsUI(id, name1 = "traitDist", name2 = "traitTime",
+                        check1 = "input.traitDistChk", check2 = "input.traitTimeChk"),
+
+            rolePlotsUI(id, name1 = "geneDist", name2 = "geneTime",
+                        check1 = "input.geneDistChk", check2 = "input.geneTimeChk"),
         )
     )
 )
 
 
 server <- function(input, output, session) {
-    selectCount <- rolePlotSelectsServer(id)
-    buttonStates <- roleControlButtonsServer(id, selectCount)
-    roleParamsServer(id, buttonStates)
+    canPlay <- reactiveVal(TRUE)
+    canPause <- reactiveVal(FALSE)
+    canNext <- reactiveVal(TRUE)
+
+    appState <- list(
+        "canPlay" = canPlay,
+        "canPause" = canPause,
+        "canNext" = canNext)
+
+    selectCount <- rolePlotSelectsServer(id, appState)
+    roleControlButtonsServer(id, appState, selectCount)
+    roleParamsServer(id, appState)
     roleDownloadsServer(id)
 
     rolePlotsServer(id, name = "abundDist", func = roleSim)
