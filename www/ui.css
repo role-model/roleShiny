@@ -44,3 +44,9 @@ h3 { margin-bottom: 16px; }
 
 .but-group { display: grid; grid-template-columns: 1fr 1fr 1fr; column-gap: 2rem; }
 .but-group .btn { font-size: x-large; }
+
+.disabled + .tooltip,
+.disabled + .tooltip > .tooltip-arrow,
+.disabled + .tooltip > .tooltip-inner {
+    display: none;
+}

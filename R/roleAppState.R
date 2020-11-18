@@ -1,26 +1,28 @@
+State <- list("init" = 0, "playing" = 1, "paused" = 2, "next_" = 3)
 
-play <- function(appState) {
-    appState$canPlay(FALSE)
-    appState$canPause(TRUE)
-    appState$canNext(FALSE)
+appState <- reactiveVal(State$init)
+
+play <- function() {appState(State$playing)}
+pause <- function() {appState(State$paused)}
+next_ <- function() {appState(State$next_)}
+reset <- function() {appState(State$init)}
+
+canPlay <- function(selectCount) {
+    (appState() %in% c(State$init, State$paused, State$next_)
+     && selectCount() > 0)
 }
 
-
-pause <- function(appState) {
-    appState$canPlay(TRUE)
-    appState$canPause(FALSE)
-    appState$canNext(TRUE)
+canPause <- function(selectCount) {
+    (appState() %in% c(State$playing)
+     && selectCount() > 0)
 }
 
-next_ <- function(appState) {
-    appState$canPlay(TRUE)
-    appState$canPause(FALSE)
-    appState$canNext(TRUE)
+canNext <- function(selectCount) {
+    (appState() %in% c(State$init, State$paused, State$next_)
+     && selectCount() > 0)
 }
 
-
-reset <- function(appState) {
-    appState$canPlay(TRUE)
-    appState$canPause(FALSE)
-    appState$canNext(TRUE)
-}
+canPlot <- reactive({
+    print(appState())
+    appState() %in% c(State$playing, State$next_)
+})

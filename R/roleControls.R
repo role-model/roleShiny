@@ -20,19 +20,19 @@ roleControlButtonsUI <- function(id) {
 }
 
 
-roleControlButtonsServer <- function(id, appState, selectCount) {
+roleControlButtonsServer <- function(id, selectCount) {
     moduleServer(id, function(input, output, session) {
 
         observe({
-            shinyjs::toggleState("playBtn", appState$canPlay() && selectCount() > 0)
-            shinyjs::toggleState("pauseBtn", appState$canPause() && selectCount() > 0)
-            shinyjs::toggleState("nextBtn", appState$canNext() && selectCount() > 0)
+            shinyjs::toggleState("playBtn", canPlay(selectCount))
+            shinyjs::toggleState("pauseBtn", canPause(selectCount))
+            shinyjs::toggleState("nextBtn", canNext(selectCount))
         })
 
-        observeEvent(input$playBtn, {play(appState)}, ignoreInit = TRUE)
+        observeEvent(input$playBtn, {play()}, ignoreInit = TRUE)
 
-        observeEvent(input$pauseBtn, {pause(appState)}, ignoreInit = TRUE)
+        observeEvent(input$pauseBtn, {pause()}, ignoreInit = TRUE)
 
-        observeEvent(input$nextBtn, {next_(appState)}, ignoreInit = TRUE)
+        observeEvent(input$nextBtn, {next_()}, ignoreInit = TRUE)
     })
 }

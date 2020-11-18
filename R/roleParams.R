@@ -79,14 +79,14 @@ roleParamsUI <- function(id, button) {
 }
 
 
-roleParamsServer <- function(id, appState) {
+roleParamsServer <- function(id) {
     moduleServer(id, function(input, output, session) {
-        observeEvent(input$sm, {pause(appState)}, ignoreInit = TRUE)
-        observeEvent(input$jm, {pause(appState)}, ignoreInit = TRUE)
-        observeEvent(input$j, {pause(appState)}, ignoreInit = TRUE)
-        observeEvent(input$m, {pause(appState)}, ignoreInit = TRUE)
-        observeEvent(input$nu, {pause(appState)}, ignoreInit = TRUE)
-        observeEvent(input$nstep, {pause(appState)}, ignoreInit = TRUE)
-        observeEvent(input$nsim, {pause(appState)}, ignoreInit = TRUE)
+        observeEvent(input$sm, {pause()}, ignoreInit = TRUE)
+        observeEvent(input$jm, {pause()}, ignoreInit = TRUE)
+        observeEvent(input$j, {pause()}, ignoreInit = TRUE)
+        observeEvent(input$m, {pause()}, ignoreInit = TRUE)
+        observeEvent(input$nu, {pause()}, ignoreInit = TRUE)
+        observeEvent(input$nstep, {pause()}, ignoreInit = TRUE)
+        observeEvent(input$nsim, {pause()}, ignoreInit = TRUE)
     })
 }

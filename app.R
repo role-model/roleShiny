@@ -43,18 +43,9 @@ ui <- fluidPage(
 
 
 server <- function(input, output, session) {
-    canPlay <- reactiveVal(TRUE)
-    canPause <- reactiveVal(FALSE)
-    canNext <- reactiveVal(TRUE)
-
-    appState <- list(
-        "canPlay" = canPlay,
-        "canPause" = canPause,
-        "canNext" = canNext)
-
-    selectCount <- rolePlotSelectsServer(id, appState)
-    roleControlButtonsServer(id, appState, selectCount)
-    roleParamsServer(id, appState)
+    selectCount <- rolePlotSelectsServer(id)
+    roleControlButtonsServer(id, selectCount)
+    roleParamsServer(id)
     roleDownloadsServer(id)
 
     rolePlotsServer(id, name = "abundDist", func = roleSim)

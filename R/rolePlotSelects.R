@@ -45,38 +45,38 @@ setSelectCount <- function(selectCount, checkBox) {
 }
 
 
-rolePlotSelectsServer <- function(id, appState) {
+rolePlotSelectsServer <- function(id) {
     moduleServer(id, function(input, output, session) {
         selectCount <- reactiveVal(0)
 
         observeEvent(input$abundDistChk, {
             setSelectCount(selectCount, input$abundDistChk)
-            pause(appState)
+            pause()
         }, ignoreInit = TRUE)
 
         observeEvent(input$abundTimeChk, {
-            setSelectCount(selectCount, input$abundDistChk)
-            pause(appState)
+            setSelectCount(selectCount, input$abundTimeChk)
+            pause()
         }, ignoreInit = TRUE)
 
         observeEvent(input$traitDistChk, {
             setSelectCount(selectCount, input$traitDistChk)
-            pause(appState)
+            pause()
         }, ignoreInit = TRUE)
 
         observeEvent(input$traitTimeChk, {
             setSelectCount(selectCount, input$traitTimeChk)
-            pause(appState)
+            pause()
         }, ignoreInit = TRUE)
 
         observeEvent(input$geneDistChk, {
             setSelectCount(selectCount, input$geneDistChk)
-            pause(appState)
+            pause()
         }, ignoreInit = TRUE)
 
         observeEvent(input$geneTimeChk, {
             setSelectCount(selectCount, input$geneTimeChk)
-            pause(appState)
+            pause()
         }, ignoreInit = TRUE)
 
         selectCount
