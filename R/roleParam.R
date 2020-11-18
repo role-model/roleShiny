@@ -17,7 +17,7 @@ roleParamUI <- function(id, name, label = "", min = 0, max = 100000, value = 100
         tags$div(
             class = "param-wrapper",
             sliderInput(ns(name), label = "", min = min, max = max, value = value, ticks = FALSE),
-            bsTooltip(ns(name), tip, placement = "bottom", trigger = "hover")
+            bsTooltip(ns(name), tip)
         )
     )
 }

@@ -28,12 +28,12 @@ rolePlotSelectsUI <- function(id) {
             tags$div(class = "plot-row-4 plot-col-2", checkboxInput(ns("geneDistChk"), label = "")),
             tags$div(class = "plot-row-4 plot-col-3", checkboxInput(ns("geneTimeChk"), label = "")),
 
-            bsTooltip(ns("abundDistChk"), "Display the abundance distribution plot", placement = "bottom", trigger = "hover"),
-            bsTooltip(ns("abundTimeChk"), "Display the abundance time plot", placement = "bottom", trigger = "hover"),
-            bsTooltip(ns("traitDistChk"), "Display the trait distribution plot", placement = "bottom", trigger = "hover"),
-            bsTooltip(ns("traitTimeChk"), "Display the trait time plot", placement = "bottom", trigger = "hover"),
-            bsTooltip(ns("geneDistChk"), "Display the genetic diversity distribution plot", placement = "bottom", trigger = "hover"),
-            bsTooltip(ns("geneTimeChk"), "Display the genetic diversity time plot", placement = "bottom", trigger = "hover"),
+            bsTooltip(ns("abundDistChk"), "Display the abundance distribution plot"),
+            bsTooltip(ns("abundTimeChk"), "Display the abundance time plot"),
+            bsTooltip(ns("traitDistChk"), "Display the trait distribution plot"),
+            bsTooltip(ns("traitTimeChk"), "Display the trait time plot"),
+            bsTooltip(ns("geneDistChk"), "Display the genetic diversity distribution plot"),
+            bsTooltip(ns("geneTimeChk"), "Display the genetic diversity time plot"),
         )
     )
 }
