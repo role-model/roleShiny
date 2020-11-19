@@ -2,7 +2,7 @@ library(shiny)
 library(shinyBS)
 
 source("R/util.R")
-
+source("R/roleAppState.R")
 
 rolePlotSelectsUI <- function(id) {
     ns <- NS(id)
@@ -39,47 +39,38 @@ rolePlotSelectsUI <- function(id) {
 }
 
 
-setSelectCount <- function(selectCount, checkBox) {
-    bump <- if (checkBox) 1 else -1
-    selectCount(selectCount() + bump)
-}
-
-
 rolePlotSelectsServer <- function(id) {
     moduleServer(id, function(input, output, session) {
-        selectCount <- reactiveVal(0)
 
         observeEvent(input$abundDistChk, {
-            setSelectCount(selectCount, input$abundDistChk)
+            setSelectCount(input$abundDistChk)
             pause()
         }, ignoreInit = TRUE)
 
         observeEvent(input$abundTimeChk, {
-            setSelectCount(selectCount, input$abundTimeChk)
+            setSelectCount(input$abundTimeChk)
             pause()
         }, ignoreInit = TRUE)
 
         observeEvent(input$traitDistChk, {
-            setSelectCount(selectCount, input$traitDistChk)
+            setSelectCount(input$traitDistChk)
             pause()
         }, ignoreInit = TRUE)
 
         observeEvent(input$traitTimeChk, {
-            setSelectCount(selectCount, input$traitTimeChk)
+            setSelectCount(input$traitTimeChk)
             pause()
         }, ignoreInit = TRUE)
 
         observeEvent(input$geneDistChk, {
-            setSelectCount(selectCount, input$geneDistChk)
+            setSelectCount(input$geneDistChk)
             pause()
         }, ignoreInit = TRUE)
 
         observeEvent(input$geneTimeChk, {
-            setSelectCount(selectCount, input$geneTimeChk)
+            setSelectCount(input$geneTimeChk)
             pause()
         }, ignoreInit = TRUE)
 
-        selectCount
     })
 }
-

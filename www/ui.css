@@ -10,8 +10,9 @@ h3 { margin-bottom: 16px; }
 .param-wrapper { grid-column: 2; }
 .param-wrapper label { display: none; }
 
-.show-hide { margin-bottom: 12px; }
 .show-hide {
+    display: block;
+    margin-bottom: 12px;
     border: none;
     background-color: rgb(245, 245, 245);
     color: #23527c;

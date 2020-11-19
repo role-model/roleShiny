@@ -45,17 +45,17 @@ ui <- fluidPage(
 
 
 server <- function(input, output, session) {
-    selectCount <- rolePlotSelectsServer(id)
-    roleControlButtonsServer(id, selectCount)
     roleParamsServer(id)
+    roleControlButtonsServer(id)
+    rolePlotSelectsServer(id)
     roleDownloadsServer(id)
 
-    rolePlotsServer(id, name = "abundDist", func = roleSim)
-    rolePlotsServer(id, name = "abundTime", func = roleSim)
-    rolePlotsServer(id, name = "traitDist", func = roleSim)
-    rolePlotsServer(id, name = "traitTime", func = roleSim)
-    rolePlotsServer(id, name = "geneDist", func = roleSim)
-    rolePlotsServer(id, name = "geneTime", func = roleSim)
+    rolePlotsServer(id, name = "abundDist", func = roleSim, checkBox = "abundDistChk")
+    rolePlotsServer(id, name = "abundTime", func = roleSim, checkBox = "abundTimeChk")
+    rolePlotsServer(id, name = "traitDist", func = roleSim, checkBox = "traitDistChk")
+    rolePlotsServer(id, name = "traitTime", func = roleSim, checkBox = "traitTimeChk")
+    rolePlotsServer(id, name = "geneDist", func = roleSim, checkBox = "geneDistChk")
+    rolePlotsServer(id, name = "geneTime", func = roleSim, checkBox = "geneTimeChk")
 }
 
 
