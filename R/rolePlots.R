@@ -5,8 +5,6 @@ library(roleR)
 
 source("R/util.R")
 
-# Note: We draw the controls 2 at a time but serve them one at a time
-
 rolePlotsUI <- function(id, name1, name2, check1, check2) {
     ns <- NS(id)
 

@@ -26,7 +26,7 @@ roleParamsUI <- function(id, button) {
         class = "control-set",
         h3("Parameters"),
 
-        tags$div(class = "show-hide", bsButton("commonParams", label = "Common Parameters", type = "toggle", value = TRUE)),
+        bsButton("commonParams", label = "Common Parameters", type = "toggle", value = TRUE, class = "show-hide"),
         bsTooltip("commonParams", "Show/hide common parameters", placement = "bottom", trigger = "hover"),
 
         conditionalPanel("input.commonParams", class = "cond-panel",
@@ -57,7 +57,7 @@ roleParamsUI <- function(id, button) {
             ),
         ),
 
-        tags$div(class = "show-hide", bsButton("extraParams", label = "Extra Parameters", type = "toggle")),
+        bsButton("extraParams", label = "Extra Parameters", type = "toggle", class = "show-hide"),
         bsTooltip("extraParams", "Show/hide extra parameters", placement = "bottom", trigger = "hover"),
 
         conditionalPanel("input.extraParams", class = "cond-panel",
