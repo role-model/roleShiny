@@ -40,13 +40,6 @@ h3 { margin-bottom: 16px; }
 .plot-group .checkbox { margin: 0; }
 .plot-group  input:checked { color: #428bca; }
 
-.down-link { margin: 16px 0; font-size: larger; }
+.down-group a { margin: 16px 0; font-size: larger; display: block; }
 
 .but-group { display: grid; grid-template-columns: 1fr 1fr 1fr; column-gap: 2rem; }
-.but-group .btn { font-size: x-large; }
-
-.disabled + .tooltip,
-.disabled + .tooltip > .tooltip-arrow,
-.disabled + .tooltip > .tooltip-inner {
-    display: none;
-}

@@ -17,6 +17,7 @@ id <- "roleControls"
 ui <- fluidPage(
     theme = "ui.css",
     tags$script(src = "ui.js"),
+    tags$style(src = "all.min.css"),
     useShinyjs(),
 
     sidebarLayout(
@@ -26,11 +27,12 @@ ui <- fluidPage(
             rolePlotSelectsUI(id),
             roleDownloadsUI(id),
         ),
+
         mainPanel(
             h1("Rules of Life Engine model"),
 
-            rolePlotsUI( id,  name1 = "abundDist", name2 = "abundTime",
-                         check1 = "input.abundDistChk", check2 = "input.abundTimeChk"),
+            rolePlotsUI(id,  name1 = "abundDist", name2 = "abundTime",
+                        check1 = "input.abundDistChk", check2 = "input.abundTimeChk"),
 
             rolePlotsUI(id, name1 = "traitDist", name2 = "traitTime",
                         check1 = "input.traitDistChk", check2 = "input.traitTimeChk"),

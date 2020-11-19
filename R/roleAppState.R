@@ -1,3 +1,5 @@
+library(shiny)
+
 State <- list("init" = 0, "playing" = 1, "paused" = 2, "next_" = 3)
 
 appState <- reactiveVal(State$init)

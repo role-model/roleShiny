@@ -13,17 +13,9 @@ roleDownloadsUI <- function(id) {
         tags$div(
             class = "down-group",
 
-            tags$div(
-                class = "down-link",
-                actionLink("downSimLink", "click to download simulation")),
-
-            tags$div(
-                class = "down-link",
-                actionLink("downScriptLink", "click to download script")),
-
-            tags$div(
-                class = "down-link",
-                actionLink("downPlotsLink", "click to download plots"))
+            actionLink("downSimLink", "click to download simulation"),
+            actionLink("downScriptLink", "click to download script"),
+            actionLink("downPlotsLink", "click to download plots")
         )
     )
 }
