@@ -52,7 +52,11 @@ roleParamsUI <- function(id, button) {
                 roleParam(id, name = "nu", label = "&#957;",
                           min = 0, max = 1.0, value = 0.01,
                           tip = "The speciation local parameter",
-                          isGreek = TRUE)
+                          isGreek = TRUE),
+
+                roleParam(id, name = "nstep", label = "n<sub>step</sub>",
+                          min = 1, max = 100, value = 10,
+                          tip = "The number of steps"),
             ),
         ),
 
@@ -63,15 +67,6 @@ roleParamsUI <- function(id, button) {
 
             tags$div(
                 class = "param-group param-2",
-
-                roleParam(id, name = "nstep",
-                          label = "n<sub>step</sub>",
-                          min = 1, max = 100, value = 10,
-                          tip = "The number of steps"),
-
-                roleParam(id, name = "nsim", label = "n<sub>sim</sub>",
-                          min = 1, max = 20, value = 1,
-                          tip = "The number of simulations to run"),
             ),
         ),
     )
