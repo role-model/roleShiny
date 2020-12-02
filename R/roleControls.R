@@ -3,7 +3,6 @@ library(shinyBS)
 library(shinyjs)
 
 source("R/util.R")
-source("R/roleAppState.R")
 
 
 roleControlButtonsUI <- function(id) {
@@ -22,15 +21,5 @@ roleControlButtonsUI <- function(id) {
 
 roleControlButtonsServer <- function(id, selectCount) {
     moduleServer(id, function(input, output, session) {
-
-        observe({
-            shinyjs::toggleState("playBtn", canPlay())
-            shinyjs::toggleState("pauseBtn", canPause())
-            shinyjs::toggleState("nextBtn", canNext())
-        })
-
-        observeEvent(input$playBtn, {play()}, ignoreInit = TRUE)
-        observeEvent(input$pauseBtn, {pause()}, ignoreInit = TRUE)
-        observeEvent(input$nextBtn, {next_()}, ignoreInit = TRUE)
     })
 }

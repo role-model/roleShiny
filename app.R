@@ -8,7 +8,6 @@ source("R/roleControls.R")
 source("R/rolePlotSelects.R")
 source("R/roleDownloads.R")
 source("R/rolePlots.R")
-source("R/roleAppState.R")
 
 
 id <- "roleControls"

@@ -2,7 +2,6 @@ library(shiny)
 library(shinyBS)
 
 source("R/util.R")
-source("R/roleAppState.R")
 
 
 roleParam <- function(id, name, label = "", min = 0, max = 100000, value = 100, tip = "", isGreek = FALSE) {
@@ -81,12 +80,5 @@ roleParamsUI <- function(id, button) {
 
 roleParamsServer <- function(id) {
     moduleServer(id, function(input, output, session) {
-        observeEvent(input$sm, {pause()}, ignoreInit = TRUE)
-        observeEvent(input$jm, {pause()}, ignoreInit = TRUE)
-        observeEvent(input$j, {pause()}, ignoreInit = TRUE)
-        observeEvent(input$m, {pause()}, ignoreInit = TRUE)
-        observeEvent(input$nu, {pause()}, ignoreInit = TRUE)
-        observeEvent(input$nstep, {pause()}, ignoreInit = TRUE)
-        observeEvent(input$nsim, {pause()}, ignoreInit = TRUE)
     })
 }

@@ -2,7 +2,6 @@ library(shiny)
 library(shinyBS)
 
 source("R/util.R")
-source("R/roleAppState.R")
 
 rolePlotSelectsUI <- function(id) {
     ns <- NS(id)
@@ -41,36 +40,5 @@ rolePlotSelectsUI <- function(id) {
 
 rolePlotSelectsServer <- function(id) {
     moduleServer(id, function(input, output, session) {
-
-        observeEvent(input$abundDistChk, {
-            setSelectCount(input$abundDistChk)
-            pause()
-        }, ignoreInit = TRUE)
-
-        observeEvent(input$abundTimeChk, {
-            setSelectCount(input$abundTimeChk)
-            pause()
-        }, ignoreInit = TRUE)
-
-        observeEvent(input$traitDistChk, {
-            setSelectCount(input$traitDistChk)
-            pause()
-        }, ignoreInit = TRUE)
-
-        observeEvent(input$traitTimeChk, {
-            setSelectCount(input$traitTimeChk)
-            pause()
-        }, ignoreInit = TRUE)
-
-        observeEvent(input$geneDistChk, {
-            setSelectCount(input$geneDistChk)
-            pause()
-        }, ignoreInit = TRUE)
-
-        observeEvent(input$geneTimeChk, {
-            setSelectCount(input$geneTimeChk)
-            pause()
-        }, ignoreInit = TRUE)
-
     })
 }
