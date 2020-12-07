@@ -1,9 +1,3 @@
-library(shiny)
-library(shinyBS)
-
-source("R/util.R")
-
-
 roleParam <- function(id, name, label = "", min = 0, max = 100000, value = 100, tip = "", isGreek = FALSE) {
     ns <- NS(id)
     opener = if (isGreek) '<div class="param-label greek">' else '<div class="param-label">'
@@ -33,11 +27,11 @@ roleParamsUI <- function(id, button) {
             tags$div(
                 class = "param-group",
 
-                roleParam(id, name = "sm", label = "S<sub>m",
+                roleParam(id, name = "sm", label = "S<sub>m</sub>",
                           min = 0, max = 10000, value = 100,
                           tip = "The species metaparameter"),
 
-                roleParam(id, name = "jm", label = "J<sub>m",
+                roleParam(id, name = "jm", label = "J<sub>m</sub>",
                           min =  0, max = 100000, value = 10000,
                           tip = "The individuals metaparameter"),
 
@@ -67,6 +61,11 @@ roleParamsUI <- function(id, button) {
 
             tags$div(
                 class = "param-group param-2",
+
+                roleParam(id, name = "nout", label = "n<sub>out</sub>",
+                          min = 1, max = 20, value = 5,
+                          tip = "Plot every n steps of the simulation"),
+
             ),
         ),
     )

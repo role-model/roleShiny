@@ -1,10 +1,3 @@
-library(shiny)
-library(shinyBS)
-library(plotly)
-library(roleR)
-
-source("R/util.R")
-
 rolePlotsUI <- function(id, name1, name2, check1, check2) {
     ns <- NS(id)
 
@@ -20,7 +13,14 @@ rolePlotsUI <- function(id, name1, name2, check1, check2) {
     )
 }
 
-rolePlotsServer <- function(id, name, func, checkBox) {
+
+rolePlotsServer <- function(id, name, func, type, checkBox, allSims) {
     moduleServer(id, function(input, output, session) {
+        observe({
+            if (!is.null(allSims()) && input[[checkBox]]) {
+                fig <- func(allSims(), type)
+                output[[name]] <- renderPlotly({fig})
+            }
+        })
     })
 }

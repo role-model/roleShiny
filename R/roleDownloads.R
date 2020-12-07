@@ -1,9 +1,3 @@
-library(shiny)
-library(shinyBS)
-
-source("R/util.R")
-
-
 roleDownloadsUI <- function(id) {
     tags$div(
         class = "control-set",

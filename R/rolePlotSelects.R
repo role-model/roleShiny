@@ -1,8 +1,3 @@
-library(shiny)
-library(shinyBS)
-
-source("R/util.R")
-
 rolePlotSelectsUI <- function(id) {
     ns <- NS(id)
 

@@ -1,11 +1,4 @@
-library(shiny)
-library(shinyBS)
-library(shinyjs)
-
-source("R/util.R")
-
-
-roleControlButtonsUI <- function(id) {
+roleControlsUI <- function(id) {
     ns <- NS(id)
     tags$div(
         class = "control-set but-group",
@@ -18,8 +11,36 @@ roleControlButtonsUI <- function(id) {
     )
 }
 
+# State <- list("busy" = 1, "ready" = 2)
 
-roleControlButtonsServer <- function(id, selectCount) {
+roleControlsServer <- function(id, allSims) {
     moduleServer(id, function(input, output, session) {
+
+        appState <- reactiveVal(State$ready)
+
+        # observe({
+        #     shinyjs::toggleState("playBtn", {appState() == State$ready})
+        #     shinyjs::toggleState("pauseBtn", {appState() == State$busy})
+        #     shinyjs::toggleState("nextBtn", {appState() == State$ready})
+        # })
+
+        observeEvent(input$playBtn, {
+            # appState(State$busy)
+            params <- list(
+                species_meta = input$sm,
+                individuals_meta = input$jm,
+                individuals_local = input$j,
+                dispersal_prob = input$m,
+                speciation_local = input$nu)
+            allSims(roleSimPlay(params, nstep = input$nstep, nout = input$nout))
+        }, ignoreInit = TRUE)
+
+        observeEvent(input$pauseBtn, {
+            # appState(State$ready)
+        }, ignoreInit = TRUE)
+
+        observeEvent(input$nextBtn, {
+            # appState(State$busy)
+        }, ignoreInit = TRUE)
     })
 }

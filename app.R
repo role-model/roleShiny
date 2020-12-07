@@ -2,12 +2,15 @@ library(shiny)
 library(shinyBS)
 library(shinyjs)
 library(plotly)
+library(plyr)
 
 source("R/roleParams.R")
 source("R/roleControls.R")
 source("R/rolePlotSelects.R")
 source("R/roleDownloads.R")
 source("R/rolePlots.R")
+
+source("R/roleAnimations.R")  # Temporary module
 
 
 id <- "roleControls"
@@ -22,7 +25,7 @@ ui <- fluidPage(
     sidebarLayout(
         sidebarPanel(
             roleParamsUI(id),
-            roleControlButtonsUI(id),
+            roleControlsUI(id),
             rolePlotSelectsUI(id),
             roleDownloadsUI(id),
         ),
@@ -44,17 +47,19 @@ ui <- fluidPage(
 
 
 server <- function(input, output, session) {
+    allSims <- reactiveVal(NULL)
+
     roleParamsServer(id)
-    roleControlButtonsServer(id)
+    roleControlsServer(id, allSims)
     rolePlotSelectsServer(id)
     roleDownloadsServer(id)
 
-    rolePlotsServer(id, name = "abundDist", func = roleSim, checkBox = "abundDistChk")
-    rolePlotsServer(id, name = "abundTime", func = roleSim, checkBox = "abundTimeChk")
-    rolePlotsServer(id, name = "traitDist", func = roleSim, checkBox = "traitDistChk")
-    rolePlotsServer(id, name = "traitTime", func = roleSim, checkBox = "traitTimeChk")
-    rolePlotsServer(id, name = "geneDist", func = roleSim, checkBox = "geneDistChk")
-    rolePlotsServer(id, name = "geneTime", func = roleSim, checkBox = "geneTimeChk")
+    rolePlotsServer(id, name = "abundDist", func = roleDistAnim, type = "Abundance", checkBox = "abundDistChk", allSims = allSims)
+    rolePlotsServer(id, name = "abundTime", func = roleTSAnim, type = "Abundance", checkBox = "abundTimeChk", allSims = allSims)
+    rolePlotsServer(id, name = "traitDist", func = roleDistAnim, type = "Trait", checkBox = "traitDistChk", allSims = allSims)
+    rolePlotsServer(id, name = "traitTime", func = roleTSAnim, type = "Trait", checkBox = "traitTimeChk", allSims = allSims)
+    rolePlotsServer(id, name = "geneDist", func = roleDistAnim, type = "pi", checkBox = "geneDistChk", allSims = allSims)
+    rolePlotsServer(id, name = "geneTime", func = roleTSAnim, type = "pi", checkBox = "geneTimeChk", allSims = allSims)
 }
 
 
