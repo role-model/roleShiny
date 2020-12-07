@@ -11,21 +11,12 @@ roleControlsUI <- function(id) {
     )
 }
 
-# State <- list("busy" = 1, "ready" = 2)
-
 roleControlsServer <- function(id, allSims) {
     moduleServer(id, function(input, output, session) {
 
         appState <- reactiveVal(State$ready)
 
-        # observe({
-        #     shinyjs::toggleState("playBtn", {appState() == State$ready})
-        #     shinyjs::toggleState("pauseBtn", {appState() == State$busy})
-        #     shinyjs::toggleState("nextBtn", {appState() == State$ready})
-        # })
-
         observeEvent(input$playBtn, {
-            # appState(State$busy)
             params <- list(
                 species_meta = input$sm,
                 individuals_meta = input$jm,
@@ -36,11 +27,9 @@ roleControlsServer <- function(id, allSims) {
         }, ignoreInit = TRUE)
 
         observeEvent(input$pauseBtn, {
-            # appState(State$ready)
         }, ignoreInit = TRUE)
 
         observeEvent(input$nextBtn, {
-            # appState(State$busy)
         }, ignoreInit = TRUE)
     })
 }
