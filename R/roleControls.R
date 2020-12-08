@@ -1,3 +1,5 @@
+library(roleR)
+
 roleControlsUI <- function(id) {
     ns <- NS(id)
     tags$div(
@@ -15,13 +17,28 @@ roleControlsServer <- function(id, allSims) {
     moduleServer(id, function(input, output, session) {
 
         observeEvent(input$playBtn, {
-            params <- list(
-                species_meta = input$sm,
-                individuals_meta = input$jm,
-                individuals_local = input$j,
-                dispersal_prob = input$m,
-                speciation_local = input$nu)
-            allSims(roleSimPlay(params, nstep = input$nstep, nout = input$nout))
+            allSims(NULL)
+
+            every <- min(input$nstep, input$nout * input$nvis)
+
+            for (i in seq(1, input$nstep, by = every)) {
+                init <- if (is.null(allSims())) NULL else allSims()[[length(allSims())]]
+                nstep <- every
+                nout <- input$nout
+                params <- list(
+                    species_meta = input$sm,
+                    individuals_meta = input$jm,
+                    individuals_local = input$j,
+                    dispersal_prob = input$m,
+                    speciation_local = input$nu)
+
+                f <- future({
+                    roleSimPlay(params, init = init, nstep = nstep, nout = nout)
+                }, seed = TRUE)
+                # f <- roleSimPlay(params, init = init, nstep = nstep, nout = nout)
+
+                allSims(append(allSims(), value(f)))
+            }
         }, ignoreInit = TRUE)
 
         observeEvent(input$pauseBtn, {

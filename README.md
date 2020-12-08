@@ -9,6 +9,8 @@ shiny app for the RoLE model
   - shinyjs
   - plotly
   - plyr
+  - promises
+  - future
 
 - GitHub libraries
 ```R

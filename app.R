@@ -3,6 +3,8 @@ library(shinyBS)
 library(shinyjs)
 library(plotly)
 library(plyr)
+library(promises)
+library(future)
 
 source("R/roleParams.R")
 source("R/roleControls.R")
@@ -11,6 +13,8 @@ source("R/roleDownloads.R")
 source("R/rolePlots.R")
 
 source("R/roleAnimations.R")  # Temporary module
+
+plan(multisession)
 
 
 id <- "roleControls"

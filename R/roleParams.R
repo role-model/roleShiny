@@ -12,6 +12,8 @@ roleParam <- function(id, name, label = "", min = 0, max = 100000, value = 100, 
 }
 
 
+maxSteps <- 1000
+
 roleParamsUI <- function(id, button) {
     ns <- NS(id)
 
@@ -49,7 +51,7 @@ roleParamsUI <- function(id, button) {
                           isGreek = TRUE),
 
                 roleParam(id, name = "nstep", label = "n<sub>step</sub>",
-                          min = 1, max = 100, value = 10,
+                          min = 1, max = maxSteps, value = 10,
                           tip = "The number of steps"),
             ),
         ),
@@ -63,8 +65,12 @@ roleParamsUI <- function(id, button) {
                 class = "param-group param-2",
 
                 roleParam(id, name = "nout", label = "n<sub>out</sub>",
-                          min = 1, max = 20, value = 5,
+                          min = 1, max = maxSteps, value = 5,
                           tip = "Plot every n steps of the simulation"),
+
+                roleParam(id, name = "nvis", label = "n<sub>vis</sub>",
+                          min = 1, max = maxSteps, value = 2,
+                          tip = "Update the plots every nvis * nout"),
 
             ),
         ),
