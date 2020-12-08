@@ -14,8 +14,6 @@ roleControlsUI <- function(id) {
 roleControlsServer <- function(id, allSims) {
     moduleServer(id, function(input, output, session) {
 
-        appState <- reactiveVal(State$ready)
-
         observeEvent(input$playBtn, {
             params <- list(
                 species_meta = input$sm,
