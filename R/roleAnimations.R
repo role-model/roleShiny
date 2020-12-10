@@ -16,20 +16,23 @@ roleDistAnim <- function(roleSim, type = all.types) {
     }
     all_data <- rbind.fill(all_data)
 
-    fig <- plotly::plot_ly(all_data, x = ~rank, y = ~y, frame = ~step,
-                           type = 'scatter', mode = 'markers',
-                           marker = list(color = 'transparent', size = 8,
-                                         line = list(color = 'black', width = 1.5)))
-    fig <- plotly::layout(fig,
-                          xaxis = list(zeroline = FALSE, title = 'Species Rank'),
-                          yaxis = list(zeroline = FALSE, title = type,
-                                       type = ifelse(type != 'Trait', 'log', 'linear')))
+    fig <- plot_ly(
+        all_data, x = ~rank, y = ~y, frame = ~step, type = 'scatter', mode = 'markers',
+        marker = list(color = 'transparent', size = 8, line = list(color = 'black', width = 1.5)))
 
-    fig <- plotly::animation_button(fig, label_play = icon("play"), label_pause = icon("pause"))
+    fig <- layout(
+        fig,
+        xaxis = list(zeroline = FALSE, title = 'Species Rank'),
+        yaxis = list(zeroline = FALSE, title = type,
+                     type = ifelse(type != 'Trait', 'log', 'linear')))
 
-    return(fig)
+    fig <- animation_button(fig, visible = FALSE)
+    fig <- animation_slider(fig, hide = TRUE)
+
+    fig
 }
 
 roleTSAnim <- function(roleSim, type = all.types) {
     'stub'
 }
+

@@ -17,12 +17,21 @@ roleControlsServer <- function(id, allSims) {
     moduleServer(id, function(input, output, session) {
 
         observeEvent(input$playBtn, {
-            allSims(NULL)
+            allSims(list())
+        }, ignoreInit = TRUE)
 
-            every <- min(input$nstep, input$nout * input$nvis)
+        observeEvent(input$pauseBtn, {
+        }, ignoreInit = TRUE)
 
-            for (i in seq(1, input$nstep, by = every)) {
-                init <- if (is.null(allSims())) NULL else allSims()[[length(allSims())]]
+        observeEvent(input$nextBtn, {
+        }, ignoreInit = TRUE)
+
+        observe({
+            if (!is.null(allSims()) && length(allSims()) < input$nstep) {
+                print(length(allSims()))
+
+                every <- min(input$nstep, input$nout * input$nvis)
+
                 nstep <- every
                 nout <- input$nout
                 params <- list(
@@ -32,19 +41,21 @@ roleControlsServer <- function(id, allSims) {
                     dispersal_prob = input$m,
                     speciation_local = input$nu)
 
+                init <- if (length(allSims()) == 0) NULL else allSims()[[length(allSims())]]
+
                 f <- future({
                     roleSimPlay(params, init = init, nstep = nstep, nout = nout)
                 }, seed = TRUE)
-                # f <- roleSimPlay(params, init = init, nstep = nstep, nout = nout)
+
+                while (!resolved(f)) {
+                    print('waiting...')
+                }  # Don't block
 
                 allSims(append(allSims(), value(f)))
+            } else {
+                print('done')
+                print(length(allSims()))
             }
-        }, ignoreInit = TRUE)
-
-        observeEvent(input$pauseBtn, {
-        }, ignoreInit = TRUE)
-
-        observeEvent(input$nextBtn, {
-        }, ignoreInit = TRUE)
+        })
     })
 }

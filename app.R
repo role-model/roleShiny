@@ -14,7 +14,9 @@ source("R/rolePlots.R")
 
 source("R/roleAnimations.R")  # Temporary module
 
+
 plan(multisession)
+# plan(transparent)
 
 
 id <- "roleControls"
