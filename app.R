@@ -4,15 +4,13 @@ library(shinyjs)
 library(plotly)
 library(plyr)
 library(future)
-# library(roleR)
+library(roleR)
 
 source("R/roleParams.R")
 source("R/roleControls.R")
 source("R/rolePlotSelects.R")
 source("R/roleDownloads.R")
 source("R/rolePlots.R")
-
-source("R/roleSimsPlots.R")  # Temporary module
 
 
 id <- "roleControls"
@@ -91,10 +89,6 @@ server <- function(input, output, session) {
     rolePlotsServer(id, name = "traitTime", func = roleTSAnim, type = "Trait", checkBox = "traitTimeChk", allSims = allSims)
     rolePlotsServer(id, name = "geneDist", func = roleDistAnim, type = "pi", checkBox = "geneDistChk", allSims = allSims)
     rolePlotsServer(id, name = "geneTime", func = roleTSAnim, type = "pi", checkBox = "geneTimeChk", allSims = allSims)
-
-    fut <- getSims(input, allSims)
-    print(fut)
-    fut
 }
 
 

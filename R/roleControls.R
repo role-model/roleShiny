@@ -16,8 +16,13 @@ roleControlsServer <- function(id, allSims) {
     moduleServer(id, function(input, output, session) {
 
         observeEvent(input$playBtn, {
-            print(allSims)
-            roleDistAnim(allSims(), 'Abundance')
+            # params <- list(species_meta = 100,
+            #                individuals_meta = 10000,
+            #                individuals_local = 1000,
+            #                dispersal_prob = 0.1,
+            #                speciation_local = 0.01)
+            # testSim <- roleSimPlay(params, nstep = 100, nout = 5)
+            # print(testSim)
         }, ignoreInit = TRUE)
 
         observeEvent(input$pauseBtn, {
