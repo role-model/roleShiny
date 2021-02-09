@@ -8,6 +8,7 @@ roleDistAnim <- function(roleSim, type = all.types) {
     # Create a single data frame from all of the simulation steps
     all_data = vector('list', length(roleSim))
     for (i in 1:length(roleSim)) {
+        print(i)
         sim <- roleSim[[i]]
         x <- sim$local_comm[[type]][sim$local_comm$Abundance > 0]
         df <- data.frame(rank = 1:length(x), y = sort(as.numeric(x), TRUE))
@@ -35,4 +36,3 @@ roleDistAnim <- function(roleSim, type = all.types) {
 roleTSAnim <- function(roleSim, type = all.types) {
     'stub'
 }
-

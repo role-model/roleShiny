@@ -1,5 +1,3 @@
-library(roleR)
-
 roleControlsUI <- function(id) {
     ns <- NS(id)
     tags$div(
@@ -13,11 +11,13 @@ roleControlsUI <- function(id) {
     )
 }
 
+
 roleControlsServer <- function(id, allSims) {
     moduleServer(id, function(input, output, session) {
 
         observeEvent(input$playBtn, {
-            allSims(list())
+            print(allSims)
+            roleDistAnim(allSims(), 'Abundance')
         }, ignoreInit = TRUE)
 
         observeEvent(input$pauseBtn, {
@@ -26,36 +26,5 @@ roleControlsServer <- function(id, allSims) {
         observeEvent(input$nextBtn, {
         }, ignoreInit = TRUE)
 
-        observe({
-            if (!is.null(allSims()) && length(allSims()) < input$nstep) {
-                print(length(allSims()))
-
-                every <- min(input$nstep, input$nout * input$nvis)
-
-                nstep <- every
-                nout <- input$nout
-                params <- list(
-                    species_meta = input$sm,
-                    individuals_meta = input$jm,
-                    individuals_local = input$j,
-                    dispersal_prob = input$m,
-                    speciation_local = input$nu)
-
-                init <- if (length(allSims()) == 0) NULL else allSims()[[length(allSims())]]
-
-                f <- future({
-                    roleSimPlay(params, init = init, nstep = nstep, nout = nout)
-                }, seed = TRUE)
-
-                while (!resolved(f)) {
-                    print('waiting...')
-                }  # Don't block
-
-                allSims(append(allSims(), value(f)))
-            } else {
-                print('done')
-                print(length(allSims()))
-            }
-        })
     })
 }

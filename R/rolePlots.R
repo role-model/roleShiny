@@ -17,7 +17,8 @@ rolePlotsUI <- function(id, name1, name2, check1, check2) {
 rolePlotsServer <- function(id, name, func, type, checkBox, allSims) {
     moduleServer(id, function(input, output, session) {
         observe({
-            if (!is.null(allSims()) && input[[checkBox]]) {
+            if (length(allSims()) > 0 && input[[checkBox]]) {
+                cat("rolePlotsServer", length(allSims()), "\n")
                 fig <- func(allSims(), type)
                 output[[name]] <- renderPlotly({fig})
             }
