@@ -1,3 +1,5 @@
+source("R/sims.R")
+
 roleControlsUI <- function(id) {
     ns <- NS(id)
     tags$div(
@@ -16,6 +18,7 @@ roleControlsServer <- function(id, allSims) {
     moduleServer(id, function(input, output, session) {
 
         observeEvent(input$playBtn, {
+            sims <- getSims(input, allSims)
             # params <- list(species_meta = 100,
             #                individuals_meta = 10000,
             #                individuals_local = 1000,
