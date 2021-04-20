@@ -63,34 +63,6 @@ server <- function(input, output, session) {
     rolePlotsServer(id, name = "geneDist", func = roleDistAnim, type = "pi", checkBox = "geneDistChk", allSims = allSims)
     rolePlotsServer(id, name = "geneTime", func = roleTSAnim, type = "pi", checkBox = "geneTimeChk", allSims = allSims)
 
-
-    output$downSim <- downloadHandler(
-        filename = function() {
-            paste("sim-", Sys.Date(), ".csv", sep = "")
-        },
-        content = function(file) {
-            write.csv(mtcars, file)
-        }
-    )
-
-    output$downScript <- downloadHandler(
-        filename = function() {
-            paste("script-", Sys.Date(), ".csv", sep = "")
-        },
-        content = function(file) {
-            write.csv(mtcars, file)
-        }
-    )
-
-    output$downPlots <- downloadHandler(
-        filename = function() {
-            paste("plots-", Sys.Date(), ".csv", sep = "")
-        },
-        content = function(file) {
-            write.csv(mtcars, file)
-        }
-    )
-
 }
 
 
