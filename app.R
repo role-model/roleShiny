@@ -66,10 +66,27 @@ server <- function(input, output, session) {
 
     output$downSim <- downloadHandler(
         filename = function() {
-            paste("data-", Sys.Date(), ".csv", sep = "")
+            paste("sim-", Sys.Date(), ".csv", sep = "")
         },
         content = function(file) {
-            # writeLines(paste(text, collapse = " "), file)
+            write.csv(mtcars, file)
+        }
+    )
+
+    output$downScript <- downloadHandler(
+        filename = function() {
+            paste("script-", Sys.Date(), ".csv", sep = "")
+        },
+        content = function(file) {
+            write.csv(mtcars, file)
+        }
+    )
+
+    output$downPlots <- downloadHandler(
+        filename = function() {
+            paste("plots-", Sys.Date(), ".csv", sep = "")
+        },
+        content = function(file) {
             write.csv(mtcars, file)
         }
     )

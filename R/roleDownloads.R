@@ -17,13 +17,5 @@ roleDownloadsUI <- function(id) {
 
 roleDownloadsServer <- function(id) {
     moduleServer(id, function(input, output, session) {
-
-        downScript <- observeEvent(input$downScriptLink, {
-            print(input$downScriptLink)
-        })
-
-        downPlots <- observeEvent(input$downPlotsLink, {
-            print(input$downPlotsLink)
-        })
     })
 }
