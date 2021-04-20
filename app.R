@@ -62,6 +62,18 @@ server <- function(input, output, session) {
     rolePlotsServer(id, name = "traitTime", func = roleTSAnim, type = "Trait", checkBox = "traitTimeChk", allSims = allSims)
     rolePlotsServer(id, name = "geneDist", func = roleDistAnim, type = "pi", checkBox = "geneDistChk", allSims = allSims)
     rolePlotsServer(id, name = "geneTime", func = roleTSAnim, type = "pi", checkBox = "geneTimeChk", allSims = allSims)
+
+
+    output$downSim <- downloadHandler(
+        filename = function() {
+            paste("data-", Sys.Date(), ".csv", sep = "")
+        },
+        content = function(file) {
+            # writeLines(paste(text, collapse = " "), file)
+            write.csv(mtcars, file)
+        }
+    )
+
 }
 
 

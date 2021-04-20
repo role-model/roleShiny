@@ -19,6 +19,11 @@ roleControlsServer <- function(id, allSims) {
 
         observeEvent(input$playBtn, {
             sims <- getSims(input, allSims)
+            print("before")
+            untar("./data/MESS-simulated-data_small.tar.gz", list = TRUE)
+            # X <- read.csv(MESS-simulated-data/params-sim-data.txt)
+             # print(files)
+            print("after")
             # params <- list(species_meta = 100,
             #                individuals_meta = 10000,
             #                individuals_local = 1000,

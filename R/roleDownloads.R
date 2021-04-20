@@ -7,9 +7,9 @@ roleDownloadsUI <- function(id) {
         tags$div(
             class = "down-group",
 
-            actionLink("downSimLink", "click to download simulation"),
-            actionLink("downScriptLink", "click to download script"),
-            actionLink("downPlotsLink", "click to download plots")
+            downloadButton("downSim", "download simulation"),
+            downloadButton("downScript", "download script"),
+            downloadButton("downPlots", "download plots")
         )
     )
 }
@@ -17,10 +17,6 @@ roleDownloadsUI <- function(id) {
 
 roleDownloadsServer <- function(id) {
     moduleServer(id, function(input, output, session) {
-
-        downSim <- observeEvent(input$downSimLink, {
-            print(input$downSimLink)
-        })
 
         downScript <- observeEvent(input$downScriptLink, {
             print(input$downScriptLink)
