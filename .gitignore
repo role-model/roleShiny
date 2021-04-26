@@ -8,7 +8,6 @@
 # R Environment Variables
 .Renviron
 
-
 # RStudio files
 .Rproj.user/
 
@@ -21,3 +20,4 @@ docs/
 junk*
 old/
 roleR/
+.venv/
