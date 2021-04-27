@@ -29,45 +29,44 @@ DELETES = {
 
 def ingest(args):
     """Ingest a simulation file into a database."""
-    with tarfile.open(args.sim_file) as tar:
-        with sqlite3.connect(args.sqlite3) as cxn:
-            for member in tar.getmembers():
-                if not member.isreg():
-                    continue
+    with tarfile.open(args.sim_file) as tar, sqlite3.connect(args.sqlite3) as cxn:
+        for member in tar.getmembers():
+            if not member.isreg():
+                continue
 
-                path = Path(member.name)
+            path = Path(member.name)
 
-                sim = path.parts[0]
-                site = path.parts[1]
+            sim = path.parts[0]
+            site = path.parts[1]
 
-                if path.suffix == '.txt':
-                    table = 'params'
-                    delete(cxn, table, (sim,))
-                    params = parse_params(tar, member)
-                    df = pd.DataFrame(params)
-                    insert_data(cxn, df, table, sim=sim)
+            if path.suffix == '.txt':
+                table = 'params'
+                delete(cxn, table, (sim,))
+                params = parse_params(tar, member)
+                df = pd.DataFrame(params)
+                insert_data(cxn, df, table, sim=sim)
 
-                elif path.suffix == '.csv':
-                    table = 'sites'
-                    delete(cxn, table, (sim, site))
-                    df = pd.read_csv(tar.extractfile(member))
-                    insert_data(cxn, df, table, sim=sim, site=site)
+            elif path.suffix == '.csv':
+                table = 'sites'
+                delete(cxn, table, (sim, site))
+                df = pd.read_csv(tar.extractfile(member))
+                insert_data(cxn, df, table, sim=sim, site=site)
 
-                elif path.suffix == '.tre':
-                    table = 'trees'
-                    delete(cxn, table, (sim, site))
-                    with tar.extractfile(member) as in_file:
-                        tree = in_file.read().decode().strip()
-                    df = pd.DataFrame({'tree': [tree]})
-                    insert_data(cxn, df, table, sim=sim, site=site)
+            elif path.suffix == '.tre':
+                table = 'trees'
+                delete(cxn, table, (sim, site))
+                with tar.extractfile(member) as in_file:
+                    tree = in_file.read().decode().strip()
+                df = pd.DataFrame({'tree': [tree]})
+                insert_data(cxn, df, table, sim=sim, site=site)
 
-                elif path.suffix == '.fasta':
-                    table = 'seqs'
-                    species = path.stem
-                    delete(cxn, table, (sim, site, species))
-                    seqs = parse_fasta(tar, member)
-                    df = pd.DataFrame(seqs)
-                    insert_data(cxn, df, table, sim=sim, site=site, species=species)
+            elif path.suffix == '.fasta':
+                table = 'seqs'
+                species = path.stem
+                delete(cxn, table, (sim, site, species))
+                seqs = parse_fasta(tar, member)
+                df = pd.DataFrame(seqs)
+                insert_data(cxn, df, table, sim=sim, site=site, species=species)
 
 
 def insert_data(cxn, df, table, **kwargs):
