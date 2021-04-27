@@ -23,7 +23,7 @@ DELETES = {
     'params': """delete from params where sim = ?""",
     'sites': """delete from sites where sim = ? and site = ?""",
     'trees': """delete from trees where sim = ? and site = ?""",
-    'seqs': """delete from seqs where sim = ? and site = ? and species = ?"""
+    'seqs': """delete from seqs where sim = ? and site = ? and species = ?""",
 }
 
 
@@ -45,16 +45,13 @@ def ingest(args):
                     delete(cxn, table, (sim,))
                     params = parse_params(tar, member)
                     df = pd.DataFrame(params)
-                    df['sim'] = sim
-                    df.to_sql(table, cxn, index=False, if_exists='append')
+                    insert_data(cxn, df, table, sim=sim)
 
                 elif path.suffix == '.csv':
                     table = 'sites'
                     delete(cxn, table, (sim, site))
                     df = pd.read_csv(tar.extractfile(member))
-                    df['sim'] = sim
-                    df['site'] = site
-                    df.to_sql(table, cxn, index=False, if_exists='append')
+                    insert_data(cxn, df, table, sim=sim, site=site)
 
                 elif path.suffix == '.tre':
                     table = 'trees'
@@ -62,26 +59,22 @@ def ingest(args):
                     with tar.extractfile(member) as in_file:
                         tree = in_file.read().decode().strip()
                     df = pd.DataFrame({'tree': [tree]})
-                    df['sim'] = sim
-                    df['site'] = site
-                    df.to_sql(table, cxn, index=False, if_exists='append')
+                    insert_data(cxn, df, table, sim=sim, site=site)
 
                 elif path.suffix == '.fasta':
                     table = 'seqs'
                     species = path.stem
                     delete(cxn, table, (sim, site, species))
-                    with tar.extractfile(member) as fasta_file:
-                        data = fasta_file.readlines()
-                        data = [ln.decode().strip() for ln in data]
-                        seqs = []
-                        for rec in SimpleFastaParser(data):
-                            if rec[1]:
-                                seqs.append(Fasta(rec[0], rec[1]))
+                    seqs = parse_fasta(tar, member)
                     df = pd.DataFrame(seqs)
-                    df['sim'] = sim
-                    df['site'] = site
-                    df['species'] = species
-                    df.to_sql(table, cxn, index=False, if_exists='append')
+                    insert_data(cxn, df, table, sim=sim, site=site, species=species)
+
+
+def insert_data(cxn, df, table, **kwargs):
+    """Write the data frame to the data base."""
+    for key, value in kwargs.items():
+        df[key] = value
+    df.to_sql(table, cxn, index=False, if_exists='append')
 
 
 def delete(cxn, table, keys):
@@ -107,8 +100,16 @@ def parse_params(tar, member):
     return params
 
 
-def parse_fasta():
-    """Get the simulation parameters."""
+def parse_fasta(tar, member):
+    """Parse a sequence file."""
+    with tar.extractfile(member) as fasta_file:
+        data = fasta_file.readlines()
+        data = [ln.decode().strip() for ln in data]
+        seqs = []
+        for rec in SimpleFastaParser(data):
+            if rec[1]:
+                seqs.append(Fasta(rec[0], rec[1]))
+    return seqs
 
 
 def parse_command_line():
