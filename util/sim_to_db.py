@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """Ingest a simulation file into a database."""
 
 import argparse
