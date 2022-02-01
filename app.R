@@ -2,17 +2,10 @@ library(shiny)
 library(shinyBS)
 library(shinyjs)
 library(plotly)
-library(plyr)
+library(dplyr)
 library(future)
 library(roleR)
-
-source("R/roleParams.R")
-source("R/roleControls.R")
-source("R/rolePlotSelects.R")
-source("R/roleDownloads.R")
-source("R/rolePlots.R")
-source("R/sims.R")
-source("R/util.R")
+library(here)
 
 id <- "roleControls"
 
