@@ -22,11 +22,13 @@ ui <- fluidPage(
             roleControlsUI(id),
             rolePlotSelectsUI(id),
             roleDownloadsUI(id),
+            roleUploadsUI(id)
         ),
 
         mainPanel(
             h1("Rules of Life Engine model"),
-
+            
+            
             rolePlotsUI(id,  name1 = "abundDist", name2 = "abundTime",
                         check1 = "input.abundDistChk", check2 = "input.abundTimeChk"),
 
@@ -48,7 +50,8 @@ server <- function(input, output, session) {
     roleControlsServer(id, allSims)
     rolePlotSelectsServer(id)
     roleDownloadsServer(id)
-
+    roleUploadsServer(id)
+    
     rolePlotsServer(id, name = "abundDist", func = roleDistAnim, type = "Abundance", checkBox = "abundDistChk", allSims = allSims)
     rolePlotsServer(id, name = "abundTime", func = roleTSAnim, type = "Abundance", checkBox = "abundTimeChk", allSims = allSims)
     rolePlotsServer(id, name = "traitDist", func = roleDistAnim, type = "Trait", checkBox = "traitDistChk", allSims = allSims)
