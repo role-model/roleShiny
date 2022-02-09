@@ -1,0 +1,19 @@
+---
+title: "Dynamic report test"
+output: html_document
+params:
+  date: !r Sys.Date()
+  n: NA
+---
+
+## R Markdown
+
+This is a test R Markdown for figuring out how to download parameterized reports.  
+
+
+A plot of `r params$n` random points.
+
+```{r}
+plot(rnorm(params$n), rnorm(params$n))
+```
+
