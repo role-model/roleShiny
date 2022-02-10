@@ -16,11 +16,21 @@
 ## Dependencies ----
 ## Add one line by package you want to add as dependency
 usethis::use_package( "thinkr" )
+usethis::use_package( "shinyBS" )
+usethis::use_package( "shinyjs" )
+usethis::use_package( "dplyr" )
+usethis::use_package( "callr" )
+usethis::use_package( "roleR" )
+usethis::use_package( "pika" )
 
 ## Add modules ----
 ## Create a module infrastructure in R/
-golem::add_module( name = "name_of_module1" ) # Name of the module
-golem::add_module( name = "name_of_module2" ) # Name of the module
+golem::add_module( name = "roleUploads" ) 
+golem::add_module( name = "roleControls" ) 
+golem::add_module( name = "roleParams" ) 
+golem::add_module( name = "roleDownloads" ) 
+golem::add_module( name = "rolePlotSelects" ) 
+golem::add_module( name = "rolePlots" ) 
 
 ## Add helper functions ----
 ## Creates fct_* and utils_*
