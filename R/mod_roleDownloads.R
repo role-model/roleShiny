@@ -10,7 +10,7 @@
 #' 
 #' 
 report_path <- tempfile(fileext = ".Rmd")
-file.copy("report.Rmd", report_path, overwrite = TRUE)
+file.copy(here("inst/templates/report.Rmd"), report_path, overwrite = TRUE)
 
 render_report <- function(input, output, params) {
   rmarkdown::render(input,

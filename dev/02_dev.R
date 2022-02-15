@@ -22,6 +22,7 @@ usethis::use_package( "dplyr" )
 usethis::use_package( "callr" )
 usethis::use_package( "roleR" )
 usethis::use_package( "pika" )
+usethis::use_package( "here" )
 
 ## Add modules ----
 ## Create a module infrastructure in R/
