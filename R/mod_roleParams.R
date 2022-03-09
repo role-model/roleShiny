@@ -7,6 +7,7 @@
 #' @noRd 
 #'
 #' @importFrom shiny NS tagList 
+#' @importFrom shinyBS bsTooltip bsButton
 
 roleParam <- function(id, name, label = "", min = 0, max = 100000, value = 100, tip = "", isGreek = FALSE) {
   ns <- NS(id)
@@ -16,7 +17,7 @@ roleParam <- function(id, name, label = "", min = 0, max = 100000, value = 100, 
     div(
       class = "param-wrapper",
       sliderInput(ns(name), label = "", min = min, max = max, value = value, ticks = FALSE),
-      bsTooltip(ns(name), tip)
+      shinyBS::bsTooltip(ns(name), tip)
     )
   )
 }
@@ -31,8 +32,8 @@ mod_roleParams_ui <- function(id, button){
     class = "control-set",
     h3("Parameters"),
     
-    bsButton("commonParams", label = "Common Parameters", type = "toggle", value = TRUE, class = "show-hide"),
-    bsTooltip("commonParams", "Show/hide common parameters", placement = "bottom", trigger = "hover"),
+    shinyBS::bsButton("commonParams", label = "Common Parameters", type = "toggle", value = TRUE, class = "show-hide"),
+    shinyBS::bsTooltip("commonParams", "Show/hide common parameters", placement = "bottom", trigger = "hover"),
     
     conditionalPanel("input.commonParams", class = "cond-panel",
                      
@@ -66,8 +67,8 @@ mod_roleParams_ui <- function(id, button){
                      ),
     ),
     
-    bsButton("extraParams", label = "Extra Parameters", type = "toggle", class = "show-hide"),
-    bsTooltip("extraParams", "Show/hide extra parameters", placement = "bottom", trigger = "hover"),
+    shinyBS::bsButton("extraParams", label = "Extra Parameters", type = "toggle", class = "show-hide"),
+    shinyBS::bsTooltip("extraParams", "Show/hide extra parameters", placement = "bottom", trigger = "hover"),
     
     conditionalPanel("input.extraParams", class = "cond-panel",
                      

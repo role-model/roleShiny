@@ -15,14 +15,8 @@
 
 ## Dependencies ----
 ## Add one line by package you want to add as dependency
-usethis::use_package( "thinkr" )
-usethis::use_package( "shinyBS" )
-usethis::use_package( "shinyjs" )
-usethis::use_package( "dplyr" )
-usethis::use_package( "callr" )
-usethis::use_package( "roleR" )
-usethis::use_package( "pika" )
-usethis::use_package( "here" )
+attachment::att_from_rscripts() %>%
+  purrr::map(usethis::use_package)
 
 ## Add modules ----
 ## Create a module infrastructure in R/

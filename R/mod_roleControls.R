@@ -7,6 +7,7 @@
 #' @noRd 
 #'
 #' @importFrom shiny NS tagList 
+#' @importFrom shinyBS bsTooltip
 #' 
 
 mod_roleControls_ui <- function(id){
@@ -17,9 +18,9 @@ mod_roleControls_ui <- function(id){
       actionButton(ns("playBtn"), icon("play")),
       actionButton(ns("pauseBtn"), icon("pause")),
       actionButton(ns("nextBtn"), icon("step-forward")),
-      bsTooltip(ns("playBtn"), "Play the simulation", placement = "bottom", trigger = "hover"),
-      bsTooltip(ns("pauseBtn"), "Pause the simulation", placement = "bottom", trigger = "hover"),
-      bsTooltip(ns("nextBtn"), "Step simulation forward", placement = "bottom", trigger = "hover")
+      shinyBS::bsTooltip(ns("playBtn"), "Play the simulation", placement = "bottom", trigger = "hover"),
+      shinyBS::bsTooltip(ns("pauseBtn"), "Pause the simulation", placement = "bottom", trigger = "hover"),
+      shinyBS::bsTooltip(ns("nextBtn"), "Step simulation forward", placement = "bottom", trigger = "hover")
       )
     )
 }
@@ -31,9 +32,11 @@ mod_roleControls_server <- function(id, allSims){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
     observeEvent(input$playBtn, {
-      sims <- getSims(input, allSims)
+      # sims <- getSims(input, allSims)
+      # something in place until I figure out what the allSims() reactiveVal is for
+      sims <- sort(rpois(100, round(runif(1, 1, 100))), decreasing = TRUE)
       print("before")
-      untar("./data/MESS-simulated-data_small.tar.gz", list = TRUE)
+      #untar("./data/MESS-simulated-data_small.tar.gz", list = TRUE)
       # X <- read.csv(MESS-simulated-data/params-sim-data.txt)
       # print(files)
       print("after")

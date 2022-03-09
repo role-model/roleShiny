@@ -4,13 +4,52 @@
 #'     DO NOT REMOVE.
 #' @import shiny
 #' @noRd
+
+# library(shiny)
+# library(shinyBS)
+# library(shinyjs)
+# library(plotly)
+# library(dplyr)
+# library(callr)
+# library(roleR)
+# library(here)
+
+id <- "roleControls"
+
 app_ui <- function(request) {
   tagList(
     # Leave this function for adding external resources
     golem_add_external_resources(),
     # Your application UI logic 
     fluidPage(
-      h1("roleShiny")
+      theme = "ui.css",
+      tags$script(src = "ui.js"),
+      tags$style(src = "all.min.css"),
+      shinyjs::useShinyjs(),
+      
+      sidebarLayout(
+        sidebarPanel(
+          mod_roleParams_ui(id),
+          mod_roleControls_ui(id),
+          mod_rolePlotSelects_ui(id),
+          mod_roleDownloads_ui(id),
+          mod_roleUploads_ui(id)
+        ),
+        
+        mainPanel(
+          h1("Rules of Life Engine model"),
+          
+          
+          mod_rolePlots_ui(id,  name1 = "abundDist", name2 = "abundTime",
+                           check1 = "input.abundDistChk", check2 = "input.abundTimeChk"),
+          
+          mod_rolePlots_ui(id, name1 = "traitDist", name2 = "traitTime",
+                           check1 = "input.traitDistChk", check2 = "input.traitTimeChk"),
+          
+          mod_rolePlots_ui(id, name1 = "geneDist", name2 = "geneTime",
+                           check1 = "input.geneDistChk", check2 = "input.geneTimeChk"),
+        )
+      )
     )
   )
 }

@@ -7,17 +7,18 @@
 #' @noRd 
 #'
 #' @importFrom shiny NS tagList 
+#' @import plotly
 mod_rolePlots_ui <- function(id, name1, name2, check1, check2){
   ns <- NS(id)
   tagList(
     fluidRow(
       
       conditionalPanel(check1, class = "cond-panel", ns = ns,
-                       column(5, plotlyOutput(ns(name1)))
+                       column(5, plotly::plotlyOutput(ns(name1)))
       ),
       
       conditionalPanel(check2, class = "cond-panel", ns = ns,
-                       column(7, plotlyOutput(ns(name2)))
+                       column(7, plotly::plotlyOutput(ns(name2)))
       )
     )
   )
@@ -34,7 +35,7 @@ mod_rolePlots_server <- function(id, name, func, type, checkBox, allSims){
       if (length(allSims()) > 0 && input[[checkBox]]) {
         cat("rolePlotsServer", length(allSims()), "\n")
         fig <- func(allSims(), type)
-        output[[name]] <- renderPlotly({fig})
+        output[[name]] <- plotly::renderPlotly({fig})
       }
     })
   })

@@ -7,6 +7,7 @@
 #' @noRd 
 #'
 #' @importFrom shiny NS tagList 
+#' @importFrom shinyBS bsTooltip
 mod_rolePlotSelects_ui <- function(id){
   ns <- NS(id)
   tagList(
@@ -31,12 +32,12 @@ mod_rolePlotSelects_ui <- function(id){
         div(class = "plot-row-4 plot-col-2", checkboxInput(ns("geneDistChk"), label = "")),
         div(class = "plot-row-4 plot-col-3", checkboxInput(ns("geneTimeChk"), label = "")),
         
-        bsTooltip(ns("abundDistChk"), "Display the abundance distribution plot"),
-        bsTooltip(ns("abundTimeChk"), "Display the abundance time plot"),
-        bsTooltip(ns("traitDistChk"), "Display the trait distribution plot"),
-        bsTooltip(ns("traitTimeChk"), "Display the trait time plot"),
-        bsTooltip(ns("geneDistChk"), "Display the genetic diversity distribution plot"),
-        bsTooltip(ns("geneTimeChk"), "Display the genetic diversity time plot"),
+        shinyBS::bsTooltip(ns("abundDistChk"), "Display the abundance distribution plot"),
+        shinyBS::bsTooltip(ns("abundTimeChk"), "Display the abundance time plot"),
+        shinyBS::bsTooltip(ns("traitDistChk"), "Display the trait distribution plot"),
+        shinyBS::bsTooltip(ns("traitTimeChk"), "Display the trait time plot"),
+        shinyBS::bsTooltip(ns("geneDistChk"), "Display the genetic diversity distribution plot"),
+        shinyBS::bsTooltip(ns("geneTimeChk"), "Display the genetic diversity time plot"),
       )
     )
   )
