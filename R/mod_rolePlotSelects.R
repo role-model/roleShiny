@@ -8,6 +8,10 @@
 #'
 #' @importFrom shiny NS tagList 
 #' @importFrom shinyBS bsTooltip
+#' 
+
+library(shinyBS)
+
 mod_rolePlotSelects_ui <- function(id){
   ns <- NS(id)
   tagList(

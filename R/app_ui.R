@@ -5,15 +5,6 @@
 #' @import shiny
 #' @noRd
 
-# library(shiny)
-# library(shinyBS)
-# library(shinyjs)
-# library(plotly)
-# library(dplyr)
-# library(callr)
-# library(roleR)
-# library(here)
-
 id <- "roleControls"
 
 app_ui <- function(request) {

@@ -8,17 +8,21 @@
 #'
 #' @importFrom shiny NS tagList 
 #' @import plotly
+#' 
+#' 
+library(plotly)
+
 mod_rolePlots_ui <- function(id, name1, name2, check1, check2){
   ns <- NS(id)
   tagList(
     fluidRow(
       
       conditionalPanel(check1, class = "cond-panel", ns = ns,
-                       column(5, plotly::plotlyOutput(ns(name1)))
+                       column(5, plotOutput(ns(name1)))
       ),
       
       conditionalPanel(check2, class = "cond-panel", ns = ns,
-                       column(7, plotly::plotlyOutput(ns(name2)))
+                       column(7, plotOutput(ns(name2)))
       )
     )
   )
@@ -28,16 +32,27 @@ mod_rolePlots_ui <- function(id, name1, name2, check1, check2){
 #'
 #' @noRd 
 mod_rolePlots_server <- function(id, name, func, type, checkBox, allSims){
+  
+  #stopifnot(is.reactive(allSims))
+  
   moduleServer( id, function(input, output, session){
     ns <- session$ns
     
     observe({
-      if (length(allSims()) > 0 && input[[checkBox]]) {
-        cat("rolePlotsServer", length(allSims()), "\n")
-        fig <- func(allSims(), type)
-        output[[name]] <- plotly::renderPlotly({fig})
-      }
-    })
+      # explore ways to change this if statement to return something
+      if (input[[checkBox]]) {
+        #cat("rolePlotsServer", length(allSims()), "\n")
+      #allSims <- mod_roleSims_server(id)
+      # fig <- allSims() %>%
+      #       plot_ly(x = ~x, y = ~y) %>%
+      #       add_lines(color = ~ordered(sim)) %>%
+      #       layout(xaxis = list(title = "Rank"), yaxis = list(title = "Abundance"))
+        fig <- plot(1:10, 1:10)
+      } else fig <- plot(1:5, 1:5)
+        output[[name]] <- renderPlot({fig})
+    }) %>% 
+      bindEvent(input$plyBtn)
+    
   })
 }
     
