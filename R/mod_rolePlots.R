@@ -18,11 +18,11 @@ mod_rolePlots_ui <- function(id, name1, name2, check1, check2){
     fluidRow(
       
       conditionalPanel(check1, class = "cond-panel", ns = ns,
-                       column(5, plotOutput(ns(name1)))
+                       column(5, plotlyOutput(ns(name1)))
       ),
       
       conditionalPanel(check2, class = "cond-panel", ns = ns,
-                       column(7, plotOutput(ns(name2)))
+                       column(7, plotlyOutput(ns(name2)))
       )
     )
   )
@@ -33,26 +33,35 @@ mod_rolePlots_ui <- function(id, name1, name2, check1, check2){
 #' @noRd 
 mod_rolePlots_server <- function(id, name, func, type, checkBox, allSims){
   
-  #stopifnot(is.reactive(allSims))
+  stopifnot(is.reactive(allSims))
   
   moduleServer( id, function(input, output, session){
     ns <- session$ns
     
-    observe({
-      # explore ways to change this if statement to return something
-      if (input[[checkBox]]) {
-        #cat("rolePlotsServer", length(allSims()), "\n")
-      #allSims <- mod_roleSims_server(id)
-      # fig <- allSims() %>%
-      #       plot_ly(x = ~x, y = ~y) %>%
-      #       add_lines(color = ~ordered(sim)) %>%
-      #       layout(xaxis = list(title = "Rank"), yaxis = list(title = "Abundance"))
-        fig <- plot(1:10, 1:10)
-      } else fig <- plot(1:5, 1:5)
-        output[[name]] <- renderPlot({fig})
-    }) %>% 
-      bindEvent(input$plyBtn)
+
+    # fig <- observe({
+    #   # explore ways to change this if statement to return something
+    #   #if (input[[checkBox]]) {
+    #     #cat("rolePlotsServer", length(allSims()), "\n"
+    #   fig <- allSims() %>%
+    #         plot_ly(x = ~x, y = ~y) %>%
+    #         add_lines(color = ~ordered(sim)) %>%
+    #         layout(xaxis = list(title = "Rank"), yaxis = list(title = "Abundance"))
+    #   #} else fig <- plot_ly()
+    #   
+    #   output[[name]] <- renderPlotly({fig})
+    # }) %>% 
+    #   bindEvent(input$plotBtn, ignoreInit = TRUE)
+    fig <-  reactive({allSims() %>%
+      plot_ly(x = ~x, y = ~y) %>%
+      add_lines(color = ~ordered(sim)) %>%
+      layout(xaxis = list(title = "Rank"), yaxis = list(title = "Abundance"))
+      }) %>% 
+      bindEvent(input$plotBtn)
     
+      output[[name]] <- renderPlotly({
+       fig()
+            })
   })
 }
     

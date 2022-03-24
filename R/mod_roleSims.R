@@ -9,7 +9,6 @@
 #' @importFrom shiny NS tagList 
 #' 
 
-id <- "roleControls"
 
 mod_roleSims_ui <- function(id){
   ns <- NS(id)
@@ -25,23 +24,19 @@ mod_roleSims_server <- function(id){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
     
-    params <- reactive({list(
-      species_meta = input[[ns("sm")]],
-      individuals_meta = input[[ns("jm")]],
-      individuals_local = input[[ns("j")]],
-      dispersal_prob = input[[ns("m")]],
-      speciation_local = input[[ns("nu")]])})
+      # params <- reactiveValues()
+      # params$species_meta <- input[[ns("sm")]]
+      # params$individuals_meta <- input[[ns("jm")]]
+      # params$individuals_local <- input[[ns("j")]]
+      # params$dispersal_prob <- input[[ns("m")]]
+      # params$speciation_local <-  input[[ns("nu")]
     
-    observe({
-      reactive({
-        s <- sort(rpois(params$individuals_local(), params$species_meta()), decreasing = TRUE)
-        data.frame(x = 1:length(s), y = s, sim = c(rep("A", length(s))))
-        }
-        ) %>% 
-        bindEvent(input$plyBtn)
-      
-    }) 
     
+    p <- reactive({sort(rpois(input$sm, input$jm), decreasing = TRUE)})
+
+    d <- reactive({data.frame(x = 1:length(p()), y = p(), sim = rep("A", length(p())))})
+    
+    return(d)
   })
 }
     
