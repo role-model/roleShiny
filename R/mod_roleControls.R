@@ -19,11 +19,10 @@ mod_roleControls_ui <- function(id){
       actionButton(ns("playBtn"), icon("play")),
       actionButton(ns("pauseBtn"), icon("pause")),
       actionButton(ns("nextBtn"), icon("step-forward")),
-      actionButton(ns("plotBtn"), icon("chart-line")),
+      
       shinyBS::bsTooltip(ns("playBtn"), "Play the simulation", placement = "bottom", trigger = "hover"),
       shinyBS::bsTooltip(ns("pauseBtn"), "Pause the simulation", placement = "bottom", trigger = "hover"),
-      shinyBS::bsTooltip(ns("nextBtn"), "Step simulation forward", placement = "bottom", trigger = "hover"),
-      shinyBS::bsTooltip(ns("plotBtn"), "Plot simulation", placement = "bottom", trigger = "hover")
+      shinyBS::bsTooltip(ns("nextBtn"), "Step simulation forward", placement = "bottom", trigger = "hover")
       )
     )
 }

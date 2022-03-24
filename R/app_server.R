@@ -20,9 +20,9 @@ app_server <- function(input, output, session) {
   mod_roleParams_server(id)
   mod_roleControls_server(id)
   mod_rolePlotSelects_server(id)
-  mod_roleDownloads_server("roleDownloads_ui_1")
-  mod_roleUploads_server("roleUploads_ui_1")
-  # 
+  mod_roleDownloads_server(id)
+  mod_roleUploads_server(id)
+  
   mod_rolePlots_server(id, name = "abundDist", func = roleDistAnim, type = "Abundance", checkBox = "abundDistChk", allSims = allSims)
   mod_rolePlots_server(id, name = "abundTime", func = roleTSAnim, type = "Abundance", checkBox = "abundTimeChk", allSims = allSims)
   mod_rolePlots_server(id, name = "traitDist", func = roleDistAnim, type = "Trait", checkBox = "traitDistChk", allSims = allSims)

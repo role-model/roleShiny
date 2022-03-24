@@ -32,7 +32,8 @@ mod_roleSims_server <- function(id){
       # params$speciation_local <-  input[[ns("nu")]
     
     
-    p <- reactive({sort(rpois(input$sm, input$jm), decreasing = TRUE)})
+    p <- reactive({sort(rpois(input$sm, input$jm), decreasing = TRUE)}) %>% 
+      bindEvent(input$playBtn)
 
     d <- reactive({data.frame(x = 1:length(p()), y = p(), sim = rep("A", length(p())))})
     

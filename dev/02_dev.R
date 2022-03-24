@@ -27,6 +27,7 @@ golem::add_module( name = "roleDownloads" )
 golem::add_module( name = "rolePlotSelects" ) 
 golem::add_module( name = "rolePlots" ) 
 golem::add_module( name = "roleSims" ) 
+golem::add_module( name = "roleReadSims" ) 
 
 ## Add helper functions ----
 ## Creates fct_* and utils_*
