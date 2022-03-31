@@ -3,6 +3,7 @@
 #' @description A shiny Module.
 #'
 #' @param id,input,output,session Internal parameters for {shiny}.
+#' 
 #'
 #' @noRd 
 #'
@@ -19,8 +20,11 @@ mod_roleSims_ui <- function(id){
     
 #' roleSims Server Functions
 #'
+#' @param id Internal parameter for {shiny}
+#' @param sims_out Path to temporary file to house simulations
+#'
 #' @noRd 
-mod_roleSims_server <- function(id){
+mod_roleSims_server <- function(id, sims_out){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
     
@@ -34,10 +38,16 @@ mod_roleSims_server <- function(id){
     
     p <- reactive({sort(rpois(input$sm, input$jm), decreasing = TRUE)}) %>% 
       bindEvent(input$playBtn)
-
-    d <- reactive({data.frame(x = 1:length(p()), y = p(), sim = rep("A", length(p())))})
     
-    return(d)
+    # make this an observe({}) dependent on p() to write out the simulation
+    # d <- reactive({data.frame(x = 1:length(p()), y = p(), sim = rep("A", length(p())))})
+    # sims_out <- tempfile(pattern = "sims", tmpdir = here("inst", "templates"), fileext = ".csv")
+    observe({
+      p()
+      d <- reactive({data.frame(x = 1:length(p()), y = p(), sim = rep("A", length(p())))})
+      write.csv(d(), sims_out)
+    })
+    
   })
 }
     

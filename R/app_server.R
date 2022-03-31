@@ -5,6 +5,7 @@
 #' @import shiny
 #' @noRd
 #' 
+library(here)
 
 id <- "roleControls"
 
@@ -16,7 +17,11 @@ app_server <- function(input, output, session) {
   #                               filePath = "~/Desktop/test_data.csv",
   #                               readFunc = read.csv)
   
-  allSims <- mod_roleSims_server(id)
+  # temporary path to house simulations
+  sims_out <- tempfile(pattern = "sims", tmpdir = here("inst", "sims"), fileext = ".csv")
+  
+  mod_roleSims_server(id, sims_out = sims_out)
+  allSims <- mod_roleReadSims_server(id, sims_out = sims_out)
   mod_roleParams_server(id)
   mod_roleControls_server(id)
   mod_rolePlotSelects_server(id)
