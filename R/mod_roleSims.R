@@ -39,9 +39,6 @@ mod_roleSims_server <- function(id, sims_out){
     p <- reactive({sort(rpois(input$sm, input$jm), decreasing = TRUE)}) %>% 
       bindEvent(input$playBtn)
     
-    # make this an observe({}) dependent on p() to write out the simulation
-    # d <- reactive({data.frame(x = 1:length(p()), y = p(), sim = rep("A", length(p())))})
-    # sims_out <- tempfile(pattern = "sims", tmpdir = here("inst", "templates"), fileext = ".csv")
     observe({
       p()
       d <- reactive({data.frame(x = 1:length(p()), y = p(), sim = rep("A", length(p())))})

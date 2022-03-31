@@ -32,42 +32,48 @@ mod_rolePlots_ui <- function(id, name1, name2, check1, check2){
 #' rolePlots Server Functions
 #'
 #' @noRd 
-mod_rolePlots_server <- function(id, name, func, type, checkBox, allSims){
+mod_rolePlots_server <- function(id, name, func, type, checkBox, sims_out, allSims){
   
-  #stopifnot(is.reactive(allSims))
-  
+
   moduleServer( id, function(input, output, session){
     ns <- session$ns
-    
     # nest these if() statements in an if() statement that checks if allSims() is of a certain size (or class. Maybe I can make the empty allSims its own class to clear us of having to worry about unusable data sizes)
-    if (stringr::str_detect(name, "Dist")) {
-      
+    
+    observe({
+      if (stringr::str_detect(name, "Dist")) {
+        
         fig <-  reactive({
           allSims() %>%
             plot_ly(x = ~x, y = ~y) %>%
             add_lines(color = ~ordered(sim)) %>%
             layout(xaxis = list(title = "Rank"), yaxis = list(title = "Abundance"))
-          })
+        })
         
         output[[name]] <- renderPlotly({
           fig()
         })
-      
-    } else if (stringr::str_detect(name, "Time")) {
-      fig <-  reactive({
-        allSims() %>%
-          plot_ly(x = ~x, y = ~y) %>%
-          add_markers(color = ~ordered(sim)) %>%
-          layout(xaxis = list(title = "Rank"), yaxis = list(title = "Abundance"))
-      }) 
-      
-      output[[name]] <- renderPlotly({
-        fig()
-      })
-    }
+        
+      } else if (stringr::str_detect(name, "Time")) {
+        fig <-  reactive({
+          allSims() %>%
+            plot_ly(x = ~x, y = ~y) %>%
+            add_markers(color = ~ordered(sim)) %>%
+            layout(xaxis = list(title = "Rank"), yaxis = list(title = "Abundance"))
+        }) 
+        
+        output[[name]] <- renderPlotly({
+          fig()
+        })
+      }
+    
+    }) %>% 
+      bindEvent(input$playBtn)
+  }
+    
+    
     
 
-  })
+  )
 }
     
 ## To be copied in the UI

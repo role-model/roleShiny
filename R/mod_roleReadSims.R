@@ -22,13 +22,12 @@ mod_roleReadSims_server <- function(id, sims_out){
     ns <- session$ns
     
     # if() statement to depend on a file being there
-    
+
     # reactiveFileReader to read in the output simulation
-    
     # else the output object is a blank object
-    d <- reactiveFileReader(10, session, filePath = sims_out, readFunc = read.csv)
-      
-    return(d)
+    d <-  reactiveFileReader(10, session, filePath = sims_out, readFunc = read.csv) %>% 
+      bindEvent(input$playBtn)
+    
     
   })
 }
