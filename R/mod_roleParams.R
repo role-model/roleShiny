@@ -9,6 +9,7 @@
 #' @importFrom shiny NS tagList 
 #' @importFrom shinyBS bsTooltip bsButton
 
+# slider input
 roleParam <- function(id, name, label = "", min = 0, max = 100000, value = 100, tip = "", isGreek = FALSE) {
   ns <- NS(id)
   opener = if (isGreek) '<div class="param-label greek">' else '<div class="param-label">'
@@ -22,7 +23,43 @@ roleParam <- function(id, name, label = "", min = 0, max = 100000, value = 100, 
   )
 }
 
-maxSteps <- 1000
+# corresponding text input
+roleParamText <- function(id, name, label = "", min = 0, max = 100000, value = 100, tip = "", isGreek = FALSE) {
+  ns <- NS(id)
+  opener = if (isGreek) '<div class="param-label greek">' else '<div class="param-label">'
+  tagList(
+    HTML(paste(opener, label, "</div>")),
+    div(
+      class = "param-wrapper",
+      textInput(ns(name), label = NULL, min = min, max = max, value = value),
+      shinyBS::bsTooltip(ns(name), tip)
+    )
+  )
+}
+
+
+### max and default values for all role Params. Easy place to adjust
+max_sm <- 10000
+value_sm <- 100
+
+max_jm <- 100000
+value_jm <- 25000
+
+max_j <- 10000
+value_j <- 1000
+
+max_m <- 1.0
+value_m <- 0.1
+
+max_nu <- 1.0
+value_nu <- 0.25
+
+max_ts <- 1000
+value_ts <- 500
+
+
+max_steps <- 1000
+value_steps <- 10
 
 
 mod_roleParams_ui <- function(id, button){
@@ -41,28 +78,33 @@ mod_roleParams_ui <- function(id, button){
                        class = "param-group",
                        
                        roleParam(id, name = "sm", label = "S<sub>m</sub>",
-                                 min = 0, max = 10000, value = 100,
+                                 min = 0, max = max_sm, value = value_sm,
                                  tip = "The species metaparameter"),
                        
                        roleParam(id, name = "jm", label = "J<sub>m</sub>",
-                                 min =  0, max = 100000, value = 10000,
+                                 min =  0, max = max_jm, value = value_jm,
                                  tip = "The individuals metaparameter"),
                        
                        roleParam(id, name = "j", label = "J",
-                                 min = 0, max = 100000, value = 100,
+                                 min = 0, max = max_j, value = value_j,
                                  tip = "The individuals local parameter"),
                        
                        roleParam(id, name = "m", label = "m",
-                                 min = 0, max = 1.0, value = 0.1,
+                                 min = 0, max = max_m, value = value_m,
                                  tip = "The dispersal probability"),
                        
                        roleParam(id, name = "nu", label = "&#957;",
-                                 min = 0, max = 1.0, value = 0.01,
+                                 min = 0, max = max_nu, value = value_nu,
                                  tip = "The speciation local parameter",
                                  isGreek = TRUE),
                        
+                       roleParam(id, name = "ts", label = "n<sub>ts</sub>",
+                                 min = 0, max = max_ts, value = value_ts,
+                                 tip = "The number of time steps to run",
+                                 isGreek = FALSE),
+                       
                        roleParam(id, name = "nstep", label = "n<sub>step</sub>",
-                                 min = 1, max = maxSteps, value = 10,
+                                 min = 1, max = max_steps, value = value_steps,
                                  tip = "The number of steps"),
                      ),
     ),
@@ -76,11 +118,11 @@ mod_roleParams_ui <- function(id, button){
                        class = "param-group param-2",
                        
                        roleParam(id, name = "nout", label = "n<sub>out</sub>",
-                                 min = 1, max = maxSteps, value = 5,
+                                 min = 1, max = max_steps, value = 5,
                                  tip = "Plot every n steps of the simulation"),
                        
                        roleParam(id, name = "nvis", label = "n<sub>vis</sub>",
-                                 min = 1, max = maxSteps, value = 2,
+                                 min = 1, max = max_steps, value = 2,
                                  tip = "Update the plots every nvis * nout"),
                        
                      ),

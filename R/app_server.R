@@ -12,7 +12,7 @@ id <- "roleControls"
 app_server <- function(input, output, session) {
   
   # temporary path to house simulations
-  sims_out <- tempfile(pattern = "sims", tmpdir = tempdir(), fileext = ".csv")
+  sims_out <- tempfile(pattern = "sims", tmpdir = tempdir(), fileext = ".rds")
   
   mod_roleSims_server(id, sims_out = sims_out)
   allSims <- mod_roleReadSims_server(id, sims_out = sims_out)
