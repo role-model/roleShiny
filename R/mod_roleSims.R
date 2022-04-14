@@ -11,6 +11,7 @@
 #' 
 
 library(ecolottery)
+library(callr)
 
 mod_roleSims_ui <- function(id){
   ns <- NS(id)
@@ -32,32 +33,8 @@ mod_roleSims_server <- function(id, sims_out){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
     
-      # params <- reactiveValues()
-      # params$species_meta <- input[[ns("sm")]]
-      # params$individuals_meta <- input[[ns("jm")]]
-      # params$individuals_local <- input[[ns("j")]]
-      # params$dispersal_prob <- input[[ns("m")]]
-      # params$speciation_local <-  input[[ns("nu")]
     
     s <- reactive({
-    ###### Coalescent sims (fast) trial. 
-      ### simulate the metacommunity
-      # metacommunity ancestors, species, and their trait values
-      # meta_com <- coalesc(input$jm, m = 1, theta = 100)
-     
-      # 
-      # # metacommunity abundances (species, abundance, and relative abundance)
-      # meta_abund <- abund(meta_com)
-      # 
-      # ### simulate the local communities (keeping it to a single community for now)
-      # local_com <- coalesc(input$j, input$m, pool = meta_com$pool)
-      # local_abund <- abund(local_com)
-      # rank_abund <- local_abund$pool %>%
-      #   arrange(desc(ab)) %>%
-      #   mutate(rank = row_number())
-      # 
-      # return(rank_abund)
-      # 
       
       ##### Forward sims
       
@@ -84,12 +61,27 @@ mod_roleSims_server <- function(id, sims_out){
       
       initial <- pool[sample(1:num_inds, input$sm),]
       
-      final <- forward(initial = initial, 
-                               prob = input$m, 
-                               d = deaths,
-                               pool = pool,
-                               gens = input$ts,
-                               keep = TRUE)
+      withProgress(message = "Simulation in progress...", 
+                   detail = "May take a while", 
+                   value = 0,
+                   { incProgress(0.75)
+                     # send this process to the background so Shiny users can do other things
+                     final_gb <- callr::r_bg(ecolottery::forward, args = list(initial = initial, 
+                                                                              prob = input$m, 
+                                                                              d = deaths,
+                                                                              pool = pool,
+                                                                              gens = input$nstep,
+                                                                              keep = TRUE), 
+                                             supervise = TRUE,
+                                             package = TRUE)
+                     
+                     # wait until the process is done before returning the results
+                     final_gb$wait()
+                     final_gb$is_alive()
+                     
+                     final <- final_gb$get_result()
+                   })
+      
       
       return(final)
 

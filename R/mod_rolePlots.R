@@ -21,11 +21,11 @@ mod_rolePlots_ui <- function(id, name1, name2, check1, check2){
     fluidRow(
       
       conditionalPanel(check1, class = "cond-panel", ns = ns,
-                       column(5, plotlyOutput(ns(name1)))
+                       column(6, plotlyOutput(ns(name1)))
       ),
       
       conditionalPanel(check2, class = "cond-panel", ns = ns,
-                       column(7, plotlyOutput(ns(name2)))
+                       column(6, plotlyOutput(ns(name2)))
       )
     )
   )
@@ -45,62 +45,35 @@ mod_rolePlots_server <- function(id, name, func, type, checkBox, sims_out, allSi
       
       # abundance distributions 
       abundances <- reactive({
-        c <- allSims() %>% 
-          # get abundance distributions
-          abund() %>% 
-          # get the `com` object, which contains the 
-          pluck("com_t") 
-        
-        # for time series plots later 
-        names(c) <- 1:length(c)
-        
-        return(c)
+        get_abund(allSims())
       })
       
       # trait distributions
       traits <- reactive({
-        t <- allSims() %>% 
-          pluck("com_t")
-        
-        names(t) <- 1:length(t)
-        
-        return(t)
+        get_traits(allSims())
       })
         
         
       
       if (stringr::str_detect(name, "abundDist")) {
         
-        # sampling timesteps so the rank plot doesn't take forever to render and isn't too dense
-        n_ts <- length(allSims()$com_t)
-        if (n_ts > 100) {
-          ts_sample <- sample.int(n_ts - 1, 100) %>% 
-            # make sure to include the most recent time step
-            append(n_ts)
-          
-        } else ts_sample <- 1:length(n_ts)
-        
         
         fig <-  reactive({
-          # take a sample of the communities
-          abund_sample <- abundances()[ts_sample]
           
-          c_df <- abund_sample %>% 
-            bind_rows(.id = "timestep") %>% 
-            group_by(timestep) %>% 
-            arrange(desc(ab), .by_group = TRUE) %>% 
-            mutate(rank = row_number()) %>% 
-            ungroup() %>% 
-            mutate(timestep = as.integer(timestep)) %>% 
-            arrange(desc(timestep))
+          c_df <- sample_ts(abundances(), n_ts = input$nout, is_abund = TRUE)
           
           p <- c_df %>% 
             ggplot(aes(x = rank, y = ab, group = timestep, color = timestep)) +
-            geom_line(alpha = 0.5) +
+            geom_line(alpha = 0.3) +
+            geom_line(aes(frame = timestep)) +
             scale_color_viridis_c() +
-            theme_minimal()
+            labs(x = "Rank", y = "Abundance", color = "Time step") +
+            theme_minimal() +
+            theme(legend.key.size = unit(0.5, 'cm'))
           
-          p_int <- ggplotly(p)
+          p_int <- ggplotly(p) %>% 
+            animation_opts(250, transition = 100)
+            
           
           return(p_int)
           
@@ -112,18 +85,12 @@ mod_rolePlots_server <- function(id, name, func, type, checkBox, sims_out, allSi
         
       } else if (stringr::str_detect(name, "abundTime")) {
         
-        # extract the communities from the time series
+        
         fig <-  reactive({
-        sim_shannon <- abundances() %>% 
-          map_df(~entropy::entropy(.$ab)) %>% 
-          pivot_longer(cols = everything(), 
-                       names_to = "time", 
-                       values_to = "shannon") %>% 
-          mutate(time = as.integer(time)) %>% 
-          arrange(desc(time))
            
+          abund_sumstats <- calc_abund_sumstats(abundances())
           
-            sim_shannon %>%
+           abund_sumstats %>%
               plot_ly(x = ~time, y = ~shannon) %>%
               add_lines() %>%
               layout(xaxis = list(title = "Time step"), yaxis = list(title = "Shannon entropy"))
@@ -134,30 +101,21 @@ mod_rolePlots_server <- function(id, name, func, type, checkBox, sims_out, allSi
         })
       } else if (stringr::str_detect(name, "traitDist")) {
         
-        # sampling timesteps so the rank plot doesn't take forever to render and isn't too dense
-        n_ts <- length(allSims()$com_t)
-        if (n_ts > 100) {
-          ts_sample <- sample.int(n_ts - 1, 100) %>% 
-            # make sure to include the most recent time step
-            append(n_ts)
-        } else ts_sample <- 1:length(n_ts)
-        
         fig <- reactive({
-          # take a sample of the communities
-          traits_sample <- traits()[ts_sample]
           
-          t_df <- traits_sample %>% 
-            bind_rows(.id = "timestep") %>% 
-            mutate(timestep = as.integer(timestep)) %>% 
-            arrange(desc(timestep))
+          t_df <- sample_ts(traits(), n_ts = input$nout, is_abund = FALSE)
           
           p <- t_df %>% 
-            ggplot(aes(x = trait, group = timestep, color = timestep)) +
-            geom_density() +
+            ggplot(aes(x = rank, y = trait, group = timestep, color = timestep)) +
+            geom_line(alpha = 0.3) +
+            geom_line(aes(frame = timestep)) +
             scale_color_viridis_c() +
-            theme_minimal()
+            labs(x = "Rank", y = "Trait", color = "Time step") +
+            theme_minimal() +
+            theme(legend.key.size = unit(0.5, 'cm'))
           
-          p_int <- ggplotly(p)
+          p_int <- ggplotly(p) %>% 
+            animation_opts(250, transition = 100) 
           
           return(p_int)
         })
@@ -169,15 +127,10 @@ mod_rolePlots_server <- function(id, name, func, type, checkBox, sims_out, allSi
       } else if (stringr::str_detect(name, "traitTime")) {
         
         fig <- reactive({
-          sim_traits <- traits() %>% 
-            map_df(~mean(.$trait)) %>% 
-            pivot_longer(cols = everything(), 
-                         names_to = "time", 
-                         values_to = "mean_trait") %>% 
-            mutate(time = as.integer(time)) %>% 
-            arrange(desc(time))
           
-          sim_traits %>%
+          trait_sumstats <- calc_trait_sumstats(traits())
+          
+          trait_sumstats %>%
             plot_ly(x = ~time, y = ~mean_trait) %>%
             add_lines() %>%
             layout(xaxis = list(title = "Time step"), yaxis = list(title = "Mean trait"))

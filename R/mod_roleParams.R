@@ -52,14 +52,11 @@ max_m <- 1.0
 value_m <- 0.1
 
 max_nu <- 1.0
-value_nu <- 0.25
-
-max_ts <- 1000
-value_ts <- 500
+value_nu <- 0.01
 
 
 max_steps <- 1000
-value_steps <- 10
+value_steps <- 500
 
 
 mod_roleParams_ui <- function(id, button){
@@ -97,15 +94,11 @@ mod_roleParams_ui <- function(id, button){
                                  min = 0, max = max_nu, value = value_nu,
                                  tip = "The speciation local parameter",
                                  isGreek = TRUE),
-                       
-                       roleParam(id, name = "ts", label = "n<sub>ts</sub>",
-                                 min = 0, max = max_ts, value = value_ts,
-                                 tip = "The number of time steps to run",
-                                 isGreek = FALSE),
+                    
                        
                        roleParam(id, name = "nstep", label = "n<sub>step</sub>",
                                  min = 1, max = max_steps, value = value_steps,
-                                 tip = "The number of steps"),
+                                 tip = "The number of time steps to run"),
                      ),
     ),
     
@@ -118,11 +111,11 @@ mod_roleParams_ui <- function(id, button){
                        class = "param-group param-2",
                        
                        roleParam(id, name = "nout", label = "n<sub>out</sub>",
-                                 min = 1, max = max_steps, value = 5,
+                                 min = 1, max = 100, value = 10,
                                  tip = "Plot every n steps of the simulation"),
                        
                        roleParam(id, name = "nvis", label = "n<sub>vis</sub>",
-                                 min = 1, max = max_steps, value = 2,
+                                 min = 1, max = 100, value = 2,
                                  tip = "Update the plots every nvis * nout"),
                        
                      ),
