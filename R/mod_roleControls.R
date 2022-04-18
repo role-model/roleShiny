@@ -17,12 +17,12 @@ mod_roleControls_ui <- function(id){
     div(
       class = "control-set but-group",
       actionButton(ns("playBtn"), icon("play")),
-      actionButton(ns("pauseBtn"), icon("pause")),
-      actionButton(ns("nextBtn"), icon("step-forward")),
+      # actionButton(ns("pauseBtn"), icon("pause")),
+      # actionButton(ns("nextBtn"), icon("step-forward")),
       
-      shinyBS::bsTooltip(ns("playBtn"), "Play the simulation", placement = "bottom", trigger = "hover"),
-      shinyBS::bsTooltip(ns("pauseBtn"), "Pause the simulation", placement = "bottom", trigger = "hover"),
-      shinyBS::bsTooltip(ns("nextBtn"), "Step simulation forward", placement = "bottom", trigger = "hover")
+      shinyBS::bsTooltip(ns("playBtn"), "Play the simulation", placement = "center", trigger = "hover")
+      # shinyBS::bsTooltip(ns("pauseBtn"), "Pause the simulation", placement = "bottom", trigger = "hover"),
+      # shinyBS::bsTooltip(ns("nextBtn"), "Step simulation forward", placement = "bottom", trigger = "hover")
       )
     )
 }
@@ -39,12 +39,12 @@ mod_roleControls_server <- function(id){
     #                        readFunc = read.csv)
     #}, ignoreInit = TRUE)
     
-    observeEvent(input$pauseBtn, {
-    }, ignoreInit = TRUE)
-    
-    observeEvent(input$nextBtn, {
-    }, ignoreInit = TRUE)
-  })
+  #   observeEvent(input$pauseBtn, {
+  #   }, ignoreInit = TRUE)
+  #   
+  #   observeEvent(input$nextBtn, {
+  #   }, ignoreInit = TRUE)
+   })
 }
     
 ## To be copied in the UI

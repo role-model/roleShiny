@@ -61,25 +61,59 @@ mod_roleSims_server <- function(id, sims_out){
       
       initial <- pool[sample(1:num_inds, input$sm),]
       
+      # environmental filtering function
+      filt_gaussian <- function(t, x, sigma) {
+        exp(-(x - t)^2 / (2 * sigma^2))
+      }
+      
+      
       withProgress(message = "Simulation in progress...", 
                    detail = "May take a while", 
                    value = 0,
                    { incProgress(0.75)
                      # send this process to the background so Shiny users can do other things
-                     final_gb <- callr::r_bg(ecolottery::forward, args = list(initial = initial, 
-                                                                              prob = input$m, 
-                                                                              d = deaths,
-                                                                              pool = pool,
-                                                                              gens = input$nstep,
-                                                                              keep = TRUE), 
-                                             supervise = TRUE,
-                                             package = TRUE)
+                     # final_gb <- callr::r_bg(ecolottery::forward, args = list(initial = initial, 
+                     #                                                          prob = input$m, 
+                     #                                                          d = deaths,
+                     #                                                          pool = pool,
+                     #                                                          gens = input$nstep,
+                     #                                                          filt = filt_fun,
+                     #                                                          keep = TRUE), 
+                     #                         supervise = TRUE,
+                     #                         package = TRUE)
+                     # 
+                     # # wait until the process is done before returning the results
+                     # final_gb$wait()
+                     # final_gb$is_alive()
+                     # 
+                     # final <- final_gb$get_result()
                      
-                     # wait until the process is done before returning the results
-                     final_gb$wait()
-                     final_gb$is_alive()
+                     # apply filtering if the user wants it
+                     if (input$filterChk) {
+                       
+                       final <- ecolottery::forward(
+                         initial = initial,
+                         prob = input$m,
+                         d = deaths,
+                         pool = pool,
+                         gens = input$nstep,
+                         filt = function(x) filt_gaussian(t = input$filt_mean, 
+                                                          x = x,
+                                                          sigma = input$filt_sd),
+                         keep = TRUE)
+                       
+                       
+                     } else {
+                       final <- ecolottery::forward(
+                         initial = initial,
+                         prob = input$m,
+                         d = deaths,
+                         pool = pool,
+                         gens = input$nstep,
+                         keep = TRUE)
+                     }
                      
-                     final <- final_gb$get_result()
+                     
                    })
       
       

@@ -30,6 +30,11 @@ hill_calc <- hill_calc <- function(dists, order = 1, correct = TRUE) {
   }
 }
 
+# environmental filtering function
+filt_gaussian <- function(t, x, sigma) {
+  exp(-(x - t)^2 / (2 * sigma^2))
+}
+
 ### simulated data processing functions
 
 # get abundance distributions
