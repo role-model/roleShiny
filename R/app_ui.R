@@ -24,7 +24,7 @@ app_ui <- function(request) {
           mod_roleControls_ui(id),
           mod_rolePlotSelects_ui(id),
           mod_roleDownloads_ui(id),
-          mod_roleUploads_ui(id)
+          #mod_roleUploads_ui(id)
         ),
         
         mainPanel(

@@ -32,8 +32,8 @@ mod_roleDownloads_ui <- function(id){
         class = "down-group",
         
         downloadButton(ns("downSim"), "download simulation"),
-        downloadButton(ns("downScript"), "download script"),
-        downloadButton(ns("downPlots"), "download plots")
+        # downloadButton(ns("downScript"), "download script"),
+        #downloadButton(ns("downPlots"), "download plots")
       )
     )
   )
@@ -42,15 +42,17 @@ mod_roleDownloads_ui <- function(id){
 #' roleDownloads Server Functions
 #'
 #' @noRd 
-mod_roleDownloads_server <- function(id){
+mod_roleDownloads_server <- function(id, allSims){
   moduleServer(id, function(input, output, session) {
-    
+  
+    #### NEED TO USE uuid PACKAGE TO APPLY A UNIQUE NAME TO THE DOWNLOAD
     output$downSim <- downloadHandler(
       filename = function() {
-        paste("sim-", Sys.Date(), ".csv", sep = "")
+        paste("sim-", Sys.Date(), ".rds", sep = "")
       },
       content = function(file) {
-        write.csv(mtcars, file)
+        
+        saveRDS(allSims(), file)
       }
     )
     

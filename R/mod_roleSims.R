@@ -89,7 +89,7 @@ mod_roleSims_server <- function(id, sims_out){
                      # final <- final_gb$get_result()
                      
                      # apply filtering if the user wants it
-                     if (input$filterChk) {
+                     if (input$env_filt == "Stabilizing") {
                        
                        final <- ecolottery::forward(
                          initial = initial,
@@ -102,8 +102,19 @@ mod_roleSims_server <- function(id, sims_out){
                                                           sigma = input$filt_sd),
                          keep = TRUE)
                        
+                     } else if (input$env_filt == "Disruptive"){
                        
-                     } else {
+                       final <- ecolottery::forward(
+                         initial = initial,
+                         prob = input$m,
+                         d = deaths,
+                         pool = pool,
+                         gens = input$nstep,
+                         filt = function(x) abs(0.5 - x),
+                         keep = TRUE)
+                     }
+                     
+                     else {
                        final <- ecolottery::forward(
                          initial = initial,
                          prob = input$m,

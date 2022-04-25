@@ -62,11 +62,13 @@ mod_rolePlots_server <- function(id, name, func, type, checkBox, sims_out, allSi
           
           c_df <- sample_ts(abundances(), n_ts = input$nout, is_abund = TRUE)
           
-          p <- c_df %>% 
-            ggplot(aes(x = rank, y = ab, group = timestep, color = timestep)) +
-            geom_line(alpha = 0.3) +
-            geom_line(aes(frame = timestep)) +
+          pool <- get_meta_abund(allSims())
+          
+          p <- ggplot() +
+            geom_line(data = c_df, aes(x = rank, y = ab, group = timestep, color = timestep), alpha = 0.3) +
+            geom_line(data = c_df, aes(x = rank, y = ab, group = timestep, color = timestep, frame = timestep)) +
             scale_color_viridis_c() +
+            geom_line(data = pool, aes(x = rank, y = ab), color = "black", linetype = "dashed") +
             labs(x = "Rank", y = "Abundance", color = "Time step") +
             theme_minimal() +
             theme(legend.key.size = unit(0.5, 'cm'))
@@ -105,11 +107,13 @@ mod_rolePlots_server <- function(id, name, func, type, checkBox, sims_out, allSi
           
           t_df <- sample_ts(traits(), n_ts = input$nout, is_abund = FALSE)
           
-          p <- t_df %>% 
-            ggplot(aes(x = rank, y = trait, group = timestep, color = timestep)) +
-            geom_line(alpha = 0.3) +
-            geom_line(aes(frame = timestep)) +
+          pool <- get_meta_traits(allSims())
+          
+          p <- ggplot() +
+            geom_line(data = t_df, aes(x = rank, y = trait, group = timestep, color = timestep), alpha = 0.3) +
+            geom_line(data = t_df, aes(x = rank, y = trait, group = timestep, color = timestep, frame = timestep)) +
             scale_color_viridis_c() +
+            geom_line(data = pool, aes(x = rank, y = trait), color = "black", linetype = "dashed") +
             labs(x = "Rank", y = "Trait", color = "Time step") +
             theme_minimal() +
             theme(legend.key.size = unit(0.5, 'cm'))

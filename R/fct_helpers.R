@@ -37,6 +37,32 @@ filt_gaussian <- function(t, x, sigma) {
 
 ### simulated data processing functions
 
+# get metacommunity abundances
+get_meta_abund <- function(allSims) {
+  
+  meta <- allSims$pool %>% 
+    count(sp) %>% 
+    rename(ab = n) %>% 
+    mutate(relab = ab / sum(ab)) %>% 
+    arrange(desc(ab)) %>% 
+    mutate(rank = row_number())
+  
+  return(meta)
+}
+  
+
+# get metacommunity traits
+get_meta_traits <- function(allSims) {
+  
+  meta <- allSims$pool %>% 
+    group_by(sp) %>% 
+    summarize(trait = median(trait)) %>% 
+    arrange(desc(trait)) %>% 
+    mutate(rank = row_number())
+  
+  return(meta)
+}
+
 # get abundance distributions
 get_abund <- function(allSims) {
   c <- allSims %>% 
@@ -51,11 +77,20 @@ get_abund <- function(allSims) {
   return(c)
 }
 
+# summarize traits by species
+get_trait_median <- function(df) {
+   df %>% 
+    group_by(sp) %>% 
+    summarize(trait = median(trait))
+}
+
 # get trait distributions
 get_traits <- function(allSims) {
-  t <- allSims %>% 
-    pluck("com_t")
   
+  t <- allSims %>% 
+    pluck("com_t") %>% 
+    map(get_trait_median)
+    
   names(t) <- 1:length(t)
   
   return(t)

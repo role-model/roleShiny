@@ -32,16 +32,16 @@ mod_rolePlotSelects_ui <- function(id){
         div(class = "plot-row-3 plot-col-2", checkboxInput(ns("traitDistChk"), label = "")),
         div(class = "plot-row-3 plot-col-3", checkboxInput(ns("traitTimeChk"), label = "")),
         
-        div(class = "plot-row-4 plot-col-1", "genetic div"),
-        div(class = "plot-row-4 plot-col-2", checkboxInput(ns("geneDistChk"), label = "")),
-        div(class = "plot-row-4 plot-col-3", checkboxInput(ns("geneTimeChk"), label = "")),
+        # div(class = "plot-row-4 plot-col-1", "genetic div"),
+        # div(class = "plot-row-4 plot-col-2", checkboxInput(ns("geneDistChk"), label = "")),
+        # div(class = "plot-row-4 plot-col-3", checkboxInput(ns("geneTimeChk"), label = "")),
         
         shinyBS::bsTooltip(ns("abundDistChk"), "Display the abundance distribution plot"),
         shinyBS::bsTooltip(ns("abundTimeChk"), "Display the abundance time plot"),
         shinyBS::bsTooltip(ns("traitDistChk"), "Display the trait distribution plot"),
         shinyBS::bsTooltip(ns("traitTimeChk"), "Display the trait time plot"),
-        shinyBS::bsTooltip(ns("geneDistChk"), "Display the genetic diversity distribution plot"),
-        shinyBS::bsTooltip(ns("geneTimeChk"), "Display the genetic diversity time plot"),
+        # shinyBS::bsTooltip(ns("geneDistChk"), "Display the genetic diversity distribution plot"),
+        # shinyBS::bsTooltip(ns("geneTimeChk"), "Display the genetic diversity time plot"),
       )
     )
   )

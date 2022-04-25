@@ -13,13 +13,12 @@ app_server <- function(input, output, session) {
   
   # temporary path to house simulations
   sims_out <- tempfile(pattern = "sims", tmpdir = tempdir(), fileext = ".rds")
-  
   mod_roleSims_server(id, sims_out = sims_out)
   allSims <- mod_roleReadSims_server(id, sims_out = sims_out)
   mod_roleParams_server(id)
   mod_roleControls_server(id)
   mod_rolePlotSelects_server(id)
-  mod_roleDownloads_server(id)
+  mod_roleDownloads_server(id, allSims = allSims)
   mod_roleUploads_server(id)
   
   mod_rolePlots_server(id, name = "abundDist", func = roleDistAnim, type = "Abundance", checkBox = "abundDistChk", allSims = allSims, sims_out = sims_out)
