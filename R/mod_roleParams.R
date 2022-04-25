@@ -136,7 +136,7 @@ mod_roleParams_ui <- function(id, button){
                      div(
                        class = "param-group param-2",
                        
-                       radioGroupButtons(
+                       shinyWidgets::radioGroupButtons(
                          inputId = ns("env_filt"),
                          label = "Type of Environmental Filtering", 
                          choices = c("None", "Stabilizing", "Disruptive"),
