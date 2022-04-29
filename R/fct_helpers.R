@@ -37,6 +37,7 @@ filt_gaussian <- function(t, x, sigma) {
 
 ### simulated data processing functions
 
+
 # get metacommunity abundances
 get_meta_abund <- function(allSims) {
   
@@ -162,4 +163,9 @@ calc_trait_sumstats <- function(tr) {
 }
 
 
-
+# function to get the date and time in a reasonable formate to append to the end of files for a unique filename
+file_suffix <- function() {
+  Sys.time() %>% 
+    str_replace_all("\\:", "-") %>% 
+    str_replace_all(" ", "_")
+}

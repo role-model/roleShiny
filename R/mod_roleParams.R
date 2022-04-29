@@ -121,7 +121,7 @@ mod_roleParams_ui <- function(id, button){
                        
                        roleParam(id, name = "nstep", label = "n<sub>step</sub>",
                                  min = 1, max = max_steps, value = value_steps,
-                                 tip = "The number of time steps to run"),
+                                 tip = "The number of time steps (generations) to run"),
                        
                        roleParamText(id, name = "nstep_t", label = NULL, 
                                      min = 0, max = max_steps, value = value_steps),
@@ -198,9 +198,9 @@ mod_roleParams_ui <- function(id, button){
                                  min = 1, max = 100, value = 10,
                                  tip = "Plot every n steps of the simulation"),
                        
-                       roleParam(id, name = "nvis", label = "n<sub>vis</sub>",
-                                 min = 1, max = 100, value = 2,
-                                 tip = "Update the plots every nvis * nout"),
+                       # roleParam(id, name = "nvis", label = "n<sub>vis</sub>",
+                       #           min = 1, max = 100, value = 2,
+                       #           tip = "Update the plots every nvis * nout"),
                        
                      ),
     ),
