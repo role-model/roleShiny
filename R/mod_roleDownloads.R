@@ -88,7 +88,7 @@ mod_roleDownloads_server <- function(id, allSims) {
     # parameters df
     param_df <- reactive({
       if (input$env_filt == "Stabilizing") {
-          data.frame(
+          param_df <- data.frame(
             jm = input$jm,
             sm = input$sm,
             j = input$j,
@@ -144,7 +144,7 @@ mod_roleDownloads_server <- function(id, allSims) {
         # create tempdir to write files temporarily
         temp_directory <- file.path(tempdir(), sim_id)
         dir.create(temp_directory)
-        
+  
         csv_list_raw <- reactiveValuesToList(csv_list)
         
         df_names <- names(csv_list_raw)
