@@ -51,7 +51,10 @@ mod_roleDownloads_server <- function(id, allSims) {
     
     csv_list <- reactiveValues()
     
-    sim_id <- uuid::UUIDgenerate()
+    observe(
+      sim_id <- uuid::UUIDgenerate()
+      ) %>% 
+      bindEvent(input$playBtn)
     
     # obtain data sets for all relevant output, including local traits, local abundances, meta traits, meta abundances, parameters
     traits <- reactive({
