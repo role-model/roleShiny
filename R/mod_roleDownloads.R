@@ -51,16 +51,16 @@ mod_roleDownloads_server <- function(id, allSims) {
     
     csv_list <- reactiveValues()
     
-    observe(
-      sim_id <- uuid::UUIDgenerate()
-      ) %>% 
+   sim_id <- reactive({
+     uuid::UUIDgenerate()
+   }) %>% 
       bindEvent(input$playBtn)
     
     # obtain data sets for all relevant output, including local traits, local abundances, meta traits, meta abundances, parameters
     traits <- reactive({
       get_traits(allSims()) %>%
         sample_ts(n_ts = length(allSims()$com_t), is_abund = FALSE) %>% 
-        mutate(sim_id = sim_id)
+        mutate(sim_id = sim_id())
     }) %>%
       bindEvent(input$playBtn)
       
@@ -68,25 +68,73 @@ mod_roleDownloads_server <- function(id, allSims) {
     abundances <- reactive({
       get_abund(allSims()) %>%
         sample_ts(n_ts = length(allSims()$com_t)) %>% 
-        mutate(sim_id = sim_id)
+        mutate(sim_id = sim_id())
     }) %>% bindEvent(input$playBtn)
       
 
 
     meta_abund <- reactive({
       get_meta_abund(allSims()) %>% 
-        mutate(sim_id = sim_id)
+        mutate(sim_id = sim_id())
     }) %>% 
       bindEvent(input$playBtn)
       
 
     meta_traits <- reactive({
       get_meta_traits(allSims()) %>% 
-        mutate(sim_id = sim_id)
+        mutate(sim_id = sim_id())
     }) %>% 
       bindEvent(input$playBtn)
-      
     
+    # calculate abundance sumstats for the last timestep
+    abund_sumstats <- reactive({
+      req(abundances)
+      last_ts <- abundances() %>% 
+        filter(timestep == max(timestep))
+      
+      abund_sum <- last_ts %>% 
+        summarize(
+          species_richness = hill_calc(.$ab, order = 0),
+          mean = mean(.$ab),
+          median = median(.$ab),
+          standard_deviation = sd(.$ab),
+          shannon = entropy::entropy(.$ab),
+          hill_1 = hill_calc(.$ab, order = 1),
+          hill_2 = hill_calc(.$ab, order = 2),
+          hill_3 = hill_calc(.$ab, order = 3),
+          hill_4 = hill_calc(.$ab, order = 4),
+          hill_5 = hill_calc(.$ab, order = 5)
+        ) %>% 
+        mutate(sim_id = sim_id())
+      
+      return(abund_sum)
+    }) %>% 
+      bindEvent(input$playBtn)
+    
+    # calculate trait sumstats for the last timestep
+    trait_sumstats <- reactive({
+      req(traits)
+      last_ts <- traits() %>% 
+        filter(timestep == max(timestep))
+      
+      trait_sum <- last_ts %>% 
+        summarize(
+          mean = mean(.$trait),
+          median = median(.$trait),
+          standard_deviation = sd(.$trait),
+          variance = var(.$trait),
+          shannon = entropy::entropy(.$trait),
+          hill_1 = hill_calc(.$trait, order = 1),
+          hill_2 = hill_calc(.$trait, order = 2),
+          hill_3 = hill_calc(.$trait, order = 3),
+          hill_4 = hill_calc(.$trait, order = 4),
+          hill_5 = hill_calc(.$trait, order = 5)
+        ) %>% 
+        mutate(sim_id = sim_id())
+      
+      return(trait_sum)
+    }) %>% 
+      bindEvent(input$playBtn)
     
     # parameters df
     param_df <- reactive({
@@ -100,7 +148,7 @@ mod_roleDownloads_server <- function(id, allSims) {
             filt_mean = input$filt_mean,
             filt_sd = input$filt_sd
           ) %>% 
-          mutate(sim_id = sim_id)
+          mutate(sim_id = sim_id())
     
       } else {
         param_df <- 
@@ -111,7 +159,7 @@ mod_roleDownloads_server <- function(id, allSims) {
             m = input$m,
             nstep = input$nstep
           ) %>% 
-          mutate(sim_id = sim_id)
+          mutate(sim_id = sim_id())
       }
       
       return(param_df)
@@ -124,6 +172,8 @@ mod_roleDownloads_server <- function(id, allSims) {
     csv_list$abundances <- abundances
     csv_list$meta_abund <- meta_abund
     csv_list$meta_traits <- meta_traits
+    csv_list$abund_sumstats <- abund_sumstats
+    csv_list$trait_sumstats <- trait_sumstats
     csv_list$params <- param_df
     
     #### NEED TO USE uuid PACKAGE TO APPLY A UNIQUE NAME TO THE DOWNLOAD
@@ -145,7 +195,7 @@ mod_roleDownloads_server <- function(id, allSims) {
       content = function(file){
         
         # create tempdir to write files temporarily
-        temp_directory <- file.path(tempdir(), sim_id)
+        temp_directory <- file.path(tempdir(), sim_id())
         dir.create(temp_directory)
   
         csv_list_raw <- reactiveValuesToList(csv_list)
@@ -155,7 +205,7 @@ mod_roleDownloads_server <- function(id, allSims) {
         # write to a temporary directory to zip
         for (i in 1:length(csv_list_raw)) {
           if (!is.null(csv_list_raw[[i]])) {
-            file_name <- paste0(df_names[[i]], "_", sim_id, ".csv")
+            file_name <- paste0(df_names[[i]], "_", sim_id(), ".csv")
             readr::write_csv(csv_list_raw[[i]](), file.path(temp_directory, file_name))
           }
         }
