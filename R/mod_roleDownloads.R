@@ -89,21 +89,20 @@ mod_roleDownloads_server <- function(id, allSims) {
     # calculate abundance sumstats for the last timestep
     abund_sumstats <- reactive({
       req(abundances)
-      last_ts <- abundances() %>% 
-        filter(timestep == max(timestep))
       
-      abund_sum <- last_ts %>% 
+      abund_sum <- abundances() %>% 
+        group_by(timestep) %>% 
         summarize(
-          species_richness = hill_calc(.$ab, order = 0),
-          mean = mean(.$ab),
-          median = median(.$ab),
-          standard_deviation = sd(.$ab),
-          shannon = entropy::entropy(.$ab),
-          hill_1 = hill_calc(.$ab, order = 1),
-          hill_2 = hill_calc(.$ab, order = 2),
-          hill_3 = hill_calc(.$ab, order = 3),
-          hill_4 = hill_calc(.$ab, order = 4),
-          hill_5 = hill_calc(.$ab, order = 5)
+          species_richness = hill_calc(ab, order = 0),
+          mean = mean(ab),
+          median = median(ab),
+          standard_deviation = sd(ab),
+          shannon = entropy::entropy(ab),
+          hill_1 = hill_calc(ab, order = 1),
+          hill_2 = hill_calc(ab, order = 2),
+          hill_3 = hill_calc(ab, order = 3),
+          hill_4 = hill_calc(ab, order = 4),
+          hill_5 = hill_calc(ab, order = 5)
         ) %>% 
         mutate(sim_id = sim_id())
       
@@ -114,21 +113,20 @@ mod_roleDownloads_server <- function(id, allSims) {
     # calculate trait sumstats for the last timestep
     trait_sumstats <- reactive({
       req(traits)
-      last_ts <- traits() %>% 
-        filter(timestep == max(timestep))
       
-      trait_sum <- last_ts %>% 
+      trait_sum <- traits() %>% 
+        group_by(timestep) %>% 
         summarize(
-          mean = mean(.$trait),
-          median = median(.$trait),
-          standard_deviation = sd(.$trait),
-          variance = var(.$trait),
-          shannon = entropy::entropy(.$trait),
-          hill_1 = hill_calc(.$trait, order = 1),
-          hill_2 = hill_calc(.$trait, order = 2),
-          hill_3 = hill_calc(.$trait, order = 3),
-          hill_4 = hill_calc(.$trait, order = 4),
-          hill_5 = hill_calc(.$trait, order = 5)
+          mean = mean(trait),
+          median = median(trait),
+          standard_deviation = sd(trait),
+          variance = var(trait),
+          shannon = entropy::entropy(trait),
+          hill_1 = hill_calc(trait, order = 1),
+          hill_2 = hill_calc(trait, order = 2),
+          hill_3 = hill_calc(trait, order = 3),
+          hill_4 = hill_calc(trait, order = 4),
+          hill_5 = hill_calc(trait, order = 5)
         ) %>% 
         mutate(sim_id = sim_id())
       

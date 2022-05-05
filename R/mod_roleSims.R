@@ -41,7 +41,7 @@ mod_roleSims_server <- function(id, sims_out){
       ## forward-in-time simulation
       # parameterize deaths so the value is reasonable and at least 1
       if (input$j >= 50) {
-        deaths <- round(input$j * 0.02)
+        deaths <- round(input$j * 0.01)
       } else {
         deaths <- 1
       }
