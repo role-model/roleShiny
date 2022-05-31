@@ -47,19 +47,13 @@ mod_roleSims_server <- function(id, sims_out){
       }
       
       # number of individuals may vary slightly depending on the how evenly the division between the number of individuals and the number of species is. Could also create a vector of this character string and sample it with replacement for the number of individuals in this community
-      num_inds <- length(rep(as.character(1:input$sm),
-                                    input$jm / input$sm))
       
-      pool <- data.frame(ind = 1:num_inds, 
-                     sp = rep(as.character(1:input$sm),
-                              input$jm / input$sm),
-                     tra = rep(NA, num_inds))
+      meta_comm <- coalesc(input$jm, m = 1, theta = 50)
       
-      t_sp <- data.frame(sp = as.character(1:input$sm), tra = runif(input$sm))
+      pool <- meta_comm$pool
       
-      pool$tra <- t_sp[pool$sp,]$tra
       
-      initial <- pool[sample(1:num_inds, input$sm),]
+      initial <- pool[sample(1:input$jm, input$j),]
       
       # environmental filtering function
       filt_gaussian <- function(t, x, sigma) {

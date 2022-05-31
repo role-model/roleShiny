@@ -68,14 +68,14 @@ value_filt_mean <- 0.5
 max_filt_sd <- 1.0
 value_filt_sd <- 0.1
 
-mod_roleParams_ui <- function(id, button){
+mod_roleParamsCoexistence_ui <- function(id, button){
   ns <- NS(id)
   
   div(
     class = "control-set",
     h3("Parameters"),
     
-    shinyBS::bsButton("commonParams", label = "Common Parameters", type = "toggle", value = TRUE, class = "show-hide"),
+    shinyBS::bsButton("commonParams", label = "Common Parameters", type = "toggle", value = FALSE, class = "show-hide"),
     shinyBS::bsTooltip("commonParams", "Show/hide common parameters", placement = "bottom", trigger = "hover"),
     
     conditionalPanel("input.commonParams", class = "cond-panel", style ="overflow-y:scroll",
@@ -210,7 +210,7 @@ mod_roleParams_ui <- function(id, button){
 #' roleParams Server Functions
 #'
 #' @noRd 
-mod_roleParams_server <- function(id){
+mod_roleParamsCoexistence_server <- function(id){
   moduleServer(id, function(input, output, session){
     ns <- session$ns
     

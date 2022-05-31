@@ -15,26 +15,43 @@ library(stringr)
 library(purrr)
 library(tidyr)
 
-mod_rolePlots_ui <- function(id, name1, name2, check1, check2){
+mod_rolePlots_ui <- function(id 
+                             #name1, 
+                             #name2, 
+                             #check1, 
+                             #check2
+                             ){
   ns <- NS(id)
   tagList(
-    fluidRow(
-      
-      conditionalPanel(check1, class = "cond-panel", ns = ns,
-                       column(6, plotlyOutput(ns(name1)))
-      ),
-      
-      conditionalPanel(check2, class = "cond-panel", ns = ns,
-                       column(6, plotlyOutput(ns(name2)))
-      )
+    tabsetPanel(
+      type = "tabs",
+      tabPanel("Abundances", 
+               fluidRow(
+                 column(width = 4, 
+                        plotlyOutput(ns("abundRank"))
+                        ),
+               column(width = 4, 
+                      plotlyOutput(ns("abundTime"))
+                      )
+               )
+               ),
+      tabPanel("Traits", 
+               plotlyOutput(ns("traitRank")),
+               plotlyOutput(ns("traitTime")))
+      )  
     )
-  )
 }
     
 #' rolePlots Server Functions
 #'
 #' @noRd 
-mod_rolePlots_server <- function(id, name, func, type, checkBox, sims_out, allSims){
+mod_rolePlots_server <- function(id, 
+                                 #name, 
+                                 #func, 
+                                 #type, 
+                                 #checkBox, 
+                                 sims_out, 
+                                 allSims){
   
 
   moduleServer( id, function(input, output, session){
@@ -55,10 +72,10 @@ mod_rolePlots_server <- function(id, name, func, type, checkBox, sims_out, allSi
         
         
       
-      if (stringr::str_detect(name, "abundDist")) {
+      # if (stringr::str_detect(name, "abundDist")) {
         
         
-        fig <-  reactive({
+        fig_abundRank <-  reactive({
           
           c_df <- sample_ts(abundances(), n_ts = input$nout, is_abund = TRUE)
           
@@ -70,6 +87,7 @@ mod_rolePlots_server <- function(id, name, func, type, checkBox, sims_out, allSi
             scale_color_viridis_c() +
             geom_line(data = pool, aes(x = rank, y = ab), color = "black", linetype = "dashed") +
             labs(x = "Rank", y = "Abundance", color = "Time step") +
+            ylim(y = c(min(c_df$ab), max(c_df$ab))) + 
             theme_minimal() +
             theme(legend.key.size = unit(0.5, 'cm'))
           
@@ -81,14 +99,15 @@ mod_rolePlots_server <- function(id, name, func, type, checkBox, sims_out, allSi
           
         })
       
-        output[[name]] <- renderPlotly({
-          fig()
+        output$abundRank <- renderPlotly({
+          fig_abundRank()
         })
         
-      } else if (stringr::str_detect(name, "abundTime")) {
+      # } else if (stringr::str_detect(name, "abundTime")) {
         
         
-        fig <-  reactive({
+        
+        fig_abundTime <-  reactive({
            
           abund_sumstats <- calc_abund_sumstats(abundances())
           
@@ -98,12 +117,12 @@ mod_rolePlots_server <- function(id, name, func, type, checkBox, sims_out, allSi
               layout(xaxis = list(title = "Time step"), yaxis = list(title = "Shannon entropy"))
         }) 
         
-        output[[name]] <- renderPlotly({
-          fig()
+        output$abundTime <- renderPlotly({
+          fig_abundTime()
         })
-      } else if (stringr::str_detect(name, "traitDist")) {
+     # } else if (stringr::str_detect(name, "traitDist")) {
         
-        fig <- reactive({
+        fig_traitRank <- reactive({
           
           t_df <- sample_ts(traits(), n_ts = input$nout, is_abund = FALSE)
           
@@ -124,13 +143,13 @@ mod_rolePlots_server <- function(id, name, func, type, checkBox, sims_out, allSi
           return(p_int)
         })
         
-        output[[name]] <- renderPlotly({
-          fig()
+        output$traitRank <- renderPlotly({
+          fig_traitRank()
         })
         
-      } else if (stringr::str_detect(name, "traitTime")) {
+       # } else if (stringr::str_detect(name, "traitTime")) {
         
-        fig <- reactive({
+        fig_traitTime <- reactive({
           
           trait_sumstats <- calc_trait_sumstats(traits())
           
@@ -140,11 +159,11 @@ mod_rolePlots_server <- function(id, name, func, type, checkBox, sims_out, allSi
             layout(xaxis = list(title = "Time step"), yaxis = list(title = "Mean trait"))
         })
         
-        output[[name]] <- renderPlotly({
-          fig()
+        output$traitTime <- renderPlotly({
+          fig_traitTime()
         })
         
-      }
+      # }
     
     }) %>% 
       bindEvent(input$playBtn)
