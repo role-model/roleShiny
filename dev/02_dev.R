@@ -28,6 +28,8 @@ golem::add_module( name = "rolePlotSelects" )
 golem::add_module( name = "rolePlots" ) 
 golem::add_module( name = "roleSims" ) 
 golem::add_module( name = "roleReadSims" ) 
+golem::add_module( name = "roleNeutral" ) 
+golem::add_module( name = "roleCoexistence" ) 
 
 ## Add helper functions ----
 ## Creates fct_* and utils_*

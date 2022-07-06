@@ -29,10 +29,9 @@ mod_roleSims_ui <- function(id){
 #' 
 library(dplyr)
 
-mod_roleSims_server <- function(id, sims_out){
+mod_roleSims_server <- function(id, sims_out, is_neutral = TRUE){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
-    
     
     s <- reactive({
       
@@ -83,30 +82,41 @@ mod_roleSims_server <- function(id, sims_out){
                      # final <- final_gb$get_result()
                      
                      # apply filtering if the user wants it
-                     if (input$env_filt == "Stabilizing") {
-                       
-                       final <- ecolottery::forward(
-                         initial = initial,
-                         prob = input$m,
-                         d = deaths,
-                         pool = pool,
-                         gens = input$nstep,
-                         filt = function(x) filt_gaussian(t = input$filt_mean, 
-                                                          x = x,
-                                                          sigma = input$filt_sd),
-                         keep = TRUE)
-                       
-                     } else if (input$env_filt == "Disruptive"){
-                       
-                       final <- ecolottery::forward(
-                         initial = initial,
-                         prob = input$m,
-                         d = deaths,
-                         pool = pool,
-                         gens = input$nstep,
-                         filt = function(x) abs(0.5 - x),
-                         keep = TRUE)
+                     if (!is_neutral) {
+                       if (input$env_filt == "Stabilizing") {
+                         
+                         final <- ecolottery::forward(
+                           initial = initial,
+                           prob = input$m,
+                           d = deaths,
+                           pool = pool,
+                           gens = input$nstep,
+                           filt = function(x) filt_gaussian(t = input$filt_mean, 
+                                                            x = x,
+                                                            sigma = input$filt_sd),
+                           keep = TRUE)
+                         
+                       } else if (input$env_filt == "Disruptive"){
+                         
+                         final <- ecolottery::forward(
+                           initial = initial,
+                           prob = input$m,
+                           d = deaths,
+                           pool = pool,
+                           gens = input$nstep,
+                           filt = function(x) abs(0.5 - x),
+                           keep = TRUE)
+                       } else {
+                         final <- ecolottery::forward(
+                           initial = initial,
+                           prob = input$m,
+                           d = deaths,
+                           pool = pool,
+                           gens = input$nstep,
+                           keep = TRUE)
+                       }
                      }
+                     
                      
                      else {
                        final <- ecolottery::forward(

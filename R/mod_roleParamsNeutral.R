@@ -26,11 +26,8 @@ roleParam <- function(id, name, label = "", min = 0, max = 100000, value = 100, 
 # corresponding text input
 roleParamText <- function(id, name, label = "", min = 0, max = 100000, value = 100, tip = "", isGreek = FALSE) {
   ns <- NS(id)
-  opener = if (isGreek) '<div class="param-label greek">' else '<div class="param-label">'
   tagList(
-    HTML(paste(opener, label, "</div>")),
     div(
-      class = "param-wrapper",
       numericInput(ns(name), label = NULL, min = min, max = max, 
                    value = value, width = 90),
       shinyBS::bsTooltip(ns(name), tip)
@@ -68,64 +65,115 @@ value_filt_mean <- 0.5
 max_filt_sd <- 1.0
 value_filt_sd <- 0.1
 
-mod_roleParamsNeutral_ui <- function(id, button){
+mod_roleParamsNeutral_ui <- function(id, button) {
   ns <- NS(id)
   
   div(
-    class = "control-set",
-    h3("Parameters"),
+    h2("Parameters"),
     
-    shinyBS::bsButton("commonParams", label = "Common Parameters", type = "toggle", value = FALSE, class = "show-hide"),
-    shinyBS::bsTooltip("commonParams", "Show/hide common parameters", placement = "bottom", trigger = "hover"),
-    
-    conditionalPanel("input.commonParams", class = "cond-panel", style ="overflow-y:scroll",
-                     
-                     div(
-                       class = "param-group",
-                       
-                       roleParam(id, name = "sm", label = "S<sub>m</sub>",
-                                 min = 0, max = max_sm, value = value_sm,
-                                 tip = "Number of species in the metacommunity"),
-                       
-                       roleParamText(id, name = "sm_t", label = NULL, 
-                                     min = 0, max = max_sm, value = value_sm),
-                       
-                       roleParam(id, name = "jm", label = "J<sub>m</sub>",
-                                 min =  0, max = max_jm, value = value_jm,
-                                 tip = "Number of individuals in the metacommunity"),
-                       
-                       roleParamText(id, name = "jm_t", label = NULL, 
-                                     min = 0, max = max_jm, value = value_jm),
-                       
-                       roleParam(id, name = "j", label = "J",
-                                 min = 0, max = max_j, value = value_j,
-                                 tip = "Number of individuals in the local community"),
-                       
-                       roleParamText(id, name = "j_t", label = NULL, 
-                                     min = 0, max = max_j, value = value_j),
-                       
-                       roleParam(id, name = "m", label = "m",
-                                 min = 0, max = max_m, value = value_m,
-                                 tip = "Probability of migration into the local community"),
-                       
-                       roleParamText(id, name = "m_t", label = NULL, 
-                                     min = 0, max = max_m, value = value_m),
-                       
-                       # roleParam(id, name = "nu", label = "&#957;",
-                       #           min = 0, max = max_nu, value = value_nu,
-                       #           tip = "The speciation local parameter",
-                       #           isGreek = TRUE),
-                       # 
-                       # roleParamText(id, name = "nu_t", label = NULL, 
-                       #               min = 0, max = max_nu, value = value_nu),
-                       
-                       roleParam(id, name = "nstep", label = "n<sub>step</sub>",
-                                 min = 1, max = max_steps, value = value_steps,
-                                 tip = "The number of time steps (generations) to run"),
-                       
-                       roleParamText(id, name = "nstep_t", label = NULL, 
-                                     min = 0, max = max_steps, value = value_steps),
-                     )
+    div(
+      roleParam(
+        id,
+        name = "sm",
+        label = "S<sub>m</sub>",
+        min = 0,
+        max = max_sm,
+        value = value_sm,
+        tip = "Number of species in the metacommunity"
+      ),
+      
+      roleParamText(
+        id,
+        name = "sm_t",
+        label = NULL,
+        min = 0,
+        max = max_sm,
+        value = value_sm
+      ),
+      
+      roleParam(
+        id,
+        name = "jm",
+        label = "J<sub>m</sub>",
+        min =  0,
+        max = max_jm,
+        value = value_jm,
+        tip = "Number of individuals in the metacommunity"
+      ),
+      
+      roleParamText(
+        id,
+        name = "jm_t",
+        label = NULL,
+        min = 0,
+        max = max_jm,
+        value = value_jm
+      ),
+      
+      roleParam(
+        id,
+        name = "j",
+        label = "J",
+        min = 0,
+        max = max_j,
+        value = value_j,
+        tip = "Number of individuals in the local community"
+      ),
+      
+      roleParamText(
+        id,
+        name = "j_t",
+        label = NULL,
+        min = 0,
+        max = max_j,
+        value = value_j
+      ),
+      
+      roleParam(
+        id,
+        name = "m",
+        label = "m",
+        min = 0,
+        max = max_m,
+        value = value_m,
+        tip = "Probability of migration into the local community"
+      ),
+      
+      roleParamText(
+        id,
+        name = "m_t",
+        label = NULL,
+        min = 0,
+        max = max_m,
+        value = value_m
+      ),
+      
+      # roleParam(id, name = "nu", label = "&#957;",
+      #           min = 0, max = max_nu, value = value_nu,
+      #           tip = "The speciation local parameter",
+      #           isGreek = TRUE),
+      #
+      # roleParamText(id, name = "nu_t", label = NULL,
+      #               min = 0, max = max_nu, value = value_nu),
+      
+      roleParam(
+        id,
+        name = "nstep",
+        label = "n<sub>step</sub>",
+        min = 1,
+        max = max_steps,
+        value = value_steps,
+        tip = "The number of time steps (generations) to run"
+      ),
+      
+      roleParamText(
+        id,
+        name = "nstep_t",
+        label = NULL,
+        min = 0,
+        max = max_steps,
+        value = value_steps
+      ),
     )
   )
 }
@@ -133,12 +181,12 @@ mod_roleParamsNeutral_ui <- function(id, button){
 #' roleParams Server Functions
 #'
 #' @noRd 
-mod_roleParamsNeutral_server <- function(id){
-  moduleServer(id, function(input, output, session){
+mod_roleParamsNeutral_server <- function(id) {
+  moduleServer(id, function(input, output, session) {
     ns <- session$ns
     
     # observe() calls to make the numeric input responsive to slider input and vice-versa
-    # Unfortunately, I can't wrap the observe() calls in a function to make this more succinct 
+    # Unfortunately, I can't wrap the observe() calls in a function to make this more succinct
     
     ########################
     ##### Common params ####
@@ -147,127 +195,99 @@ mod_roleParamsNeutral_server <- function(id){
     ########################
     ########################
     
-    ## update the Sm slider. 
-    observe(
-      updateNumericInput(session,
-                         inputId = "sm_t",
-                         value = input$sm)
-    ) %>%
+    ## update the Sm slider.
+    observe(updateNumericInput(session,
+                               inputId = "sm_t",
+                               value = input$sm)) %>%
       bindEvent(input$sm)
-
-    observe(
-      updateSliderInput(session,
-                        "sm",
-                        value = input$sm_t)
-    ) %>%
+    
+    observe(updateSliderInput(session,
+                              "sm",
+                              value = input$sm_t)) %>%
       bindEvent(input$sm_t)
     
     ########################
     ########################
     
-    ## update the Jm slider. 
-    observe(
-      updateNumericInput(session,
-                         inputId = "jm_t",
-                         value = input$jm)
-    ) %>%
+    ## update the Jm slider.
+    observe(updateNumericInput(session,
+                               inputId = "jm_t",
+                               value = input$jm)) %>%
       bindEvent(input$jm)
     
-    observe(
-      updateSliderInput(session,
-                        "jm",
-                        value = input$jm_t)
-    ) %>%
+    observe(updateSliderInput(session,
+                              "jm",
+                              value = input$jm_t)) %>%
       bindEvent(input$jm_t)
     
     ########################
     ########################
     
-    ## update the J slider. 
-    observe(
-      updateNumericInput(session,
-                         inputId = "j_t",
-                         value = input$j)
-    ) %>%
+    ## update the J slider.
+    observe(updateNumericInput(session,
+                               inputId = "j_t",
+                               value = input$j)) %>%
       bindEvent(input$j)
     
-    observe(
-      updateSliderInput(session,
-                        "j",
-                        value = input$j_t)
-    ) %>%
+    observe(updateSliderInput(session,
+                              "j",
+                              value = input$j_t)) %>%
       bindEvent(input$j_t)
     
     ########################
     ########################
     
-    ## update the m slider. 
-    observe(
-      updateNumericInput(session,
-                         inputId = "m_t",
-                         value = input$m)
-    ) %>%
+    ## update the m slider.
+    observe(updateNumericInput(session,
+                               inputId = "m_t",
+                               value = input$m)) %>%
       bindEvent(input$m)
     
-    observe(
-      updateSliderInput(session,
-                        "m",
-                        value = input$m_t)
-    ) %>%
+    observe(updateSliderInput(session,
+                              "m",
+                              value = input$m_t)) %>%
       bindEvent(input$m_t)
     
     ########################
     ########################
     
-    ## update the m slider. 
-    observe(
-      updateNumericInput(session,
-                         inputId = "m_t",
-                         value = input$m)
-    ) %>%
+    ## update the m slider.
+    observe(updateNumericInput(session,
+                               inputId = "m_t",
+                               value = input$m)) %>%
       bindEvent(input$m)
     
-    observe(
-      updateSliderInput(session,
-                        "m",
-                        value = input$m_t)
-    ) %>%
+    observe(updateSliderInput(session,
+                              "m",
+                              value = input$m_t)) %>%
       bindEvent(input$m_t)
     
     ########################
     ########################
     
-    ## update the nu slider. 
-    observe(
-      updateNumericInput(session,
-                         inputId = "nu_t",
-                         value = input$nu)
-    ) %>%
+    ## update the nu slider.
+    observe(updateNumericInput(session,
+                               inputId = "nu_t",
+                               value = input$nu)) %>%
       bindEvent(input$nu)
     
-    observe(
-      updateSliderInput(session,
-                        "nu",
-                        value = input$nu_t)
-    ) %>%
+    observe(updateSliderInput(session,
+                              "nu",
+                              value = input$nu_t)) %>%
       bindEvent(input$nu_t)
     
     ########################
     ########################
     
-    ## update the nstep slider. 
-    observe(
-      updateNumericInput(session,
-                         inputId = "nstep_t",
-                         value = input$nstep)
-    ) %>%
+    ## update the nstep slider.
+    observe(updateNumericInput(session,
+                               inputId = "nstep_t",
+                               value = input$nstep)) %>%
       bindEvent(input$nstep)
     
-    observe(
-      updateSliderInput(session,
-                        "nstep",
-                        value = input$nstep_t)
-    ) %>%
+    observe(updateSliderInput(session,
+                              "nstep",
+                              value = input$nstep_t)) %>%
       bindEvent(input$nstep_t)
     
     
@@ -275,9 +295,9 @@ mod_roleParamsNeutral_server <- function(id){
   })
   
 }
-    
+
 ## To be copied in the UI
 # mod_roleParams_ui("roleParams_ui_1")
-    
+
 ## To be copied in the server
 # mod_roleParams_server("roleParams_ui_1")

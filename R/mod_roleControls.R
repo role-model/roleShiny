@@ -15,7 +15,6 @@ mod_roleControls_ui <- function(id){
   ns <- NS(id)
   tagList(
     div(
-      class = "control-set but-group",
       actionButton(ns("playBtn"), icon("play")),
       # actionButton(ns("pauseBtn"), icon("pause")),
       # actionButton(ns("nextBtn"), icon("step-forward")),
@@ -32,7 +31,7 @@ mod_roleControls_ui <- function(id){
 #' @noRd 
 mod_roleControls_server <- function(id){
   moduleServer( id, function(input, output, session){
-    ns <- session$ns
+    
     #observeEvent(input$playBtn, {
     # allSims <- reactiveFileReader(10, session,
     #                        filePath = "~/Desktop/test_data.csv",

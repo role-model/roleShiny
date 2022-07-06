@@ -11,12 +11,10 @@ mod_roleUploads_ui <- function(id){
   ns <- NS(id)
   tagList(
     div(
-      class = "control-set",
       
-      h3("Uploads"),
+      #h3("Uploads"),
       
       div(
-        class = "up-group",
         fileInput(ns("upSim"), "upload simulation(s)",
                   multiple = TRUE,
                   accept = c(".csv")),

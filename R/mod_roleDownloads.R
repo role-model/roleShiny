@@ -27,12 +27,10 @@ mod_roleDownloads_ui <- function(id){
   ns <- NS(id)
   tagList(
     div(
-      class = "control-set",
       
       h3("Downloads"),
       
       div(
-        class = "down-group",
         
         downloadButton(ns("downSim"), "download simulation RDS object"),
         downloadButton(ns("downCSVs"), "download simulation CSVs")
