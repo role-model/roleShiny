@@ -11,6 +11,7 @@
 #' 
 
 library(ecolottery)
+library(roleR)
 library(callr)
 
 mod_roleSims_ui <- function(id){
@@ -35,114 +36,42 @@ mod_roleSims_server <- function(id, sims_out, is_neutral = TRUE){
     
     s <- reactive({
       
-      ##### Forward sims
-      
-      ## forward-in-time simulation
-      # parameterize deaths so the value is reasonable and at least 1
-      if (input$j >= 50) {
-        deaths <- round(input$j * 0.01)
-      } else {
-        deaths <- 1
+      if(is_neutral) {
+        params <- roleParams(individuals_local = input$j, 
+                             individuals_meta = input$jm,
+                             species_meta = input$sm, speciation_local = input$nu,
+                             speciation_meta = 1, extinction_meta = 0.8,
+                             trait_sigma = 1, env_sigma = 1,
+                             comp_sigma = 1, dispersal_prob = input$m, mutation_rate = 0.01,
+                             equilib_escape = 1, num_basepairs = 250,
+                             init_type = 'oceanic_island', niter = 100,
+                             niterTimestep = input$nstep)
+        
+        final <- roleExperiment(list(params))
+      } else if(is_neutral == FALSE) {
+        params <- roleParams(individuals_local = input$j, 
+                             individuals_meta = input$jm,
+                             species_meta = input$sm, speciation_local = input$nu,
+                             speciation_meta = 1, extinction_meta = 0.8,
+                             trait_sigma = input$trait_sigma, env_sigma = 1,
+                             comp_sigma = 1, dispersal_prob = input$m, mutation_rate = 0.01,
+                             equilib_escape = 1, num_basepairs = 250,
+                             init_type = 'oceanic_island', niter = 100,
+                             niterTimestep = input$nstep)
+        
+        final <- roleExperiment(list(params))
       }
       
-      # number of individuals may vary slightly depending on the how evenly the division between the number of individuals and the number of species is. Could also create a vector of this character string and sample it with replacement for the number of individuals in this community
-      
-      meta_comm <- coalesc(input$jm, m = 1, theta = 50)
-      
-      pool <- meta_comm$pool
-      
-      
-      initial <- pool[sample(1:input$jm, input$j),]
-      
-      # environmental filtering function
-      filt_gaussian <- function(t, x, sigma) {
-        exp(-(x - t)^2 / (2 * sigma^2))
-      }
-      
-      
-      withProgress(message = "Simulation in progress...", 
-                   detail = "May take a while", 
-                   value = 0,
-                   { incProgress(0.75)
-                     # send this process to the background so Shiny users can do other things
-                     # final_gb <- callr::r_bg(ecolottery::forward, args = list(initial = initial, 
-                     #                                                          prob = input$m, 
-                     #                                                          d = deaths,
-                     #                                                          pool = pool,
-                     #                                                          gens = input$nstep,
-                     #                                                          filt = filt_fun,
-                     #                                                          keep = TRUE), 
-                     #                         supervise = TRUE,
-                     #                         package = TRUE)
-                     # 
-                     # # wait until the process is done before returning the results
-                     # final_gb$wait()
-                     # final_gb$is_alive()
-                     # 
-                     # final <- final_gb$get_result()
-                     
-                     # apply filtering if the user wants it
-                     if (!is_neutral) {
-                       if (input$env_filt == "Stabilizing") {
-                         
-                         final <- ecolottery::forward(
-                           initial = initial,
-                           prob = input$m,
-                           d = deaths,
-                           pool = pool,
-                           gens = input$nstep,
-                           filt = function(x) filt_gaussian(t = input$filt_mean, 
-                                                            x = x,
-                                                            sigma = input$filt_sd),
-                           keep = TRUE)
-                         
-                       } else if (input$env_filt == "Disruptive"){
-                         
-                         final <- ecolottery::forward(
-                           initial = initial,
-                           prob = input$m,
-                           d = deaths,
-                           pool = pool,
-                           gens = input$nstep,
-                           filt = function(x) abs(0.5 - x),
-                           keep = TRUE)
-                       } else {
-                         final <- ecolottery::forward(
-                           initial = initial,
-                           prob = input$m,
-                           d = deaths,
-                           pool = pool,
-                           gens = input$nstep,
-                           keep = TRUE)
-                       }
-                     }
-                     
-                     
-                     else {
-                       final <- ecolottery::forward(
-                         initial = initial,
-                         prob = input$m,
-                         d = deaths,
-                         pool = pool,
-                         gens = input$nstep,
-                         keep = TRUE)
-                     }
-                     
-                     
-                   })
-      
-      
-      return(final)
 
       }) %>%
       bindEvent(input$playBtn)
     
     
-
     observe({
       s()
       saveRDS(s(), file = sims_out)
-    })
+    }) %>% 
+      bindEvent(input$playBtn)
     
       
       

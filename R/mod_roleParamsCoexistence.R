@@ -67,11 +67,11 @@ roleParamText <-
 ### max and default values for all role Params. Easy place to adjust
 
 ### Common params ###
-max_sm <- 1000
-value_sm <- 100
+max_sm <- 2000
+value_sm <- 500
 
 max_jm <- 10000
-value_jm <- 2500
+value_jm <- 1000
 
 max_j <- 1000
 value_j <- 100
@@ -80,18 +80,16 @@ max_m <- 1.0
 value_m <- 0.1
 
 max_nu <- 1.0
-value_nu <- 0.01
-
+value_nu <- 0.1
 
 max_steps <- 1000
-value_steps <- 500
+value_steps <- 50
 
-### Filter params ###
-max_filt_mean <- 1.0
-value_filt_mean <- 0.5
+### non-neutral params
+max_trait_sigma <- 1
+value_trait_sigma <- 0.1
 
-max_filt_sd <- 1.0
-value_filt_sd <- 0.1
+
 
 mod_roleParamsCoexistence_ui <- function(id, button) {
   ns <- NS(id)
@@ -176,14 +174,26 @@ mod_roleParamsCoexistence_ui <- function(id, button) {
         max = max_m,
         value = value_m
       ),
+
+      roleParam(
+        id,
+        name = "nu",
+        label = "&#957;",
+        min = 0,
+        max = max_nu,
+        value = value_nu,
+        tip = "The speciation local parameter",
+        isGreek = TRUE
+      ),
       
-      # roleParam(id, name = "nu", label = "&#957;",
-      #           min = 0, max = max_nu, value = value_nu,
-      #           tip = "The speciation local parameter",
-      #           isGreek = TRUE),
-      #
-      # roleParamText(id, name = "nu_t", label = NULL,
-      #               min = 0, max = max_nu, value = value_nu),
+      roleParamText(
+        id,
+        name = "nu_t",
+        label = NULL,
+        min = 0,
+        max = max_nu,
+        value = value_nu
+      ),
       
       roleParam(
         id,
@@ -199,64 +209,30 @@ mod_roleParamsCoexistence_ui <- function(id, button) {
         id,
         name = "nstep_t",
         label = NULL,
-        min = 0,
+        min = 1,
         max = max_steps,
         value = value_steps
       ),
-    ),
-    
-    
-    
-    
-    div(
-      shinyWidgets::radioGroupButtons(
-        inputId = ns("env_filt"),
-        label = "Type of Environmental Filtering",
-        choices = c("None", "Stabilizing", "Disruptive"),
-        status = "primary",
-        selected = "None",
-        size = "sm",
-        justified = FALSE
-      ),
       
       roleParam(
         id,
-        name = "filt_mean",
-        label = "M",
+        name = "trait_sigma",
+        label = "Trait &#963;",
         min = 0,
-        max = max_filt_mean,
-        value = value_filt_mean,
-        tip = "Mean trait value for stabilizing filtering"
+        max = max_trait_sigma,
+        value = value_trait_sigma,
+        tip = "The rate of Brownian trait evolution in the meta community",
+        isGreek = TRUE
       ),
       
       roleParamText(
         id,
-        name = "filt_mean_t",
+        name = "trait_sigma",
         label = NULL,
         min = 0,
-        max = max_filt_mean,
-        value = value_filt_mean
+        max = max_trait_sigma,
+        value = value_trait_sigma
       ),
-      
-      roleParam(
-        id,
-        name = "filt_sd",
-        label = "SD",
-        min = 0,
-        max = max_filt_sd,
-        value = value_filt_sd,
-        tip = "Standard deviation of stabilizing filtering"
-      ),
-      
-      roleParamText(
-        id,
-        name = "filt_sd_t",
-        label = NULL,
-        min = 0,
-        max = max_filt_sd,
-        value = value_filt_sd
-      ),
-      
       
       
     ),

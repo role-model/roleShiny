@@ -169,3 +169,35 @@ file_suffix <- function() {
     str_replace_all("\\:", "-") %>% 
     str_replace_all(" ", "_")
 }
+
+# process raw abundances for plotting
+# ss = sumstats, output from getSumStats
+# raw_string = the raw data you want to format. For now, choices are "
+
+tidy_raw <- function(ss, raw_string) {
+  raw <- map(ss[[raw_string]], ~sort(.x, decreasing = TRUE))
+  
+  names(raw) <- paste0("gen_", 0:(length(raw) - 1))
+  
+  rawdf <- map_dfr(raw, ~as_tibble(.x), .id = "gen") %>% 
+    mutate(gen = str_remove_all(gen, "gen_") %>% as.integer())
+  
+  names(rawdf) <- c("gen", raw_string)
+  
+  return(rawdf)
+}
+
+# rank abundances, traits, etc. for rank-abundance plots
+tidy_rank <- function(df) {
+  df %>% 
+    group_by(gen) %>% 
+    mutate(rank = row_number()) 
+}
+
+
+
+
+
+
+
+

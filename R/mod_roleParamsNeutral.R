@@ -39,11 +39,11 @@ roleParamText <- function(id, name, label = "", min = 0, max = 100000, value = 1
 ### max and default values for all role Params. Easy place to adjust
 
 ### Common params ###
-max_sm <- 1000
-value_sm <- 100
+max_sm <- 2000
+value_sm <- 500
 
 max_jm <- 10000
-value_jm <- 2500
+value_jm <- 1000
 
 max_j <- 1000
 value_j <- 100
@@ -52,11 +52,11 @@ max_m <- 1.0
 value_m <- 0.1
 
 max_nu <- 1.0
-value_nu <- 0.01
-
+value_nu <- 0.1
 
 max_steps <- 1000
-value_steps <- 500
+value_steps <- 50
+
 
 ### Filter params ###
 max_filt_mean <- 1.0
@@ -76,7 +76,7 @@ mod_roleParamsNeutral_ui <- function(id, button) {
         id,
         name = "sm",
         label = "S<sub>m</sub>",
-        min = 0,
+        min = 250,
         max = max_sm,
         value = value_sm,
         tip = "Number of species in the metacommunity"
@@ -86,7 +86,7 @@ mod_roleParamsNeutral_ui <- function(id, button) {
         id,
         name = "sm_t",
         label = NULL,
-        min = 0,
+        min = 250,
         max = max_sm,
         value = value_sm
       ),
@@ -148,13 +148,13 @@ mod_roleParamsNeutral_ui <- function(id, button) {
         value = value_m
       ),
       
-      # roleParam(id, name = "nu", label = "&#957;",
-      #           min = 0, max = max_nu, value = value_nu,
-      #           tip = "The speciation local parameter",
-      #           isGreek = TRUE),
-      #
-      # roleParamText(id, name = "nu_t", label = NULL,
-      #               min = 0, max = max_nu, value = value_nu),
+      roleParam(id, name = "nu", label = "&#957;",
+                min = 0, max = max_nu, value = value_nu,
+                tip = "The speciation local parameter",
+                isGreek = TRUE),
+
+      roleParamText(id, name = "nu_t", label = NULL,
+                    min = 0, max = max_nu, value = value_nu),
       
       roleParam(
         id,

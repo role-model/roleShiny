@@ -14,6 +14,7 @@ library(plotly)
 library(stringr)
 library(purrr)
 library(tidyr)
+library(roleR)
 
 mod_rolePlots_ui <- function(id 
                              #name1, 
@@ -57,37 +58,48 @@ mod_rolePlots_server <- function(id,
   moduleServer( id, function(input, output, session){
     ns <- session$ns
     # nest these if() statements in an if() statement that checks if allSims() is of a certain size (or class. Maybe I can make the empty allSims its own class to clear us of having to worry about unusable data sizes)
+    
     observe({
+      
       req(allSims())
-      
-      # abundance distributions 
-      abundances <- reactive({
-        get_abund(allSims())
+    
+      sumstats <- reactive({
+        ss <- getSumStats(allSims(), 
+                    funs = list(abund = rawAbundance, 
+                                hillAbund = hillAbund, 
+                                rich = richness,
+                                traits = rawTraits,
+                                hillTrait = hillTrait), 
+                    moreArgs = list(hillAbund = list(q = 1:3)))
+        ss[,"gen"] <- allSims()@experimentMeta$generations
+        
+        return(ss)
       })
       
-      # trait distributions
-      traits <- reactive({
-        get_traits(allSims())
+      meta <- reactive({
+        slot(allSims(), "experimentMeta")
       })
         
+      raw <- reactive({
+        abund <- tidy_raw(sumstats(), "abund")
+        traits <- tidy_raw(sumstats(), "traits")
+        df <- left_join(abund, traits, by = c("gen"))
         
+        return(df)
+      })  
       
       # if (stringr::str_detect(name, "abundDist")) {
         
         
         fig_abundRank <-  reactive({
           
-          c_df <- sample_ts(abundances(), n_ts = input$nout, is_abund = TRUE)
-          
-          pool <- get_meta_abund(allSims())
+          abund_rank <- raw() %>% tidy_rank()
           
           p <- ggplot() +
-            geom_line(data = c_df, aes(x = rank, y = ab, group = timestep, color = timestep), alpha = 0.3) +
-            geom_line(data = c_df, aes(x = rank, y = ab, group = timestep, color = timestep, frame = timestep)) +
+            geom_line(data = abund_rank, aes(x = rank, y = abund, group = gen, color = gen), alpha = 0.3) +
             scale_color_viridis_c() +
-            geom_line(data = pool, aes(x = rank, y = ab), color = "black", linetype = "dashed") +
-            labs(x = "Rank", y = "Abundance", color = "Time step") +
-            ylim(y = c(min(c_df$ab), max(c_df$ab))) + 
+            labs(x = "Rank", y = "Abundance", color = "Generation") +
+            ylim(y = c(min(abund_rank$abund), max(abund_rank$abund))) + 
             theme_minimal() +
             theme(legend.key.size = unit(0.5, 'cm'))
           
@@ -108,13 +120,12 @@ mod_rolePlots_server <- function(id,
         
         
         fig_abundTime <-  reactive({
-           
-          abund_sumstats <- calc_abund_sumstats(abundances())
           
-           abund_sumstats %>%
-              plot_ly(x = ~time, y = ~shannon) %>%
+           sumstats() %>%
+            as_tibble() %>% 
+              plot_ly(x = ~gen, y = ~hillAbund_1) %>%
               add_lines() %>%
-              layout(xaxis = list(title = "Time step"), yaxis = list(title = "Shannon entropy"))
+              layout(xaxis = list(title = "Time step"), yaxis = list(title = "Hill 1"))
         }) 
         
         output$abundTime <- renderPlotly({
@@ -124,21 +135,19 @@ mod_rolePlots_server <- function(id,
         
         fig_traitRank <- reactive({
           
-          t_df <- sample_ts(traits(), n_ts = input$nout, is_abund = FALSE)
-          
-          pool <- get_meta_traits(allSims())
+          trait_rank <- raw() %>% tidy_rank()
           
           p <- ggplot() +
-            geom_line(data = t_df, aes(x = rank, y = trait, group = timestep, color = timestep), alpha = 0.3) +
-            geom_line(data = t_df, aes(x = rank, y = trait, group = timestep, color = timestep, frame = timestep)) +
+            geom_line(data = trait_rank, aes(x = rank, y = traits, group = gen, color = gen), alpha = 0.3) +
             scale_color_viridis_c() +
-            geom_line(data = pool, aes(x = rank, y = trait), color = "black", linetype = "dashed") +
-            labs(x = "Rank", y = "Trait", color = "Time step") +
+            labs(x = "Rank", y = "Trait", color = "Generation") +
+            ylim(y = c(min(trait_rank$traits), max(trait_rank$traits))) + 
             theme_minimal() +
             theme(legend.key.size = unit(0.5, 'cm'))
           
           p_int <- ggplotly(p) %>% 
-            animation_opts(250, transition = 100) 
+            animation_opts(250, transition = 100)
+          
           
           return(p_int)
         })
@@ -151,12 +160,11 @@ mod_rolePlots_server <- function(id,
         
         fig_traitTime <- reactive({
           
-          trait_sumstats <- calc_trait_sumstats(traits())
-          
-          trait_sumstats %>%
-            plot_ly(x = ~time, y = ~mean_trait) %>%
+          sumstats() %>%
+            as_tibble() %>% 
+            plot_ly(x = ~gen, y = ~hillTrait_1) %>%
             add_lines() %>%
-            layout(xaxis = list(title = "Time step"), yaxis = list(title = "Mean trait"))
+            layout(xaxis = list(title = "Time step"), yaxis = list(title = "Hill 1"))
         })
         
         output$traitTime <- renderPlotly({

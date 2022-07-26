@@ -38,13 +38,13 @@ mod_roleCoexistence_server <- function(id){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
     # temporary path to house simulations
-    sims_out <- tempfile(pattern = "sims", tmpdir = tempdir(), fileext = ".rds")
+    sims_out_coexistence <- tempfile(pattern = "sims_coexistence", tmpdir = tempdir(), fileext = ".rds")
     
     # roleSims
-    mod_roleSims_server(id, sims_out = sims_out, is_neutral = FALSE)
+    mod_roleSims_server(id, sims_out = sims_out_coexistence, is_neutral = FALSE)
     
     # roleReadSims
-    allSims <- mod_roleReadSims_server(id, sims_out = sims_out)
+    allSims <- mod_roleReadSims_server(id, sims_out = sims_out_coexistence)
     
     # roleParams
     mod_roleParamsCoexistence_server(id)
@@ -62,7 +62,7 @@ mod_roleCoexistence_server <- function(id){
     mod_roleUploads_server(id)
     
     # rolePlots
-    mod_rolePlots_server(id, allSims = allSims, sims_out = sims_out)
+    mod_rolePlots_server(id, allSims = allSims, sims_out = sims_out_coexistence)
     
   })
 }

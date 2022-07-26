@@ -39,13 +39,13 @@ mod_roleNeutral_server <- function(id){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
     # temporary path to house simulations
-    sims_out <- tempfile(pattern = "sims", tmpdir = tempdir(), fileext = ".rds")
+    sims_out_neutral <- tempfile(pattern = "sims_neutral_", tmpdir = tempdir(), fileext = ".rds")
     
     # roleSims
-    mod_roleSims_server(id, sims_out = sims_out, is_neutral = TRUE)
+    mod_roleSims_server(id, sims_out = sims_out_neutral, is_neutral = TRUE)
     
     # roleReadSims
-    allSims <- mod_roleReadSims_server(id, sims_out = sims_out)
+    allSims <- mod_roleReadSims_server(id, sims_out = sims_out_neutral)
     
     # roleParams
     mod_roleParamsNeutral_server(id)
@@ -63,7 +63,7 @@ mod_roleNeutral_server <- function(id){
     mod_roleUploads_server(id)
     
     # rolePlots
-    mod_rolePlots_server(id, allSims = allSims, sims_out = sims_out)
+    mod_rolePlots_server(id, allSims = allSims, sims_out = sims_out_neutral)
     
   })
 }
