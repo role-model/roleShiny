@@ -7,12 +7,10 @@
 #'
 #' @noRd 
 #'
-#' @importFrom shiny NS tagList 
+#' @import shiny roleR 
 #' 
 
-library(ecolottery)
-library(roleR)
-library(callr)
+
 
 mod_roleSims_ui <- function(id){
   ns <- NS(id)
@@ -27,8 +25,7 @@ mod_roleSims_ui <- function(id){
 #' @param sims_out Path to temporary file to house simulations
 #'
 #' @noRd 
-#' 
-library(dplyr)
+#' @import shiny roleR
 
 mod_roleSims_server <- function(id, sims_out, is_neutral = TRUE){
   moduleServer( id, function(input, output, session){
@@ -44,8 +41,8 @@ mod_roleSims_server <- function(id, sims_out, is_neutral = TRUE){
                              trait_sigma = 1, env_sigma = 1,
                              comp_sigma = 1, dispersal_prob = input$m, mutation_rate = 0.01,
                              equilib_escape = 1, num_basepairs = 250,
-                             init_type = 'oceanic_island', niter = 100,
-                             niterTimestep = input$nstep)
+                             init_type = 'oceanic_island', niter = input$iter,
+                             niterTimestep = 1)
         
         final <- roleExperiment(list(params))
       } else if(is_neutral == FALSE) {
@@ -56,8 +53,8 @@ mod_roleSims_server <- function(id, sims_out, is_neutral = TRUE){
                              trait_sigma = input$trait_sigma, env_sigma = 1,
                              comp_sigma = 1, dispersal_prob = input$m, mutation_rate = 0.01,
                              equilib_escape = 1, num_basepairs = 250,
-                             init_type = 'oceanic_island', niter = 100,
-                             niterTimestep = input$nstep)
+                             init_type = 'oceanic_island', niter = input$iter,
+                             niterTimestep = 1)
         
         final <- roleExperiment(list(params))
       }

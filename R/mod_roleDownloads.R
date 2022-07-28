@@ -6,10 +6,12 @@
 #'
 #' @noRd 
 #'
-#' @importFrom shiny NS tagList 
+#' @import here shiny dplyr callr
+#' @importFrom rmarkdown render
+#' @importFrom uuid UUIDgenerate
+#' @importFrom zip zip
+#' @importFrom readr read_csv write_csv
 #' 
-#' 
-library(uuid)
 
 
 report_path <- tempfile(fileext = ".Rmd")

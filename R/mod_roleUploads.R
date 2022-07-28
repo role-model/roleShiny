@@ -6,7 +6,7 @@
 #'
 #' @noRd 
 #'
-#' @importFrom shiny NS tagList 
+#' @import shiny
 mod_roleUploads_ui <- function(id){
   ns <- NS(id)
   tagList(

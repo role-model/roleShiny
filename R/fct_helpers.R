@@ -5,165 +5,11 @@
 #' @return The return value, if any, from executing the function.
 #'
 #' @noRd
-#' 
+#' @import dplyr 
+#' @importFrom stringr str_replace_all
 
 
-hill_calc <- hill_calc <- function(dists, order = 1, correct = TRUE) { 
-  if (order == 0) {
-    return(length(dists))
-  }
-  if (order == 1) {
-    h1 = exp(entropy::entropy(dists))
-    if (correct) {
-      return(h1 / length(dists))
-    } else return(h1)
-    
-  }
-  else {
-    tot = sum(dists)
-    proportions = dists/tot
-    prop_order = proportions**order
-    h2 = sum(prop_order)**(1/(1-order))
-    if (correct) {
-      return(h2 / length(dists))
-    } else return(h2)
-  }
-}
-
-# environmental filtering function
-filt_gaussian <- function(t, x, sigma) {
-  exp(-(x - t)^2 / (2 * sigma^2))
-}
-
-### simulated data processing functions
-
-
-# get metacommunity abundances
-get_meta_abund <- function(allSims) {
-  
-  meta <- allSims$pool %>% 
-    count(sp) %>% 
-    rename(ab = n) %>% 
-    mutate(relab = ab / sum(ab)) %>% 
-    arrange(desc(ab)) %>% 
-    mutate(rank = row_number())
-  
-  return(meta)
-}
-  
-
-# get metacommunity traits
-get_meta_traits <- function(allSims) {
-  
-  meta <- allSims$pool %>% 
-    group_by(sp) %>% 
-    summarize(trait = median(trait)) %>% 
-    arrange(desc(trait)) %>% 
-    mutate(rank = row_number())
-  
-  return(meta)
-}
-
-# get abundance distributions
-get_abund <- function(allSims) {
-  c <- allSims %>% 
-    # get abundance distributions
-    abund() %>% 
-    # get the `com` object, which contains the 
-    pluck("com_t") 
-  
-  # for time series plots later 
-  names(c) <- 1:length(c)
-  
-  return(c)
-}
-
-# summarize traits by species
-get_trait_median <- function(df) {
-   df %>% 
-    group_by(sp) %>% 
-    summarize(trait = median(trait))
-}
-
-# get trait distributions
-get_traits <- function(allSims) {
-  
-  t <- allSims %>% 
-    pluck("com_t") %>% 
-    map(get_trait_median)
-    
-  names(t) <- 1:length(t)
-  
-  return(t)
-}
-
-# sample abundance and trait distributions for plotting and format them
-# comm_list is the output from get_abund or get_traits
-# n_ts is the number of timesteps to sample. This comes from the input$nout parameter
-# is_abund asks if the list contains abundances or not, for determining the variable to sort by
-sample_ts <- function(comm_list, n_ts, is_abund = TRUE) {
-  
-  # evenly distribute samples across the time series
-  ts_sample <- round(seq(from = 2, to = length(comm_list), length.out = n_ts))
-  
-  # index for the samples
-  comm_sample <- comm_list[ts_sample]
-  
-  # if else for the variable to sort by
-  if (is_abund) {
-    sort_var <- "ab"
-  } else sort_var <- "trait"
-  
-  c <- comm_sample %>% 
-    # take the list of timesteps and combine into a single dataframe
-    bind_rows(.id = "timestep") %>% 
-    # group by timestep and sort from most abundant/largest trait to least abundant/lowest trait
-    group_by(timestep) %>% 
-    arrange(desc(!!sym(sort_var)), .by_group = TRUE) %>% 
-    # the rank is now the row number, since they're sorted
-    mutate(rank = row_number()) %>% 
-    ungroup() %>% 
-    # convert timestep to an integer (is a character at first) and sort the timesteps
-    mutate(timestep = as.integer(timestep)) %>% 
-    arrange(desc(timestep))
-  
-  return(c)
-}
-
-
-# calculate abundance summary stats
-# abund is the output of get_abund
-
-calc_abund_sumstats <- function(abund) {
-  
-  sim_stats <- abund %>% 
-    map_df(~entropy::entropy(.$ab)) %>% 
-    pivot_longer(cols = everything(), 
-                 names_to = "time", 
-                 values_to = "shannon") %>% 
-    mutate(time = as.integer(time)) %>% 
-    arrange(desc(time))
-  
-  return(sim_stats)
-}
-
-# calculate trait sumstats
-# tr is the output from get_traits
-calc_trait_sumstats <- function(tr) {
-  
-  sim_stats <- tr %>% 
-    map_df(~mean(.$trait)) %>% 
-    pivot_longer(cols = everything(), 
-                 names_to = "time", 
-                 values_to = "mean_trait") %>% 
-    mutate(time = as.integer(time)) %>% 
-    arrange(desc(time))
-  
-  return(sim_stats)
-}
-
-
-# function to get the date and time in a reasonable formate to append to the end of files for a unique filename
+# function to get the date and time in a reasonable format to append to the end of files for a unique filename
 file_suffix <- function() {
   Sys.time() %>% 
     str_replace_all("\\:", "-") %>% 
@@ -174,27 +20,28 @@ file_suffix <- function() {
 # ss = sumstats, output from getSumStats
 # raw_string = the raw data you want to format. For now, choices are "
 
-tidy_raw <- function(ss, raw_string) {
-  raw <- map(ss[[raw_string]], ~sort(.x, decreasing = TRUE))
-  
-  names(raw) <- paste0("gen_", 0:(length(raw) - 1))
-  
-  rawdf <- map_dfr(raw, ~as_tibble(.x), .id = "gen") %>% 
-    mutate(gen = str_remove_all(gen, "gen_") %>% as.integer())
-  
-  names(rawdf) <- c("gen", raw_string)
-  
-  return(rawdf)
-}
 
-# rank abundances, traits, etc. for rank-abundance plots
-tidy_rank <- function(df) {
-  df %>% 
+
+tidy_raw_rank <- function(ss, raw_string) {
+  o <- lapply(1:nrow(ss), function(i) {
+    x <- ss[[raw_string]][[i]]
+    x <- sort(x[x > 0], decreasing = TRUE)
+    
+    g <- rep(ss$gen[i], length(x))
+    
+    return(cbind(g, x))
+  })
+  
+  o <- as.data.frame(do.call(rbind, o))
+  
+  colnames(o) <- c('gen', raw_string)
+  
+  o_rank <- o %>% 
     group_by(gen) %>% 
-    mutate(rank = row_number()) 
+    mutate(rank = row_number())
+  
+  return(o_rank)
 }
-
-
 
 
 

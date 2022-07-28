@@ -6,15 +6,9 @@
 #'
 #' @noRd 
 #'
-#' @importFrom shiny NS tagList 
-#' @import plotly
+#' @import shiny plotly roleR ggplot2
+#' @importFrom dplyr left_join
 #' 
-#' 
-library(plotly)
-library(stringr)
-library(purrr)
-library(tidyr)
-library(roleR)
 
 mod_rolePlots_ui <- function(id 
                              #name1, 
@@ -79,21 +73,20 @@ mod_rolePlots_server <- function(id,
       meta <- reactive({
         slot(allSims(), "experimentMeta")
       })
-        
+      
       raw <- reactive({
-        abund <- tidy_raw(sumstats(), "abund")
-        traits <- tidy_raw(sumstats(), "traits")
-        df <- left_join(abund, traits, by = c("gen"))
+        abund <- tidy_raw_rank(sumstats(), "abund")
+        traits <- tidy_raw_rank(sumstats(), "traits")
         
-        return(df)
+        return(list(abund = abund, traits = traits))
       })  
       
       # if (stringr::str_detect(name, "abundDist")) {
         
         
         fig_abundRank <-  reactive({
-          
-          abund_rank <- raw() %>% tidy_rank()
+        
+          abund_rank <- raw()$abund
           
           p <- ggplot() +
             geom_line(data = abund_rank, aes(x = rank, y = abund, group = gen, color = gen), alpha = 0.3) +
@@ -134,8 +127,8 @@ mod_rolePlots_server <- function(id,
      # } else if (stringr::str_detect(name, "traitDist")) {
         
         fig_traitRank <- reactive({
-          
-          trait_rank <- raw() %>% tidy_rank()
+        
+          trait_rank <- raw()$traits
           
           p <- ggplot() +
             geom_line(data = trait_rank, aes(x = rank, y = traits, group = gen, color = gen), alpha = 0.3) +

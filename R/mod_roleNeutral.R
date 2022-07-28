@@ -6,7 +6,7 @@
 #'
 #' @noRd 
 #'
-#' @importFrom shiny NS tagList 
+#' @import shiny
 mod_roleNeutral_ui <- function(id){
   ns <- NS(id)
     tabPanel(title = "Neutral",

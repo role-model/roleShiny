@@ -2,10 +2,10 @@
 #' 
 #' @param input,output,session Internal parameters for {shiny}. 
 #'     DO NOT REMOVE.
-#' @import shiny
+#' @import shiny here
 #' @noRd
 #' 
-library(here)
+
 
 id_n <- "neutral"
 id_c <- "coexistence"
