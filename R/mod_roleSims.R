@@ -41,8 +41,7 @@ mod_roleSims_server <- function(id, sims_out, is_neutral = TRUE){
                              trait_sigma = 1, env_sigma = 1,
                              comp_sigma = 1, dispersal_prob = input$m, mutation_rate = 0.01,
                              equilib_escape = 1, num_basepairs = 250,
-                             init_type = 'oceanic_island', niter = input$iter,
-                             niterTimestep = 1)
+                             init_type = 'oceanic_island', niter = input$iter)
         
         final <- roleExperiment(list(params))
       } else if(is_neutral == FALSE) {
@@ -53,8 +52,7 @@ mod_roleSims_server <- function(id, sims_out, is_neutral = TRUE){
                              trait_sigma = input$trait_sigma, env_sigma = 1,
                              comp_sigma = 1, dispersal_prob = input$m, mutation_rate = 0.01,
                              equilib_escape = 1, num_basepairs = 250,
-                             init_type = 'oceanic_island', niter = input$iter,
-                             niterTimestep = 1)
+                             init_type = 'oceanic_island', niter = input$iter)
         
         final <- roleExperiment(list(params))
       }
