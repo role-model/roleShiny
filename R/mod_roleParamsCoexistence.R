@@ -109,6 +109,9 @@ value_m <- 0.1
 max_eq <- 1.0
 value_eq <- 0.5
 
+max_trait_sigma <- 1
+value_trait_sigma <- 0.1
+
 # genetics params
 max_mu <- 0.01
 value_mu <- 0.001
@@ -117,8 +120,7 @@ max_bp <- 1000
 value_bp <- 500
 
 # non-neutral params
-max_trait_sigma <- 1
-value_trait_sigma <- 0.1
+
 
 max_env_sigma <- 1
 value_env_sigma <- 0.1
@@ -301,6 +303,27 @@ mod_roleParamsCoexistence_ui <- function(id, button) {
         tip = "Initialization routine"
       ),
       
+      roleParam(
+        id,
+        name = "trait_sigma",
+        label = "Trait &#963;",
+        min = 0,
+        max = max_trait_sigma,
+        value = value_trait_sigma,
+        tip = "The rate of Brownian trait evolution in the meta community",
+        isGreek = TRUE
+      ),
+      
+      roleParamText(
+        id,
+        name = "trait_sigma",
+        label = NULL,
+        min = 0,
+        max = max_trait_sigma,
+        value = value_trait_sigma
+      ),
+      
+      
       ## genetics parameters
       roleParam(
         id,
@@ -341,25 +364,6 @@ mod_roleParamsCoexistence_ui <- function(id, button) {
       ),
       
       ## non-neutral parameters
-      roleParam(
-        id,
-        name = "trait_sigma",
-        label = "Trait &#963;",
-        min = 0,
-        max = max_trait_sigma,
-        value = value_trait_sigma,
-        tip = "The rate of Brownian trait evolution in the meta community",
-        isGreek = TRUE
-      ),
-      
-      roleParamText(
-        id,
-        name = "trait_sigma",
-        label = NULL,
-        min = 0,
-        max = max_trait_sigma,
-        value = value_trait_sigma
-      ),
       
       roleParam(
         id,
@@ -584,6 +588,23 @@ mod_roleParamsCoexistence_server <- function(id){
     ) %>%
       bindEvent(input$eq_t)
     
+    #### trait_sigma slider ####
+    
+    observe(
+      updateNumericInput(session,
+                         inputId = "trait_sigma_t",
+                         value = input$trait_sigma)
+    ) %>%
+      bindEvent(input$trait_sigma)
+    
+    observe(
+      updateSliderInput(session,
+                        "trait_sigma",
+                        value = input$trait_sigma_t)
+    ) %>%
+      bindEvent(input$trait_sigma_t)
+    
+    
     #### Genetics params ####
     
     #### mu slider ####
@@ -620,21 +641,6 @@ mod_roleParamsCoexistence_server <- function(id){
     
     #### Non-neutral params ####
     
-    #### trait_sigma slider ####
-    
-    observe(
-      updateNumericInput(session,
-                         inputId = "trait_sigma_t",
-                         value = input$trait_sigma)
-    ) %>%
-      bindEvent(input$trait_sigma)
-    
-    observe(
-      updateSliderInput(session,
-                        "trait_sigma",
-                        value = input$trait_sigma_t)
-    ) %>%
-      bindEvent(input$trait_sigma_t)
     
     #### env_sigma slider ####
     

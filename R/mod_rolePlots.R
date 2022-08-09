@@ -89,7 +89,7 @@ mod_rolePlots_server <- function(id,
           abund_rank <- raw()$abund
           
           p <- ggplot() +
-            geom_line(data = abund_rank, aes(x = rank, y = abund, group = gen, color = gen), alpha = 0.3) +
+            geom_line(data = abund_rank, aes(x = rank, y = abund, group = gen, color = gen, frame = gen), alpha = 0.3) +
             scale_color_viridis_c() +
             labs(x = "Rank", y = "Abundance", color = "Generation") +
             ylim(y = c(min(abund_rank$abund), max(abund_rank$abund))) + 
@@ -131,7 +131,7 @@ mod_rolePlots_server <- function(id,
           trait_rank <- raw()$traits
           
           p <- ggplot() +
-            geom_line(data = trait_rank, aes(x = rank, y = traits, group = gen, color = gen), alpha = 0.3) +
+            geom_line(data = trait_rank, aes(x = rank, y = traits, group = gen, color = gen, frame = gen), alpha = 0.3) +
             scale_color_viridis_c() +
             labs(x = "Rank", y = "Trait", color = "Generation") +
             ylim(y = c(min(trait_rank$traits), max(trait_rank$traits))) + 

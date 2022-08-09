@@ -35,25 +35,43 @@ mod_roleSims_server <- function(id, sims_out, is_neutral = TRUE){
       
       if(is_neutral) {
         
-        params <- roleParams(individuals_local = input$j, 
-                             individuals_meta = input$jm,
-                             species_meta = input$sm, speciation_local = input$nu,
-                             speciation_meta = 1, extinction_meta = 0.8,
-                             trait_sigma = 1, env_sigma = 1,
-                             comp_sigma = 1, dispersal_prob = input$m, mutation_rate = 0.01,
-                             equilib_escape = 1, num_basepairs = 250,
-                             init_type = 'oceanic_island', niter = input$iter)
+        params <- roleParams(
+          individuals_local = input$j,
+          individuals_meta = input$jm,
+          species_meta = input$sm,
+          speciation_local = input$nu,
+          speciation_meta = 1,
+          extinction_meta = 0.8,
+          trait_sigma = 1,
+          env_sigma = 1,
+          comp_sigma = 1,
+          dispersal_prob = input$m,
+          mutation_rate = 0.01,
+          equilib_escape = 1,
+          num_basepairs = 250,
+          init_type = 'oceanic_island',
+          niter = input$iter
+        )
         
         final <- roleExperiment(list(params))
       } else if(is_neutral == FALSE) {
-        params <- roleParams(individuals_local = input$j, 
-                             individuals_meta = input$jm,
-                             species_meta = input$sm, speciation_local = input$nu,
-                             speciation_meta = 1, extinction_meta = 0.8,
-                             trait_sigma = input$trait_sigma, env_sigma = 1,
-                             comp_sigma = 1, dispersal_prob = input$m, mutation_rate = 0.01,
-                             equilib_escape = 1, num_basepairs = 250,
-                             init_type = 'oceanic_island', niter = input$iter)
+        params <- roleParams(
+          individuals_local = input$j,
+          individuals_meta = input$jm,
+          species_meta = input$sm,
+          speciation_local = input$nu,
+          speciation_meta = 1,
+          extinction_meta = 0.8,
+          trait_sigma = input$trait_sigma,
+          env_sigma = 1,
+          comp_sigma = 1,
+          dispersal_prob = input$m,
+          mutation_rate = 0.01,
+          equilib_escape = 1,
+          num_basepairs = 250,
+          init_type = 'oceanic_island',
+          niter = input$iter
+        )
         
         final <- roleExperiment(list(params))
       }

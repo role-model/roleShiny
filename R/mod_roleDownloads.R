@@ -18,7 +18,7 @@ report_path <- tempfile(fileext = ".Rmd")
 file.copy(here::here("inst/templates/report.Rmd"), report_path, overwrite = TRUE)
 
 render_report <- function(input, output, params) {
-  rmarkdown::render(input,
+  rmarkdown::render(here::here("inst/templates/report.Rmd"),
                     output_file = output,
                     params = params,
                     envir = new.env(parent = globalenv())
@@ -35,8 +35,8 @@ mod_roleDownloads_ui <- function(id){
       div(
         
         downloadButton(ns("downSim"), "download simulation RDS object"),
-        downloadButton(ns("downCSVs"), "download simulation CSVs")
-        # downloadButton(ns("downScript"), "download script"),
+        downloadButton(ns("downCSVs"), "download simulation CSVs"),
+        downloadButton(ns("downScript"), "download script"),
         #downloadButton(ns("downPlots"), "download plots")
       )
     )
@@ -218,20 +218,29 @@ mod_roleDownloads_server <- function(id, allSims) {
       contentType = "application/zip")
         
     output$downScript <- downloadHandler(
-      filename = "report.html",
+      filename = "report.pdf",
       content = function(file) {
-        params <- list(n = 10)
+        params <- list(
+          j = input$j,
+          jm = input$jm,
+          sm = input$sm,
+          nu = input$nu,
+          trait_sigma = input$trait_sigma,
+          m = input$m,
+          iter = input$iter
+          )
         
-        id <- showNotification(
-          "Rendering report...", 
-          duration = NULL, 
-          closeButton = FALSE
-        )
+        id <- showNotification("Rendering report...",
+                               duration = NULL,
+                               closeButton = FALSE)
         on.exit(removeNotification(id), add = TRUE)
         
         callr::r(render_report,
-                 list(input = report_path, output = file, params = params)
-        )
+                 list(
+                   input = report_path,
+                   output = file,
+                   params = params
+                 ))
       }
     )
     

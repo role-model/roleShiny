@@ -1,19 +1,65 @@
 ---
-title: "Dynamic report test"
-output: html_document
+title: "Code to reproduce your simulation"
+output: pdf_document
 params:
   date: !r Sys.Date()
-  n: NA
+  j: NA
+  jm: NA
+  sm: NA
+  nu: NA
+  num: NA
+  ext: NA
+  trait_sigma: NA
+  env_sigma: NA
+  comp_sigma: NA
+  m: NA
+  mu: NA
+  eq: NA
+  bp: NA
+  type: NA
+  iter: NA
 ---
+## Load roleR package
 
-## R Markdown
-
-This is a test R Markdown for figuring out how to download parameterized reports.  
-
-
-A plot of `r params$n` random points.
-
-```{r}
-plot(rnorm(params$n), rnorm(params$n))
+```{r, echo=FALSE, message=FALSE}
+library(here)
 ```
 
+```{r,eval=FALSE}
+library(roleR)
+```
+
+
+## Parameters
+
+These are the input parameters necessary to reproduce your simulation.  
+
+
+```{r, echo=FALSE}
+# make templates for several different chunks, e.g. making params, runing model
+temp <- readLines(here("inst", "templates", "params.txt"), warn = FALSE)
+x <- sprintf(paste(temp, collapse = '\n'), 
+             input$j,
+             input$jm,
+             input$sm,
+             input$nu,
+             input$num,
+             input$ext,
+             input$trait_sigma,
+             input$env_sigma,
+             input$comp_sigma,
+             input$m,
+             input$mu,
+             input$eq,
+             input$bp,
+             input$type,
+             input$iter,
+             )
+
+temp_params <- tempfile("role_params", fileext = ".R")
+
+writeLines(x, temp_params)
+```
+
+```{r code=readLines(temp_params), eval = FALSE}
+```

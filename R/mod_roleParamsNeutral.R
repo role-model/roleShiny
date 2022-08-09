@@ -64,12 +64,7 @@ value_m <- 0.1
 max_eq <- 1.0
 value_eq <- 0.5
 
-#### genetics params ####
-max_mu <- 0.01
-value_mu <- 0.001
 
-max_bp <- 1000
-value_bp <- 500
 
 #### simulation length params ####
 max_iter <- 100
@@ -244,43 +239,24 @@ mod_roleParamsNeutral_ui <- function(id, button) {
         tip = "Initialization routine"
       ),
       
-      #### genetics parameters ####
       roleParam(
         id,
-        name = "mu",
-        label = "&#956;",
+        name = "trait_sigma",
+        label = "Trait &#963;",
         min = 0,
-        max = max_mu,
-        value = value_mu,
-        tip = "Mutation rate"
+        max = max_trait_sigma,
+        value = value_trait_sigma,
+        tip = "The rate of Brownian trait evolution in the meta community",
+        isGreek = TRUE
       ),
       
       roleParamText(
         id,
-        name = "mu_t",
+        name = "trait_sigma",
         label = NULL,
         min = 0,
-        max = max_mu,
-        value = value_mu
-      ),
-      
-      roleParam(
-        id,
-        name = "bp",
-        label = "BP",
-        min = 100,
-        max = max_bp,
-        value = value_bp,
-        tip = "The number of basepairs"
-      ),
-      
-      roleParamText(
-        id,
-        name = "bp_t",
-        label = NULL,
-        min = 100,
-        max = max_bp,
-        value = value_bp
+        max = max_trait_sigma,
+        value = value_trait_sigma
       ),
       
       #### simulation length parameters ####
@@ -446,39 +422,23 @@ mod_roleParamsNeutral_server <- function(id) {
     ) %>%
       bindEvent(input$eq_t)
     
-    #### Genetics params ####
-    
-    #### mu slider ####
+    #### trait_sigma slider ####
     
     observe(
       updateNumericInput(session,
-                         inputId = "mu_t",
-                         value = input$mu)
+                         inputId = "trait_sigma_t",
+                         value = input$trait_sigma)
     ) %>%
-      bindEvent(input$mu)
+      bindEvent(input$trait_sigma)
     
     observe(
       updateSliderInput(session,
-                        "mu",
-                        value = input$mu_t)
+                        "trait_sigma",
+                        value = input$trait_sigma_t)
     ) %>%
-      bindEvent(input$mu_t)
+      bindEvent(input$trait_sigma_t)
     
-    #### bp slider ####
     
-    observe(
-      updateNumericInput(session,
-                         inputId = "bp_t",
-                         value = input$bp)
-    ) %>%
-      bindEvent(input$bp)
-    
-    observe(
-      updateSliderInput(session,
-                        "bp",
-                        value = input$bp_t)
-    ) %>%
-      bindEvent(input$bp_t)
     #### Sim length params ####
     
     #### iter slider ####
