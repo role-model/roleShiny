@@ -76,6 +76,8 @@ mod_roleParamsNeutral_ui <- function(id, button) {
   div(
     h2("Parameters"),
     
+    h3("Local community"),
+    
     div(
       roleParam(
         id,
@@ -95,6 +97,66 @@ mod_roleParamsNeutral_ui <- function(id, button) {
         max = max_j,
         value = value_j
       ),
+      
+      roleParam(
+        id,
+        name = "nu",
+        label = "&#957;",
+        min = 0,
+        max = max_nu,
+        value = value_nu,
+        tip = "The probability of local speciation",
+        isGreek = TRUE
+      ),
+      
+      roleParamText(
+        id,
+        name = "nu_t",
+        label = NULL,
+        min = 0,
+        max = max_nu,
+        value = value_nu
+      ),
+      
+      roleParam(
+        id,
+        name = "m",
+        label = "m",
+        min = 0,
+        max = max_m,
+        value = value_m,
+        tip = "The local dispersal probability"
+      ),
+      
+      roleParamText(
+        id,
+        name = "m_t",
+        label = NULL,
+        min = 0,
+        max = max_m,
+        value = value_m
+      ),
+      
+      roleParam(
+        id,
+        name = "eq",
+        label = "EQ",
+        min = 0,
+        max = max_eq,
+        value = value_eq,
+        tip = "The proportion of equilibrium achieved"
+      ),
+      
+      roleParamText(
+        id,
+        name = "eq_t",
+        label = NULL,
+        min = 0,
+        max = max_eq,
+        value = value_eq
+      ),
+      
+      h3("Metacommunity"),
       
       roleParam(
         id,
@@ -136,26 +198,6 @@ mod_roleParamsNeutral_ui <- function(id, button) {
       
       roleParam(
         id,
-        name = "nu",
-        label = "&#957;",
-        min = 0,
-        max = max_nu,
-        value = value_nu,
-        tip = "The probability of local speciation",
-        isGreek = TRUE
-      ),
-      
-      roleParamText(
-        id,
-        name = "nu_t",
-        label = NULL,
-        min = 0,
-        max = max_nu,
-        value = value_nu
-      ),
-      
-      roleParam(
-        id,
         name = "num",
         label = "&#957;<sub>m</sub>",
         min = 0,
@@ -193,45 +235,6 @@ mod_roleParamsNeutral_ui <- function(id, button) {
         value = value_ext
       ),
       
-      
-      roleParam(
-        id,
-        name = "m",
-        label = "m",
-        min = 0,
-        max = max_m,
-        value = value_m,
-        tip = "The local dispersal probability"
-      ),
-      
-      roleParamText(
-        id,
-        name = "m_t",
-        label = NULL,
-        min = 0,
-        max = max_m,
-        value = value_m
-      ),
-      
-      roleParam(
-        id,
-        name = "eq",
-        label = "EQ",
-        min = 0,
-        max = max_eq,
-        value = value_eq,
-        tip = "The proportion of equilibrium achieved"
-      ),
-      
-      roleParamText(
-        id,
-        name = "eq_t",
-        label = NULL,
-        min = 0,
-        max = max_eq,
-        value = value_eq
-      ),
-      
       roleParamDrop(
         id,
         name = "type",
@@ -258,6 +261,8 @@ mod_roleParamsNeutral_ui <- function(id, button) {
         max = max_trait_sigma,
         value = value_trait_sigma
       ),
+      
+      h3("Simulation length"),
       
       #### simulation length parameters ####
       roleParam(

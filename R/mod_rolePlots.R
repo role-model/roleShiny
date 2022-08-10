@@ -31,8 +31,15 @@ mod_rolePlots_ui <- function(id
                )
                ),
       tabPanel("Traits", 
-               plotlyOutput(ns("traitRank")),
-               plotlyOutput(ns("traitTime")))
+               fluidRow(
+                 column(width = 4, 
+                        plotlyOutput(ns("traitRank"))
+                 ),
+                 column(width = 4, 
+                        plotlyOutput(ns("traitTime"))
+                 )
+               )
+      )
       )  
     )
 }

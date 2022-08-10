@@ -18,6 +18,7 @@ report_path <- tempfile(fileext = ".Rmd")
 file.copy(here::here("inst/templates/report.Rmd"), report_path, overwrite = TRUE)
 
 render_report <- function(input, output, params) {
+  
   rmarkdown::render(here::here("inst/templates/report.Rmd"),
                     output_file = output,
                     params = params,
@@ -216,7 +217,7 @@ mod_roleDownloads_server <- function(id, allSims) {
         )
       },
       contentType = "application/zip")
-        
+    
     output$downScript <- downloadHandler(
       filename = "report.pdf",
       content = function(file) {
@@ -225,10 +226,24 @@ mod_roleDownloads_server <- function(id, allSims) {
           jm = input$jm,
           sm = input$sm,
           nu = input$nu,
+          num = input$num,
+          ext = input$ext,
           trait_sigma = input$trait_sigma,
+          env_sigma = input$env_sigma,
+          comp_sigma = input$comp_sigma,
           m = input$m,
+          mu = input$mu,
+          eq = input$eq,
+          bp = input$bp,
+          type = input$type,
           iter = input$iter
           )
+        
+        for (i in 1:length(params)) {
+          if (is.null(params[[i]])) {
+            params[[i]] <- "NULL"
+          }
+        }
         
         id <- showNotification("Rendering report...",
                                duration = NULL,
@@ -241,6 +256,8 @@ mod_roleDownloads_server <- function(id, allSims) {
                    output = file,
                    params = params
                  ))
+        
+        #render_report(input = report_path, output = file, params = params)
       }
     )
     
