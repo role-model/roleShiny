@@ -219,7 +219,7 @@ mod_roleDownloads_server <- function(id, allSims) {
       contentType = "application/zip")
     
     output$downScript <- downloadHandler(
-      filename = "report.pdf",
+      filename = "report.html",
       content = function(file) {
         params <- list(
           j = input$j,

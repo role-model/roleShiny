@@ -1,6 +1,6 @@
 ---
 title: "Code to reproduce your simulation"
-output: pdf_document
+output: html_document
 params:
   date: !r Sys.Date()
   j: NA
