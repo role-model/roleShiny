@@ -53,7 +53,15 @@ mod_roleSims_server <- function(id, sims_out, is_neutral = TRUE){
           niter = input$iter
         )
         
-        final <- roleExperiment(list(params))
+        exp <- roleModel(params)
+        
+        # temporary fix to add metadata
+        exp_2 <- as(exp, "roleExperiment")
+        
+        m <- iterModel(exp)
+        
+        final <- list(mod = m, meta = exp_2)
+        
       } else if(is_neutral == FALSE) {
         params <- roleParams(
           individuals_local = input$j,
@@ -73,7 +81,15 @@ mod_roleSims_server <- function(id, sims_out, is_neutral = TRUE){
           niter = input$iter
         )
         
-        final <- roleExperiment(list(params))
+
+        exp <- roleModel(params)
+        
+        # temporary fix to add metadata
+        exp_2 <- as(exp, "roleExperiment")
+        
+        m <- iterModel(exp)
+      
+        final <- list(mod = m, meta = exp_2)
       }
       
 
