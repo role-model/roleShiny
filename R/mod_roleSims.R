@@ -88,7 +88,7 @@ mod_roleSims_server <- function(id, sims_out, is_neutral = TRUE){
         exp_2 <- as(exp, "roleExperiment")
         
         m <- iterModel(exp)
-      
+        
         final <- list(mod = m, meta = exp_2)
       }
       

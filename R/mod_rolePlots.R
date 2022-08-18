@@ -93,7 +93,7 @@ mod_rolePlots_server <- function(id,
         
         
         fig_abundRank <-  reactive({
-        
+          
           abund_rank <- raw()$abund
           
           p <- ggplot() +
