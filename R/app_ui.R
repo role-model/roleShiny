@@ -8,6 +8,7 @@
 id_a <- "about"
 id_n <- "neutral"
 id_c <- "coexistence"
+id_m <- "mess"
 
 
 app_ui <- function(request) {
@@ -18,9 +19,10 @@ app_ui <- function(request) {
     # Your application UI logic 
     navbarPage("Rules of Life Engine",
                theme = bslib::bs_theme(bootswatch = "sandstone"),
+               mod_roleAbout_ui(id_a),
                mod_roleNeutral_ui(id_n),
                mod_roleCoexistence_ui(id_c),
-               mod_roleAbout_ui(id_a)
+               mod_roleMESS_ui(id_m)
       ),
       
     )

@@ -6,7 +6,7 @@
 #'
 #' @noRd 
 #'
-#' @import shiny plotly roleR ggplot2
+#' @import shiny plotly roleR ggplot2 highcharter
 #' @importFrom dplyr left_join
 #' 
 
@@ -22,20 +22,20 @@ mod_rolePlots_ui <- function(id
       type = "tabs",
       tabPanel("Abundances", 
                fluidRow(
-                 column(width = 4, 
+                 column(width = 5, 
                         plotlyOutput(ns("abundRank"))
                         ),
-               column(width = 4, 
+               column(width = 5, 
                       plotlyOutput(ns("abundTime"))
                       )
                )
                ),
       tabPanel("Traits", 
                fluidRow(
-                 column(width = 4, 
+                 column(width = 5, 
                         plotlyOutput(ns("traitRank"))
                  ),
-                 column(width = 4, 
+                 column(width = 5, 
                         plotlyOutput(ns("traitTime"))
                  )
                )
@@ -96,19 +96,10 @@ mod_rolePlots_server <- function(id,
           
           abund_rank <- raw()$abund
           
-          p <- ggplot() +
-            geom_line(data = abund_rank, aes(x = rank, y = abund, group = gen, color = gen, frame = gen), alpha = 0.3) +
-            scale_color_viridis_c() +
-            labs(x = "Rank", y = "Abundance", color = "Generation") +
-            ylim(y = c(min(abund_rank$abund), max(abund_rank$abund))) + 
-            theme_minimal() +
-            theme(legend.key.size = unit(0.5, 'cm'))
-          
-          p_int <- ggplotly(p) %>% 
-            animation_opts(250, transition = 100)
+          p <- gg_scatter(dat = abund_rank, yvar = "abund", is_abund = TRUE)
             
           
-          return(p_int)
+          return(p)
           
         })
       
@@ -122,11 +113,8 @@ mod_rolePlots_server <- function(id,
         
         fig_abundTime <-  reactive({
           
-           sumstats() %>%
-            as_tibble() %>% 
-              plot_ly(x = ~gen, y = ~hillAbund_1) %>%
-              add_lines() %>%
-              layout(xaxis = list(title = "Time step"), yaxis = list(title = "Hill 1"))
+          plotly_ts(dat = sumstats(), yvar = "hillAbund_1")
+    
         }) 
         
         output$abundTime <- renderPlotly({
@@ -138,19 +126,9 @@ mod_rolePlots_server <- function(id,
         
           trait_rank <- raw()$traits
           
-          p <- ggplot() +
-            geom_line(data = trait_rank, aes(x = rank, y = traits, group = gen, color = gen, frame = gen), alpha = 0.3) +
-            scale_color_viridis_c() +
-            labs(x = "Rank", y = "Trait", color = "Generation") +
-            ylim(y = c(min(trait_rank$traits), max(trait_rank$traits))) + 
-            theme_minimal() +
-            theme(legend.key.size = unit(0.5, 'cm'))
+          p <- gg_scatter(dat = trait_rank, yvar = "traits", is_abund = FALSE)
           
-          p_int <- ggplotly(p) %>% 
-            animation_opts(250, transition = 100)
-          
-          
-          return(p_int)
+          return(p)
         })
         
         output$traitRank <- renderPlotly({
@@ -161,11 +139,8 @@ mod_rolePlots_server <- function(id,
         
         fig_traitTime <- reactive({
           
-          sumstats() %>%
-            as_tibble() %>% 
-            plot_ly(x = ~gen, y = ~hillTrait_1) %>%
-            add_lines() %>%
-            layout(xaxis = list(title = "Time step"), yaxis = list(title = "Hill 1"))
+          plotly_ts(dat = sumstats(), yvar = "hillTrait_1")
+          
         })
         
         output$traitTime <- renderPlotly({

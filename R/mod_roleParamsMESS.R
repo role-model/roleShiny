@@ -1,40 +1,85 @@
-#' roleParams UI Function
+#' roleParamsMESS UI Function
 #'
-#' @description A shiny Module controlling parameter inputs for simulations
+#' @description A shiny Module.
 #'
 #' @param id,input,output,session Internal parameters for {shiny}.
 #'
 #' @noRd 
 #'
-#' @import shiny 
+#' @import shiny
 #' @importFrom shinyBS bsTooltip bsButton
 
 # slider input
-roleParam <- function(id, name, label = "", min = 0, max = 100000, value = 100, tip = "", isGreek = FALSE) {
-  ns <- NS(id)
-  opener = if (isGreek) '<div class="param-label greek">' else '<div class="param-label">'
-  tagList(
-    HTML(paste(opener, label, "</div>")),
-    div(
-      class = "param-wrapper",
-      sliderInput(ns(name), label = "", min = min, max = max, value = value, ticks = FALSE),
-      shinyBS::bsTooltip(ns(name), tip)
-    )
-  )
-}
+roleParam <-
+  function(id,
+           name,
+           label = "",
+           min = 0,
+           max = 100000,
+           value = 100,
+           tip = "",
+           isGreek = FALSE) {
+    ns <- NS(id)
+    opener = if (isGreek)
+      '<div class="param-label greek">'
+    else
+      '<div class="param-label">'
+    tagList(HTML(paste(opener, label, "</div>")),
+            div(
+              class = "param-wrapper",
+              sliderInput(
+                ns(name),
+                label = "",
+                min = min,
+                max = max,
+                value = value,
+                ticks = FALSE
+              ),
+              shinyBS::bsTooltip(ns(name), tip)
+            ))
+  }
 
 # corresponding text input
-roleParamText <- function(id, name, label = "", min = 0, max = 100000, value = 100, tip = "", isGreek = FALSE) {
-  ns <- NS(id)
-  tagList(
-    div(
-      numericInput(ns(name), label = NULL, min = min, max = max, 
-                   value = value, width = 90),
+roleParamText <-
+  function(id,
+           name,
+           label = "",
+           min = 0,
+           max = 100000,
+           value = 100,
+           tip = "") {
+    ns <- NS(id)
+    tagList(div(
+      numericInput(
+        ns(name),
+        label = NULL,
+        min = min,
+        max = max,
+        value = value,
+        width = 90
+      ),
       shinyBS::bsTooltip(ns(name), tip)
-    )
-  )
-}
+    ))
+  }
 
+# dropdown menu
+roleParamDrop <-
+  function(id,
+           name,
+           label = NULL,
+           selected = "oceanic_island",
+           tip = "") {
+    ns <- NS(id)
+    tagList(div(
+      selectInput(
+        ns(name),
+        label = label,
+        choices = c("oceanic_island", "bridge_island"),
+        selected = selected
+      ),
+      shinyBS::bsTooltip(ns(name), tip)
+    ))
+  }
 
 ### max and default values for all role Params. Easy place to adjust
 
@@ -64,12 +109,32 @@ value_m <- 0.1
 max_eq <- 1.0
 value_eq <- 0.5
 
+max_trait_sigma <- 1
+value_trait_sigma <- 0.1
 
-#### simulation length params ####
+# genetics params
+max_mu <- 0.01
+value_mu <- 0.001
+
+max_bp <- 1000
+value_bp <- 500
+
+# non-neutral params
+
+
+max_env_sigma <- 1
+value_env_sigma <- 0.1
+
+max_comp_sigma <- 1
+value_comp_sigma <- 0.1
+
+# simulation length params
 max_iter <- 1000
 value_iter <- 100
 
-mod_roleParamsNeutral_ui <- function(id, button) {
+
+
+mod_roleParamsMESS_ui <- function(id, button) {
   ns <- NS(id)
   
   div(
@@ -195,6 +260,7 @@ mod_roleParamsNeutral_ui <- function(id, button) {
         value = value_sm
       ),
       
+      
       roleParam(
         id,
         name = "num",
@@ -261,41 +327,145 @@ mod_roleParamsNeutral_ui <- function(id, button) {
         value = value_trait_sigma
       ),
       
-      h3("Simulation length"),
+      h3("Genetics"),
       
-      #### simulation length parameters ####
+      ## genetics parameters
       roleParam(
         id,
-        name = "iter",
-        label = "n<sub>iter</sub>",
-        min = 1,
-        max = max_iter,
-        value = value_iter,
-        tip = "The number of iterations to run"
+        name = "mu",
+        label = "&#956;",
+        min = 0,
+        max = max_mu,
+        value = value_mu,
+        tip = "Mutation rate"
       ),
       
       roleParamText(
         id,
-        name = "iter_t",
+        name = "mu_t",
         label = NULL,
-        min = 1,
-        max = max_iter,
-        value = value_iter
-      )
+        min = 0,
+        max = max_mu,
+        value = value_mu
+      ),
       
-    )
+      roleParam(
+        id,
+        name = "bp",
+        label = "BP",
+        min = 100,
+        max = max_bp,
+        value = value_bp,
+        tip = "The number of basepairs"
+      ),
+      
+      roleParamText(
+        id,
+        name = "bp_t",
+        label = NULL,
+        min = 100,
+        max = max_bp,
+        value = value_bp
+      ),
+      
+      h3("Non-neutral"),
+      ## non-neutral parameters
+      
+      roleParam(
+        id,
+        name = "env_sigma",
+        label = "Environment &#963;",
+        min = 0,
+        max = max_env_sigma,
+        value = value_env_sigma,
+        tip = "The selectivity of the environmental filter",
+        isGreek = TRUE
+      ),
+      
+      roleParamText(
+        id,
+        name = "env_sigma",
+        label = NULL,
+        min = 0,
+        max = max_env_sigma,
+        value = value_env_sigma
+      ),
+      
+      roleParam(
+        id,
+        name = "comp_sigma",
+        label = "Competition &#963;",
+        min = 0,
+        max = max_comp_sigma,
+        value = value_comp_sigma,
+        tip = "The selectivity of the environmental filter",
+        isGreek = TRUE
+      ),
+      
+      roleParamText(
+        id,
+        name = "comp_sigma",
+        label = NULL,
+        min = 0,
+        max = max_comp_sigma,
+        value = value_comp_sigma
+      ),
+      
+    ),
+    
+    h3("Simulation length"),
+    
+    #### simulation length parameters ####
+    roleParam(
+      id,
+      name = "iter",
+      label = "n<sub>iter</sub>",
+      min = 1,
+      max = max_iter,
+      value = value_iter,
+      tip = "The number of iterations to run"
+    ),
+    
+    roleParamText(
+      id,
+      name = "iter_t",
+      label = NULL,
+      min = 1,
+      max = max_iter,
+      value = value_iter
+    ),
+    
+    # roleParam(
+    #   id,
+    #   name = "nstep",
+    #   label = "n<sub>step</sub>",
+    #   min = 1,
+    #   max = max_steps,
+    #   value = value_steps,
+    #   tip = "The number of time steps (generations) to run"
+    # ),
+    # 
+    # roleParamText(
+    #   id,
+    #   name = "nstep_t",
+    #   label = NULL,
+    #   min = 1,
+    #   max = max_steps,
+    #   value = value_steps
+    # ),
+    
   )
 }
-    
+
 #' roleParams Server Functions
 #'
 #' @noRd 
-mod_roleParamsNeutral_server <- function(id) {
-  moduleServer(id, function(input, output, session) {
+mod_roleParamsMESS_server <- function(id){
+  moduleServer(id, function(input, output, session){
     ns <- session$ns
     
     # observe() calls to make the numeric input responsive to slider input and vice-versa
-    # Unfortunately, I can't wrap the observe() calls in a function to make this more succinct
+    # Unfortunately, I can't wrap the observe() calls in a function to make this more succinct 
     
     ##### Common params ####
     
@@ -443,6 +613,75 @@ mod_roleParamsNeutral_server <- function(id) {
       bindEvent(input$trait_sigma_t)
     
     
+    #### Genetics params ####
+    
+    #### mu slider ####
+    
+    observe(
+      updateNumericInput(session,
+                         inputId = "mu_t",
+                         value = input$mu)
+    ) %>%
+      bindEvent(input$mu)
+    
+    observe(
+      updateSliderInput(session,
+                        "mu",
+                        value = input$mu_t)
+    ) %>%
+      bindEvent(input$mu_t)
+    
+    #### bp slider ####
+    
+    observe(
+      updateNumericInput(session,
+                         inputId = "bp_t",
+                         value = input$bp)
+    ) %>%
+      bindEvent(input$bp)
+    
+    observe(
+      updateSliderInput(session,
+                        "bp",
+                        value = input$bp_t)
+    ) %>%
+      bindEvent(input$bp_t)
+    
+    #### Non-neutral params ####
+    
+    
+    #### env_sigma slider ####
+    
+    observe(
+      updateNumericInput(session,
+                         inputId = "env_sigma_t",
+                         value = input$env_sigma)
+    ) %>%
+      bindEvent(input$env_sigma)
+    
+    observe(
+      updateSliderInput(session,
+                        "env_sigma",
+                        value = input$env_sigma_t)
+    ) %>%
+      bindEvent(input$env_sigma_t)
+    
+    #### comp_sigma slider ####
+    
+    observe(
+      updateNumericInput(session,
+                         inputId = "comp_sigma_t",
+                         value = input$comp_sigma)
+    ) %>%
+      bindEvent(input$comp_sigma)
+    
+    observe(
+      updateSliderInput(session,
+                        "comp_sigma",
+                        value = input$comp_sigma_t)
+    ) %>%
+      bindEvent(input$comp_sigma_t)
+    
     #### Sim length params ####
     
     #### iter slider ####
@@ -467,7 +706,7 @@ mod_roleParamsNeutral_server <- function(id) {
 }
 
 ## To be copied in the UI
-# mod_roleParams_ui("roleParams_ui_1")
-
+# mod_roleParamsMESS_ui("roleParamsMESS_1")
+    
 ## To be copied in the server
-# mod_roleParams_server("roleParams_ui_1")
+# mod_roleParamsMESS_server("roleParamsMESS_1")

@@ -22,7 +22,9 @@ attachment::att_from_rscripts() %>%
 ## Create a module infrastructure in R/
 golem::add_module( name = "roleUploads" ) 
 golem::add_module( name = "roleControls" ) 
-golem::add_module( name = "roleParams" ) 
+golem::add_module( name = "roleParamsNeutral" ) 
+golem::add_module( name = "roleParamsCoexistence" ) 
+golem::add_module( name = "roleParamsMESS" ) 
 golem::add_module( name = "roleDownloads" ) 
 golem::add_module( name = "rolePlotSelects" ) 
 golem::add_module( name = "rolePlots" ) 
@@ -30,6 +32,7 @@ golem::add_module( name = "roleSims" )
 golem::add_module( name = "roleReadSims" ) 
 golem::add_module( name = "roleNeutral" ) 
 golem::add_module( name = "roleCoexistence" ) 
+golem::add_module( name = "roleMESS" ) 
 golem::add_module( name = "roleAbout" ) 
 
 ## Add helper functions ----

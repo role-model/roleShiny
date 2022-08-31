@@ -1,4 +1,4 @@
-#' roleNeutral UI Function
+#' roleMESS UI Function
 #'
 #' @description A shiny Module.
 #'
@@ -6,16 +6,15 @@
 #'
 #' @noRd 
 #'
-#' @import shiny 
-#' 
-mod_roleNeutral_ui <- function(id) {
+#' @importFrom shiny NS tagList 
+mod_roleMESS_ui <- function(id){
   ns <- NS(id)
-  tabPanel(title = "Neutral",
+  tabPanel(title = "The Full MESS",
            sidebarLayout(
              fluid = FALSE,
              sidebarPanel(
                mod_roleControls_ui(ns(id)),
-               mod_roleParamsNeutral_ui(ns(id)),
+               mod_roleParamsMESS_ui(ns(id)),
                #mod_rolePlotSelects_ui(ns(id)),
                mod_roleDownloads_ui(ns(id)),
                #mod_roleUploads_ui(ns(id)),
@@ -25,32 +24,29 @@ mod_roleNeutral_ui <- function(id) {
              mainPanel(h2("Plots"),
                        
                        mod_rolePlots_ui(ns(id)),
+                       width = 10
                        
-                       width = 10)
+             )
            ))
 }
 
-#' roleNeutral Server Functions
+#' roleMESS Server Functions
 #'
-#' @noRd
-mod_roleNeutral_server <- function(id) {
-  moduleServer(id, function(input, output, session) {
+#' @noRd 
+mod_roleMESS_server <- function(id){
+  moduleServer( id, function(input, output, session){
     ns <- session$ns
     # temporary path to house simulations
-    sims_out_neutral <-
-      tempfile(pattern = "sims_neutral_",
-               tmpdir = tempdir(),
-               fileext = ".rds")
+    sims_out_MESS <- tempfile(pattern = "sims_MESS", tmpdir = tempdir(), fileext = ".rds")
     
     # roleSims
-    mod_roleSims_server(id, sims_out = sims_out_neutral, is_neutral = TRUE)
+    mod_roleSims_server(id, sims_out = sims_out_MESS, is_neutral = FALSE)
     
     # roleReadSims
-    allSims <-
-      mod_roleReadSims_server(id, sims_out = sims_out_neutral)
+    allSims <- mod_roleReadSims_server(id, sims_out = sims_out_MESS)
     
     # roleParams
-    mod_roleParamsNeutral_server(id)
+    mod_roleParamsMESS_server(id)
     
     # roleControls
     mod_roleControls_server(id)
@@ -65,13 +61,7 @@ mod_roleNeutral_server <- function(id) {
     mod_roleUploads_server(id)
     
     # rolePlots
-    mod_rolePlots_server(id, allSims = allSims, sims_out = sims_out_neutral)
+    mod_rolePlots_server(id, allSims = allSims, sims_out = sims_out_MESS)
     
   })
 }
-
-## To be copied in the UI
-# mod_roleNeutral_ui("roleNeutral_1")
-
-## To be copied in the server
-# mod_roleNeutral_server("roleNeutral_1")

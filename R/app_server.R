@@ -9,10 +9,12 @@
 
 id_n <- "neutral"
 id_c <- "coexistence"
+id_m <- "mess"
 
 app_server <- function(input, output, session) {
   
   mod_roleNeutral_server(id_n)
   mod_roleCoexistence_server(id_c)
+  mod_roleMESS_server(id_m)
   
   }

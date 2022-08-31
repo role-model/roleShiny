@@ -129,8 +129,8 @@ max_comp_sigma <- 1
 value_comp_sigma <- 0.1
 
 # simulation length params
-max_iter <- 100
-value_iter <- 10
+max_iter <- 1000
+value_iter <- 100
 
 
 
@@ -325,47 +325,6 @@ mod_roleParamsCoexistence_ui <- function(id, button) {
         min = 0,
         max = max_trait_sigma,
         value = value_trait_sigma
-      ),
-      
-      h3("Genetics"),
-      
-      ## genetics parameters
-      roleParam(
-        id,
-        name = "mu",
-        label = "&#956;",
-        min = 0,
-        max = max_mu,
-        value = value_mu,
-        tip = "Mutation rate"
-      ),
-      
-      roleParamText(
-        id,
-        name = "mu_t",
-        label = NULL,
-        min = 0,
-        max = max_mu,
-        value = value_mu
-      ),
-      
-      roleParam(
-        id,
-        name = "bp",
-        label = "BP",
-        min = 100,
-        max = max_bp,
-        value = value_bp,
-        tip = "The number of basepairs"
-      ),
-      
-      roleParamText(
-        id,
-        name = "bp_t",
-        label = NULL,
-        min = 100,
-        max = max_bp,
-        value = value_bp
       ),
       
       h3("Non-neutral"),
@@ -612,40 +571,6 @@ mod_roleParamsCoexistence_server <- function(id){
     ) %>%
       bindEvent(input$trait_sigma_t)
     
-    
-    #### Genetics params ####
-    
-    #### mu slider ####
-    
-    observe(
-      updateNumericInput(session,
-                         inputId = "mu_t",
-                         value = input$mu)
-    ) %>%
-      bindEvent(input$mu)
-    
-    observe(
-      updateSliderInput(session,
-                        "mu",
-                        value = input$mu_t)
-    ) %>%
-      bindEvent(input$mu_t)
-    
-    #### bp slider ####
-    
-    observe(
-      updateNumericInput(session,
-                         inputId = "bp_t",
-                         value = input$bp)
-    ) %>%
-      bindEvent(input$bp)
-    
-    observe(
-      updateSliderInput(session,
-                        "bp",
-                        value = input$bp_t)
-    ) %>%
-      bindEvent(input$bp_t)
     
     #### Non-neutral params ####
     

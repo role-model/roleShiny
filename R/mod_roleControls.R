@@ -10,18 +10,23 @@
 #' @importFrom shinyBS bsTooltip
 #' 
 
-
 mod_roleControls_ui <- function(id){
   ns <- NS(id)
   tagList(
     div(
-      actionButton(ns("playBtn"), icon("play")),
+      br(),
+      br(),
+      br(),
+      br(),
+      h2("Run the simulation"),
+      actionButton(ns("playBtn"), icon("play"), class = "btn-primary btn-lg"),
       # actionButton(ns("pauseBtn"), icon("pause")),
       # actionButton(ns("nextBtn"), icon("step-forward")),
       
-      shinyBS::bsTooltip(ns("playBtn"), "Play the simulation", placement = "center", trigger = "hover")
+      shinyBS::bsTooltip(ns("playBtn"), "Play the simulation", placement = "center", trigger = "hover"),
       # shinyBS::bsTooltip(ns("pauseBtn"), "Pause the simulation", placement = "bottom", trigger = "hover"),
       # shinyBS::bsTooltip(ns("nextBtn"), "Step simulation forward", placement = "bottom", trigger = "hover")
+      hr()
       )
     )
 }

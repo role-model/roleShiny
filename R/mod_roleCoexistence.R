@@ -16,18 +16,18 @@ mod_roleCoexistence_ui <- function(id) {
            sidebarLayout(
              fluid = FALSE,
              sidebarPanel(
-               mod_roleParamsCoexistence_ui(ns(id)),
                mod_roleControls_ui(ns(id)),
+               mod_roleParamsCoexistence_ui(ns(id)),
                #mod_rolePlotSelects_ui(ns(id)),
                mod_roleDownloads_ui(ns(id)),
                #mod_roleUploads_ui(ns(id)),
-               width = 3
+               width = 2
              ),
              
              mainPanel(h2("Plots"),
                        
                        mod_rolePlots_ui(ns(id)),
-                       width = 9
+                       width = 10
                        
                        )
            ))
