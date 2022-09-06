@@ -9,6 +9,7 @@ id_a <- "about"
 id_n <- "neutral"
 id_c <- "coexistence"
 id_m <- "mess"
+id_lv <- "lv"
 
 
 app_ui <- function(request) {
@@ -22,7 +23,8 @@ app_ui <- function(request) {
                mod_roleAbout_ui(id_a),
                mod_roleNeutral_ui(id_n),
                mod_roleCoexistence_ui(id_c),
-               mod_roleMESS_ui(id_m)
+               mod_roleMESS_ui(id_m),
+               mod_roleLV_ui(id_lv)
       ),
       
     )
