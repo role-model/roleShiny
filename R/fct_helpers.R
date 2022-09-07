@@ -5,7 +5,7 @@
 #' @return The return value, if any, from executing the function.
 #'
 #' @noRd
-#' @import dplyr stringr
+#' @import dplyr stringr ape ggtree
 
 
 # function to get the date and time in a reasonable format to append to the end of files for a unique filename
@@ -86,5 +86,22 @@ plotly_ts <- function(dat, yvar) {
     )
 }
 
+## phylogenetic tree
+
+plotly_phylo <- function() {
+  
+  trees <- lapply(rep(c(10, 25, 50, 100), 3), ape::rtree)
+  class(trees) <- "multiPhylo"
+  
+  g <- ggtree::ggtree(trees, aes(frame = .id)) + 
+    ggtree::theme_tree2()
+  # either remove animation labels or see "generation" label
+  
+  gp <- ggplotly(g) %>% 
+    animation_opts(250, transition = 100) %>% 
+    animation_slider(hide = TRUE)
+  
+  gp
+}
 
 

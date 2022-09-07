@@ -5,12 +5,14 @@ Authors@R: person('Connor', 'French', email = 'french.connor.m@gmail.com', role 
 Description: An app to interact with the RoLE model in educational and research settings.
 License: GPL (>= 3)
 Imports: 
+    ape,
     attempt,
     bslib,
     callr,
     config (>= 0.3.1),
     DT,
     entropy,
+    ggtree,
     glue,
     golem (>= 0.3.1),
     here,
@@ -20,9 +22,12 @@ Imports:
     processx,
     readr,
     rmarkdown,
+    rvest,
     shiny (>= 1.7.0),
     shinyBS,
+    shinyjs,
     uuid,
+    xml2,
     zip
 Encoding: UTF-8
 LazyData: true

@@ -81,7 +81,6 @@ mod_roleSims_server <- function(id, sims_out, is_neutral = TRUE){
           niter = input$iter
         )
         
-
         exp <- roleModel(params)
         
         # temporary fix to add metadata

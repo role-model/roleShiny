@@ -10,11 +10,8 @@
 #' @importFrom dplyr left_join
 #' 
 
-mod_rolePlots_ui <- function(id 
-                             #name1, 
-                             #name2, 
-                             #check1, 
-                             #check2
+mod_rolePlots_ui <- function(id,
+                             has_phylo = FALSE
                              ){
   ns <- NS(id)
   tagList(
@@ -39,7 +36,17 @@ mod_rolePlots_ui <- function(id
                         plotlyOutput(ns("traitTime"))
                  )
                )
-      )
+      ),
+      if (has_phylo) {
+        tabPanel("Phylogenetics",
+                 fluidRow(
+                   column(width = 8,
+                          plotlyOutput(ns("phylo"))
+                   )
+                 )
+                 )
+      }
+      
       )  
     )
 }
@@ -53,7 +60,8 @@ mod_rolePlots_server <- function(id,
                                  #type, 
                                  #checkBox, 
                                  sims_out, 
-                                 allSims){
+                                 allSims, 
+                                 has_phylo = FALSE){
   
 
   moduleServer( id, function(input, output, session){
@@ -89,7 +97,7 @@ mod_rolePlots_server <- function(id,
         return(list(abund = abund, traits = traits))
       })  
       
-      # if (stringr::str_detect(name, "abundDist")) {
+      ### Abund rank fig ###
         
         
         fig_abundRank <-  reactive({
@@ -107,9 +115,7 @@ mod_rolePlots_server <- function(id,
           fig_abundRank()
         })
         
-      # } else if (stringr::str_detect(name, "abundTime")) {
-        
-        
+        ### Abund time fig ###
         
         fig_abundTime <-  reactive({
           
@@ -120,7 +126,8 @@ mod_rolePlots_server <- function(id,
         output$abundTime <- renderPlotly({
           fig_abundTime()
         })
-     # } else if (stringr::str_detect(name, "traitDist")) {
+      
+        ### Trait rank fig ###
         
         fig_traitRank <- reactive({
         
@@ -135,7 +142,7 @@ mod_rolePlots_server <- function(id,
           fig_traitRank()
         })
         
-       # } else if (stringr::str_detect(name, "traitTime")) {
+       ### Trait time fig ###
         
         fig_traitTime <- reactive({
           
@@ -147,7 +154,17 @@ mod_rolePlots_server <- function(id,
           fig_traitTime()
         })
         
-      # }
+        if (has_phylo) {
+          fig_phylo <- reactive({
+            
+            plotly_phylo()
+            
+          })
+          
+          output$phylo <- renderPlotly({
+            fig_phylo()
+          })
+        }
     
     }) %>% 
       bindEvent(input$playBtn)

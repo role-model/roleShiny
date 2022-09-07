@@ -23,7 +23,7 @@ mod_roleMESS_ui <- function(id){
              
              mainPanel(h2("Plots"),
                        
-                       mod_rolePlots_ui(ns(id)),
+                       mod_rolePlots_ui(ns(id), has_phylo = TRUE),
                        width = 10
                        
              )
@@ -61,7 +61,7 @@ mod_roleMESS_server <- function(id){
     mod_roleUploads_server(id)
     
     # rolePlots
-    mod_rolePlots_server(id, allSims = allSims, sims_out = sims_out_MESS)
+    mod_rolePlots_server(id, allSims = allSims, sims_out = sims_out_MESS, has_phylo = TRUE)
     
   })
 }
