@@ -17,9 +17,9 @@ app_ui <- function(request) {
   tagList(
     # Leave this function for adding external resources
     golem_add_external_resources(),
-    tags$script(src = "ui.js"),
-    tags$style(src = "all.min.css"),
-    shinyjs::useShinyjs(),
+    # tags$script(src = "ui.js"),
+    # tags$style(src = "all.min.css"),
+    # shinyjs::useShinyjs(),
     # Your application UI logic 
     navbarPage("Rules of Life Engine",
                theme = bslib::bs_theme(bootswatch = "sandstone"),
