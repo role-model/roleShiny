@@ -4,6 +4,7 @@ Version: 0.0.0.9000
 Authors@R: person('Connor', 'French', email = 'french.connor.m@gmail.com', role = c('cre', 'aut'))
 Description: An app to interact with the RoLE model in educational and research settings.
 License: GPL (>= 3)
+biocViews:
 Imports: 
     ape,
     attempt,
