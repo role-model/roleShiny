@@ -29,6 +29,7 @@ Imports:
     shinyjs,
     uuid,
     xml2,
+    shinybusy,
     zip
 Remotes: 
     role-model/roleR
