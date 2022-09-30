@@ -35,6 +35,25 @@ roleParamText <- function(id, name, label = "", min = 0, max = 100000, value = 1
   )
 }
 
+roleParamDrop <-
+  function(id,
+           name,
+           label = NULL,
+           selected = "oceanic_island",
+           tip = "") {
+    ns <- NS(id)
+    tagList(div(
+      selectInput(
+        ns(name),
+        label = label,
+        choices = c("oceanic_island", "bridge_island"),
+        selected = selected
+      ),
+      shinyBS::bsTooltip(ns(name), tip)
+    ))
+  }
+
+
 
 ### max and default values for all role Params. Easy place to adjust
 
@@ -46,11 +65,11 @@ value_jm <- 1000
 max_j <- 1000
 value_j <- 100
 
-max_sm <- 2000
-value_sm <- 500
+max_sm <- 1000
+value_sm <- 100
 
-max_nu <- 1.0
-value_nu <- 0.1
+max_nu <- 0.5
+value_nu <- 0.01
 
 max_num <- 1.0
 value_num <- 0.1
@@ -59,15 +78,15 @@ max_ext <- 1.0
 value_ext <- 0.1
 
 max_m <- 1.0
-value_m <- 0.1
+value_m <- 0.2
 
 max_eq <- 1.0
 value_eq <- 0.5
 
 
 #### simulation length params ####
-max_iter <- 1000
-value_iter <- 100
+max_iter <- 10000
+value_iter <- 1000
 
 mod_roleParamsNeutral_ui <- function(id, button) {
   ns <- NS(id)

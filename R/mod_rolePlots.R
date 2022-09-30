@@ -10,6 +10,7 @@
 #' @importFrom dplyr left_join
 #' 
 
+
 mod_rolePlots_ui <- function(id,
                              has_phylo = FALSE
                              ){
@@ -68,8 +69,9 @@ mod_rolePlots_server <- function(id,
     ns <- session$ns
     # nest these if() statements in an if() statement that checks if allSims() is of a certain size (or class. Maybe I can make the empty allSims its own class to clear us of having to worry about unusable data sizes)
     
+    
     observe({
-      
+      shinybusy::show_modal_spinner()
       req(allSims())
     
       sumstats <- reactive({
@@ -106,7 +108,6 @@ mod_rolePlots_server <- function(id,
           
           p <- gg_scatter(dat = abund_rank, yvar = "abund", is_abund = TRUE)
             
-          
           return(p)
           
         })
@@ -165,7 +166,7 @@ mod_rolePlots_server <- function(id,
             fig_phylo()
           })
         }
-    
+        shinybusy::remove_modal_spinner()
     }) %>% 
       bindEvent(input$playBtn)
   }
