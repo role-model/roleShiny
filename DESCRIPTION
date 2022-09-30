@@ -22,6 +22,7 @@ Imports:
     plotly,
     processx,
     readr,
+    Remotes: github::role-model/roleR
     rmarkdown,
     rvest,
     shiny (>= 1.7.0),
