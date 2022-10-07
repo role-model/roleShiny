@@ -56,7 +56,8 @@ gg_scatter <- function(dat, yvar, is_abund = TRUE) {
   }
   
   p <- ggplot() +
-    geom_line(data = dat, aes_string(x = "rank", y = yvar, group = "gen", color = "gen", frame = "gen"), alpha = 0.3) +
+    geom_line(data = dat, aes_string(x = "rank", y = yvar, group = "gen", color = "gen"), alpha = 0.1) +
+    geom_line(data = dat, aes_string(x = "rank", y = yvar, group = "gen", color = "gen", frame = "gen"), alpha = 1.0) +
     scale_color_viridis_c(option = "mako") +
     labs(x = "Rank", y = y_lab, color = "Generation") +
     ylim(y = y_lims) + 
