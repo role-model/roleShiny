@@ -32,7 +32,7 @@ mod_roleSims_server <- function(id, sims_out, is_neutral = TRUE){
     ns <- session$ns
     
     s <- reactive({
-      #shinybusy::show_modal_spinner()
+      shinybusy::show_modal_spinner()
       if(is_neutral) {
         
         params <- untbParams(
@@ -66,6 +66,7 @@ mod_roleSims_server <- function(id, sims_out, is_neutral = TRUE){
         #   niter = input$iter
         # )
         # 
+    
         exp <- roleModel(params)
         
         # temporary fix to add metadata
@@ -95,6 +96,7 @@ mod_roleSims_server <- function(id, sims_out, is_neutral = TRUE){
           niter = input$iter
         )
         
+        
         exp <- roleModel(params)
         
         # temporary fix to add metadata
@@ -105,18 +107,18 @@ mod_roleSims_server <- function(id, sims_out, is_neutral = TRUE){
         final <- list(mod = m, meta = exp_2)
       }
       
-      #shinybusy::remove_modal_spinner()
+      shinybusy::remove_modal_spinner()
+      return(final)
       
-
       }) %>%
       bindEvent(input$playBtn)
     
     
-    observe({
-      s()
-      saveRDS(s(), file = sims_out)
-    }) %>% 
-      bindEvent(input$playBtn)
+    # observe({
+    #   s()
+    #   saveRDS(s(), file = sims_out)
+    # }) %>% 
+    #   bindEvent(input$playBtn)
     
       
       

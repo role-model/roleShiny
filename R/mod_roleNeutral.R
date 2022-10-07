@@ -46,11 +46,11 @@ mod_roleNeutral_server <- function(id) {
                fileext = ".rds")
     
     # roleSims
-    mod_roleSims_server(id, sims_out = sims_out_neutral, is_neutral = TRUE)
+    allSims <- mod_roleSims_server(id, sims_out = sims_out_neutral, is_neutral = TRUE)
     
     # roleReadSims
-    allSims <-
-      mod_roleReadSims_server(id, sims_out = sims_out_neutral)
+    # allSims <-
+    #   mod_roleReadSims_server(id, sims_out = sims_out_neutral)
     
     # roleParams
     mod_roleParamsNeutral_server(id)

@@ -56,16 +56,16 @@ gg_scatter <- function(dat, yvar, is_abund = TRUE) {
   }
   
   p <- ggplot() +
-    geom_line(data = dat, aes_string(x = "rank", y = yvar, group = "gen", color = "gen"), alpha = 0.1) +
-    geom_line(data = dat, aes_string(x = "rank", y = yvar, group = "gen", color = "gen", frame = "gen"), alpha = 1.0) +
-    scale_color_viridis_c(option = "mako") +
+    #geom_line(data = dat, aes_string(x = "rank", y = yvar, group = "gen", color = "gen"), alpha = 0.1) +
+    geom_line(data = dat, aes_string(x = "rank", y = yvar, group = "gen",  frame = "gen"), color = "#107361", alpha = 1.0) +
     labs(x = "Rank", y = y_lab, color = "Generation") +
     ylim(y = y_lims) + 
     theme_bw()  +
     theme(legend.key.size = unit(3, "mm"))
+  p_int <- ggplotly(p) 
   
-  p_int <- ggplotly(p) %>%
-    animation_opts(250, transition = 100) %>%
+  p_int <- p_int %>%
+    animation_opts(250, transition = 10) %>%
     animation_slider(currentvalue = list(prefix = "Gen = ", font = list(color = "black")))
   
   return(p_int)
