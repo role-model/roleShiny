@@ -62,9 +62,22 @@ gg_scatter <- function(dat, yvar, is_abund = TRUE) {
     ylim(y = y_lims) + 
     theme_bw()  +
     theme(legend.key.size = unit(3, "mm"))
+  
   p_int <- ggplotly(p) 
   
-  p_int <- p_int %>%
+  p_build <- plotly_build(p_int)
+  
+  for(i in 1:max(dat$gen)) {
+    ii <- i + (-2:2) # get a range of indices centered at the current gen
+    ii <- ii[ii %in% dat$gen] # limit to only valid indices. 
+    ii <- ii[ii != 0] # no zeros
+    
+    # set x and y lims for frame `i`
+    p_build$x$frames[[i]]$layout <- list(xaxis = list(range = range(dat$rank[ii])), 
+                                     yaxis = list(range = range(dat[[yvar]][ii])))
+  }
+  
+  p_int <- p_build %>%
     animation_opts(250, transition = 10) %>%
     animation_slider(currentvalue = list(prefix = "Gen = ", font = list(color = "black")))
   
@@ -76,7 +89,7 @@ plotly_ts <- function(dat, yvar) {
   
   y_var <- as.formula(paste0("~", yvar))
   
-  dat %>%
+  pt <- dat %>%
     as_tibble() %>%
     plot_ly(x = ~ gen, y = y_var, line = list(color = "#107361")) %>%
     add_lines() %>%
@@ -85,6 +98,7 @@ plotly_ts <- function(dat, yvar) {
       yaxis = list(title = yvar, gridcolor = '#e5ecf6', zerolinecolor = '#e5ecf6'),
       plot_bgcolor='#303030'
     )
+  return(pt)
 }
 
 ## phylogenetic tree
