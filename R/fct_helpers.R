@@ -67,15 +67,21 @@ gg_scatter <- function(dat, yvar, is_abund = TRUE) {
   
   p_build <- plotly_build(p_int)
   
-  for(i in 1:max(dat$gen)) {
-    ii <- i + (-2:2) # get a range of indices centered at the current gen
-    ii <- ii[ii %in% dat$gen] # limit to only valid indices. 
-    ii <- ii[ii != 0] # no zeros
-    
-    # set x and y lims for frame `i`
-    p_build$x$frames[[i]]$layout <- list(xaxis = list(range = range(dat$rank[ii])), 
-                                     yaxis = list(range = range(dat[[yvar]][ii])))
-  }
+  # unique generations
+  # unigen <- sort(unique(dat$gen))
+  # 
+  # for(i in 1:length(p_build$x$frames)) {
+  #   currGen <- unigen[i]
+  #   ii <- currGen + (-2:2)
+  #   
+  #   ii <- ii[ii %in% unigen] # limit to only valid indices
+  #   ii <- which(dat$gen %in% ii)
+  # 
+  #   
+  #   # set x and y lims for frame `i`
+  #   p_build$x$frames[[i]]$layout <- list(xaxis = list(range = c(1, max(dat$rank[ii]))), 
+  #                                        yaxis = list(range = c(1, max(dat[[yvar]][ii]))))
+  # }
   
   p_int <- p_build %>%
     animation_opts(250, transition = 10) %>%
@@ -118,5 +124,6 @@ plotly_phylo <- function() {
   
   gp
 }
+
 
 
