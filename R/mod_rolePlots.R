@@ -71,9 +71,9 @@ mod_rolePlots_server <- function(id,
     
     
     observe({
-      shinybusy::show_modal_spinner()
+      
       req(allSims())
-    
+      
       sumstats <- reactive({
 
         ss <- getSumStats(allSims()$mod, 
@@ -166,7 +166,7 @@ mod_rolePlots_server <- function(id,
             fig_phylo()
           })
         }
-        shinybusy::remove_modal_spinner()
+        
     }) %>% 
       bindEvent(input$playBtn)
   }
