@@ -16,7 +16,8 @@
 
 mod_roleAbout_ui <- function(id) {
   ns <- NS(id)
-  rmarkdown::render(here("about.Rmd"), quiet = TRUE)
+  about_file <- file.path(system.file(package = 'roleShiny'), 'about.Rmd')
+  rmarkdown::render(about_file, quiet = TRUE)
   xml2::write_html(rvest::html_node(xml2::read_html("about.html"), "body"), file = "about2.html")
   
   tabPanel(title = "About",
