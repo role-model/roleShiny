@@ -67,12 +67,15 @@ gg_scatter <- function(dat, yvar, is_abund = TRUE) {
   
   p_build <- plotly_build(p_int)
   
-  for(i in 1:max(dat$gen)) {
+  gen_full <- dat$gen[dat$rank == min(dat$rank)] # so we can index the appropriate frame 
+  
+  for(i in 1:length(gen_full)) {
+    browser()
     ii <- i + (-2:2) # get a range of indices centered at the current gen
     ii <- ii[ii %in% dat$gen] # limit to only valid indices. 
     ii <- ii[ii != 0] # no zeros
     
-    # set x and y lims for frame `i`
+    # set x and y lims for frame `fi`
     p_build$x$frames[[i]]$layout <- list(xaxis = list(range = range(dat$rank[ii])), 
                                      yaxis = list(range = range(dat[[yvar]][ii])))
   }
