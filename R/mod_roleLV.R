@@ -21,13 +21,13 @@ mod_roleLV_ui <- function(id) {
                #mod_rolePlotSelects_ui(ns(id)),
                mod_roleDownloads_ui(ns(id)),
                #mod_roleUploads_ui(ns(id)),
-               width = 2
+               width = 3
              ),
              
              mainPanel(h2("Plots"),
                        
                        mod_rolePlots_ui(ns(id)),
-                       width = 10
+                       width = 9
                        
              )
            ))
