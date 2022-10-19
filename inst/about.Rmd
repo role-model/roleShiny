@@ -18,12 +18,8 @@ Blurb about what this app is for, what the Role model is, etc.
 
 The app is divided into two main sections. On the left are your input parameters, plotting controls, and download buttons. On the right is the area for your plots.
 
-```{r, include = FALSE}
-app_panes <- here("images/app_panes.png")
-```
 
-
-![Screenshot of app with the left and right sections indicated](`r app_panes`){width="70%"}
+![Screenshot of app with the left and right sections indicated](images/app_panes.png){width="70%"}
 
 The plotting area should be blank until you're ready to plot your simulation output.
 
