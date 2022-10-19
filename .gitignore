@@ -21,4 +21,5 @@ junk*
 old/
 roleR/
 .venv/
-about.Rmd
+inst/about.html
+inst/about2.html

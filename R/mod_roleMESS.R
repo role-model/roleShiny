@@ -23,7 +23,7 @@ mod_roleMESS_ui <- function(id){
              
              mainPanel(h2("Plots"),
                        
-                       mod_rolePlots_ui(ns(id), has_phylo = TRUE),
+                       mod_rolePlots_ui(ns(id), has_traits = TRUE, has_phylo = TRUE),
                        width = 9
                        
              )

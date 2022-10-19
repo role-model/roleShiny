@@ -35,7 +35,8 @@ golem::add_module( name = "roleNeutral" )
 golem::add_module( name = "roleCoexistence" ) 
 golem::add_module( name = "roleMESS" ) 
 golem::add_module( name = "roleLV" ) 
-golem::add_module( name = "roleAbout" ) 
+golem::add_module( name = "roleAbout" )
+golem::add_module( name = "roleAboutGen" )
 
 ## Add helper functions ----
 ## Creates fct_* and utils_*

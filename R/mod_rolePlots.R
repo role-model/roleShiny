@@ -12,6 +12,7 @@
 
 
 mod_rolePlots_ui <- function(id,
+                             has_traits = FALSE,
                              has_phylo = FALSE
                              ){
   ns <- NS(id)
@@ -28,16 +29,20 @@ mod_rolePlots_ui <- function(id,
                       )
                )
                ),
-      tabPanel("Traits", 
-               fluidRow(
-                 column(width = 5, 
-                        plotlyOutput(ns("traitRank"))
-                 ),
-                 column(width = 5, 
-                        plotlyOutput(ns("traitTime"))
+      
+      if (has_traits) {
+        tabPanel("Traits", 
+                 fluidRow(
+                   column(width = 5, 
+                          plotlyOutput(ns("traitRank"))
+                   ),
+                   column(width = 5, 
+                          plotlyOutput(ns("traitTime"))
+                   )
                  )
-               )
-      ),
+        )
+      }
+      ,
       if (has_phylo) {
         tabPanel("Phylogenetics",
                  fluidRow(
@@ -83,7 +88,7 @@ mod_rolePlots_server <- function(id,
                                 traits = rawTraits,
                                 hillTrait = hillTrait), 
                     moreArgs = list(hillAbund = list(q = 1:3)))
-        ss[,"gen"] <- allSims()$meta@experimentMeta$generations
+        ss[,"gen"] <- round(allSims()$meta@experimentMeta$generations, 1)
         
         return(ss)
       })

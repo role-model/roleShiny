@@ -71,17 +71,11 @@ value_sm <- 100
 max_nu <- 0.5
 value_nu <- 0.01
 
-max_num <- 1.0
-value_num <- 0.1
-
-max_ext <- 1.0
-value_ext <- 0.1
 
 max_m <- 1.0
 value_m <- 0.2
 
-max_eq <- 1.0
-value_eq <- 0.5
+
 
 
 #### simulation length params ####
@@ -94,7 +88,50 @@ mod_roleParamsNeutral_ui <- function(id, button) {
   div(
     h2("Parameters"),
     
-    h3("Local community"),
+    roleParamDrop(
+      id,
+      name = "type",
+      label = "Type",
+      tip = "Initialization routine"
+    ),
+    
+    roleParam(
+      id,
+      name = "jm",
+      label = "J<sub>m</sub>",
+      min =  0,
+      max = max_jm,
+      value = value_jm,
+      tip = "Number of individuals in the metacommunity"
+    ),
+    
+    roleParamText(
+      id,
+      name = "jm_t",
+      label = NULL,
+      min = 0,
+      max = max_jm,
+      value = value_jm
+    ),
+    
+    roleParam(
+      id,
+      name = "sm",
+      label = "S<sub>m</sub>",
+      min = 0,
+      max = max_sm,
+      value = value_sm,
+      tip = "Number of species in the metacommunity"
+    ),
+    
+    roleParamText(
+      id,
+      name = "sm_t",
+      label = NULL,
+      min = 0,
+      max = max_sm,
+      value = value_sm
+    ),
     
     div(
       roleParam(
@@ -154,133 +191,6 @@ mod_roleParamsNeutral_ui <- function(id, button) {
         max = max_m,
         value = value_m
       ),
-      
-      roleParam(
-        id,
-        name = "eq",
-        label = "EQ",
-        min = 0,
-        max = max_eq,
-        value = value_eq,
-        tip = "The proportion of equilibrium achieved"
-      ),
-      
-      roleParamText(
-        id,
-        name = "eq_t",
-        label = NULL,
-        min = 0,
-        max = max_eq,
-        value = value_eq
-      ),
-      
-      h3("Metacommunity"),
-      
-      roleParam(
-        id,
-        name = "jm",
-        label = "J<sub>m</sub>",
-        min =  0,
-        max = max_jm,
-        value = value_jm,
-        tip = "Number of individuals in the metacommunity"
-      ),
-      
-      roleParamText(
-        id,
-        name = "jm_t",
-        label = NULL,
-        min = 0,
-        max = max_jm,
-        value = value_jm
-      ),
-      
-      roleParam(
-        id,
-        name = "sm",
-        label = "S<sub>m</sub>",
-        min = 0,
-        max = max_sm,
-        value = value_sm,
-        tip = "Number of species in the metacommunity"
-      ),
-      
-      roleParamText(
-        id,
-        name = "sm_t",
-        label = NULL,
-        min = 0,
-        max = max_sm,
-        value = value_sm
-      ),
-      
-      roleParam(
-        id,
-        name = "num",
-        label = "&#957;<sub>m</sub>",
-        min = 0,
-        max = max_nu,
-        value = value_nu,
-        tip = "The speciation rate in the meta community",
-        isGreek = TRUE
-      ),
-      
-      roleParamText(
-        id,
-        name = "num_t",
-        label = NULL,
-        min = 0,
-        max = max_nu,
-        value = value_nu
-      ),
-      
-      roleParam(
-        id,
-        name = "ext",
-        label = "E",
-        min = 0,
-        max = max_ext,
-        value = value_ext,
-        tip = "Extinction rate in the meta community"
-      ),
-      
-      roleParamText(
-        id,
-        name = "ext_t",
-        label = NULL,
-        min = 0,
-        max = max_ext,
-        value = value_ext
-      ),
-      
-      roleParamDrop(
-        id,
-        name = "type",
-        label = "Type",
-        tip = "Initialization routine"
-      ),
-      
-      roleParam(
-        id,
-        name = "trait_sigma",
-        label = "Trait &#963;",
-        min = 0,
-        max = max_trait_sigma,
-        value = value_trait_sigma,
-        tip = "The rate of Brownian trait evolution in the meta community",
-        isGreek = TRUE
-      ),
-      
-      roleParamText(
-        id,
-        name = "trait_sigma",
-        label = NULL,
-        min = 0,
-        max = max_trait_sigma,
-        value = value_trait_sigma
-      ),
-      
-      h3("Simulation length"),
       
       #### simulation length parameters ####
       roleParam(
@@ -381,38 +291,7 @@ mod_roleParamsNeutral_server <- function(id) {
     ) %>%
       bindEvent(input$nu_t)
     
-    #### num slider ####
-    
-    observe(
-      updateNumericInput(session,
-                         inputId = "num_t",
-                         value = input$num)
-    ) %>%
-      bindEvent(input$num)
-    
-    observe(
-      updateSliderInput(session,
-                        "num",
-                        value = input$num_t)
-    ) %>%
-      bindEvent(input$num_t)
-    
-    #### ext slider ####
-    
-    observe(
-      updateNumericInput(session,
-                         inputId = "ext_t",
-                         value = input$ext)
-    ) %>%
-      bindEvent(input$ext)
-    
-    observe(
-      updateSliderInput(session,
-                        "ext",
-                        value = input$ext_t)
-    ) %>%
-      bindEvent(input$ext_t)
-    
+  
     #### m slider ####
     
     observe(
@@ -428,39 +307,6 @@ mod_roleParamsNeutral_server <- function(id) {
                         value = input$m_t)
     ) %>%
       bindEvent(input$m_t)
-    
-    #### eq slider ####
-    
-    observe(
-      updateNumericInput(session,
-                         inputId = "eq_t",
-                         value = input$eq)
-    ) %>%
-      bindEvent(input$eq)
-    
-    observe(
-      updateSliderInput(session,
-                        "eq",
-                        value = input$eq_t)
-    ) %>%
-      bindEvent(input$eq_t)
-    
-    #### trait_sigma slider ####
-    
-    observe(
-      updateNumericInput(session,
-                         inputId = "trait_sigma_t",
-                         value = input$trait_sigma)
-    ) %>%
-      bindEvent(input$trait_sigma)
-    
-    observe(
-      updateSliderInput(session,
-                        "trait_sigma",
-                        value = input$trait_sigma_t)
-    ) %>%
-      bindEvent(input$trait_sigma_t)
-    
     
     #### Sim length params ####
     

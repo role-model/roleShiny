@@ -23,7 +23,7 @@ app_ui <- function(request) {
     # Your application UI logic 
     navbarPage("Rules of Life Engine",
                theme = bslib::bs_theme(bootswatch = "sandstone"),
-               #mod_roleAbout_ui(id_a),
+               mod_roleAbout_ui(id_a),
                mod_roleNeutral_ui(id_n),
                mod_roleLV_ui(id_lv),
                mod_roleCoexistence_ui(id_c),

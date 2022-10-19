@@ -114,9 +114,9 @@ plotly_ts <- function(dat, yvar) {
     plot_ly(x = ~ gen, y = y_var, line = list(color = "#107361")) %>%
     add_lines() %>%
     layout(
-      xaxis = list(title = "Time step", rangeslider = list(visible = T), gridcolor = '#e5ecf6', zerolinecolor = '#e5ecf6'),
-      yaxis = list(title = yvar, gridcolor = '#e5ecf6', zerolinecolor = '#e5ecf6'),
-      plot_bgcolor='#303030'
+      xaxis = list(title = "Time step", rangeslider = list(visible = T), gridcolor = "grey92", zerolinecolor = "grey92"),
+      yaxis = list(title = yvar, gridcolor = "grey92", zerolinecolor = "grey92"),
+      plot_bgcolor='white'
     )
   return(pt)
 }

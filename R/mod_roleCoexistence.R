@@ -26,7 +26,7 @@ mod_roleCoexistence_ui <- function(id) {
              
              mainPanel(h2("Plots"),
                        
-                       mod_rolePlots_ui(ns(id)),
+                       mod_rolePlots_ui(ns(id), has_traits = TRUE),
                        width = 9
                        
                        )
