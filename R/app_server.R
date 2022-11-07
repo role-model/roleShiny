@@ -12,7 +12,9 @@ id_m <- "mess"
 id_lv <- "lv"
 
 app_server <- function(input, output, session) {
-  
+  observe(session$setCurrentTheme(
+    if (isTRUE(input$dark_mode)) dark else light
+  ))
   mod_roleNeutral_server(id_n)
   mod_roleCoexistence_server(id_c)
   mod_roleMESS_server(id_m)
