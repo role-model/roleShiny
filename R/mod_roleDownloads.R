@@ -11,6 +11,7 @@
 #' @importFrom uuid UUIDgenerate
 #' @importFrom zip zip
 #' @importFrom readr read_csv write_csv
+#' @importFrom shinybusy show_modal_spinner remove_modal_spinner
 #'
 
 
@@ -113,9 +114,18 @@ mod_roleDownloads_server <- function(id, allSims) {
           paste("sim-", file_suffix(), ".rds", sep = "")
         },
         content = function(file) {
-          saveRDS(allSims(), file)
+          
+          saveRDS(as, file)
         }
       )
+      
+      observeEvent(input$downSim, {
+          showModal(modalDialog(
+            title = "This might take a minute",
+            easyClose = TRUE,
+            footer = NULL
+          ))
+      })
       
       
       output$downCSVs <- downloadHandler(

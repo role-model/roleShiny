@@ -6,10 +6,10 @@
 #'
 #' @noRd 
 #'
-#' @import shiny plotly roleR ggplot2 highcharter
+#' @import shiny plotly roleR ggplot2 highcharter magrittr
 #' @importFrom dplyr left_join
 #' 
-
+library(magrittr)
 
 mod_rolePlots_ui <- function(id,
                              has_traits = FALSE,
@@ -17,6 +17,7 @@ mod_rolePlots_ui <- function(id,
                              ){
   ns <- NS(id)
   tagList(
+    tags$head(tags$style(".rightAlign{float:right;}")),
     tabsetPanel(
       type = "tabs",
       tabPanel("Abundances", 
@@ -25,7 +26,8 @@ mod_rolePlots_ui <- function(id,
                         plotlyOutput(ns("abundRank"))
                         ),
                column(width = 5, 
-                      plotlyOutput(ns("abundTime"))
+                      plotlyOutput(ns("abundTime")),
+                      uiOutput(ns("abundYvar"), class = "rightAlign")
                       )
                )
                ),
@@ -105,7 +107,17 @@ mod_rolePlots_server <- function(id,
       })  
       
       ### Abund rank fig ###
-        
+      
+      # y-axis choices 
+      output$abundYvar <- renderUI({
+        radioButtons(
+          ns("abundYvar"),
+          label = "",
+          choiceNames = c("Hill 1", "Hill 2", "Hill 3", "All Hill #s"),
+          choiceValues = c("hillAbund_1", "hillAbund_2", "hillAbund_3", "all_hill"),
+          inline = TRUE
+        )
+      })
         
         fig_abundRank <-  reactive({
           
@@ -125,7 +137,7 @@ mod_rolePlots_server <- function(id,
         
         fig_abundTime <-  reactive({
           
-          plotly_ts(dat = sumstats(), yvar = "hillAbund_1")
+          plotly_ts(dat = sumstats(), yvar = input$abundYvar)
     
         }) 
         

@@ -5,13 +5,13 @@
 #' @return The return value, if any, from executing the function.
 #'
 #' @noRd
-#' @import dplyr stringr ape ggtree
+#' @import dplyr stringr ape ggtree magrittr
 
 
 # function to get the date and time in a reasonable format to append to the end of files for a unique filename
 file_suffix <- function() {
-  Sys.time() %>% 
-    str_replace_all("\\:", "-") %>% 
+  Sys.time() |> 
+    str_replace_all("\\:", "-") |> 
     str_replace_all(" ", "_")
 }
 
@@ -35,8 +35,8 @@ tidy_raw_rank <- function(ss, raw_string) {
   
   colnames(o) <- c('gen', raw_string)
   
-  o_rank <- o %>% 
-    group_by(gen) %>% 
+  o_rank <- o |> 
+    group_by(gen) |> 
     mutate(rank = row_number())
   
   return(o_rank)
@@ -56,7 +56,7 @@ gg_scatter <- function(dat, yvar, is_abund = TRUE) {
   }
   
   p <- ggplot() +
-    #geom_line(data = dat, aes_string(x = "rank", y = yvar, group = "gen", color = "gen"), alpha = 0.1) +
+    geom_line(data = dat, aes_string(x = "rank", y = yvar, group = "gen"), color = "lightgrey", alpha = 0.1) +
     geom_line(data = dat, aes_string(x = "rank", y = yvar, group = "gen",  frame = "gen"), color = "#107361", alpha = 1.0) +
     labs(x = "Rank", y = y_lab, color = "Generation") +
     ylim(y = y_lims) + 
@@ -97,8 +97,8 @@ gg_scatter <- function(dat, yvar, is_abund = TRUE) {
   #                                        yaxis = list(range = c(1, max(dat[[yvar]][ii]))))
   # }
   
-  p_fin <- p_build %>%
-    animation_opts(50, transition = 1) %>%
+  p_fin <- p_build |>
+    animation_opts(frame = 0, transition = 0, easing = "linear") |>
     animation_slider(currentvalue = list(prefix = "Gen = ", font = list(color = "black")))
   
   return(p_fin)
@@ -107,17 +107,48 @@ gg_scatter <- function(dat, yvar, is_abund = TRUE) {
 ## timeseries
 plotly_ts <- function(dat, yvar) {
   
-  y_var <- as.formula(paste0("~", yvar))
+  if (yvar == "all_hill") {
+    y_var <- as.formula(paste0("~", "hillAbund_1"))
+    y_var_2 <- as.formula(paste0("~", "hillAbund_2"))
+    y_var_3 <- as.formula(paste0("~", "hillAbund_3"))
+    
+    pt <- dat |>
+      as_tibble() |>
+      plot_ly() |>
+      add_lines(x = ~ gen, y = y_var, line = list(color = "#107361"), name = "Hill 1") |>
+      add_lines(x = ~ gen, y = y_var_2, line = list(color = "black"), name = "Hill 2") |>
+      add_lines(x = ~ gen, y = y_var_3, line = list(color = "yellow"), name = "Hill 3") |>
+      layout(
+        xaxis = list(title = "Time step", rangeslider = list(visible = T), gridcolor = "grey92", zerolinecolor = "grey92"),
+        yaxis = list(title = "Hill number value", gridcolor = "grey92", zerolinecolor = "grey92"),
+        plot_bgcolor='white'
+      )
+    
+  } else {
+    y_var <- as.formula(paste0("~", yvar))
+    
+    if (stringr::str_detect(yvar, "1")) {
+      y_name <- "Hill 1"
+    } else if (stringr::str_detect(yvar, "2")) {
+      y_name <- "Hill 2"
+    } else if (stringr::str_detect(yvar, "3")) {
+      y_name <- "Hill 3"
+    }
+    
+    pt <- dat |>
+      as_tibble() |>
+      plot_ly() |>
+      add_lines(x = ~ gen, y = y_var, line = list(color = "#107361")) |>
+      layout(
+        xaxis = list(title = "Time step", rangeslider = list(visible = T), gridcolor = "grey92", zerolinecolor = "grey92"),
+        yaxis = list(title = y_name, gridcolor = "grey92", zerolinecolor = "grey92"),
+        plot_bgcolor='white'
+      )
+  }
   
-  pt <- dat %>%
-    as_tibble() %>%
-    plot_ly(x = ~ gen, y = y_var, line = list(color = "#107361")) %>%
-    add_lines() %>%
-    layout(
-      xaxis = list(title = "Time step", rangeslider = list(visible = T), gridcolor = "grey92", zerolinecolor = "grey92"),
-      yaxis = list(title = yvar, gridcolor = "grey92", zerolinecolor = "grey92"),
-      plot_bgcolor='white'
-    )
+  
+  
+  
   return(pt)
 }
 
@@ -132,8 +163,8 @@ plotly_phylo <- function() {
     ggtree::theme_tree2()
   # either remove animation labels or see "generation" label
   
-  gp <- ggplotly(g) %>% 
-    animation_opts(250, transition = 100) %>% 
+  gp <- ggplotly(g) |> 
+    animation_opts(250, transition = 100) |> 
     animation_slider(hide = TRUE)
   
   gp
