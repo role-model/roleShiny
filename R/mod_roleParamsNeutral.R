@@ -91,7 +91,7 @@ mod_roleParamsNeutral_ui <- function(id, button) {
     roleParamDrop(
       id,
       name = "type",
-      label = "Type",
+      label = "Initialization Type",
       tip = "Initialization routine"
     ),
     
