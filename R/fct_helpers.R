@@ -22,7 +22,9 @@ file_suffix <- function() {
 
 
 tidy_raw_rank <- function(ss, raw_string) {
+  
   o <- lapply(1:nrow(ss), function(i) {
+    
     x <- ss[[raw_string]][[i]]
     x <- sort(x[x > 0], decreasing = TRUE)
     
@@ -46,6 +48,21 @@ tidy_raw_rank <- function(ss, raw_string) {
 # plotting functions to make plotting easier
 ## scatterplot
 gg_scatter <- function(dat, yvar, is_abund = TRUE) {
+  
+  # select fewer generations to make plotting easier
+  if (length(unique(dat$gen)) > 150) {
+    g <- unique(dat$gen)
+    g_first <- g[1]
+    g_last <- g[length(g)]
+    g_rest <- g[-1]
+    s_g <- sample(g_rest, 100, replace = FALSE)
+    s_g <- c(g_first, s_g, g_last)
+    
+    dat <- dat[dat$gen %in% s_g,]
+    
+  }
+  
+  
   
   if (is_abund) {
     y_lims <- c(min(dat$abund), max(dat$abund))
@@ -115,12 +132,12 @@ plotly_ts <- function(dat, yvar) {
     pt <- dat |>
       as_tibble() |>
       plot_ly() |>
-      add_lines(x = ~ gen, y = y_var, line = list(color = "#107361"), name = "Hill 1") |>
-      add_lines(x = ~ gen, y = y_var_2, line = list(color = "black"), name = "Hill 2") |>
-      add_lines(x = ~ gen, y = y_var_3, line = list(color = "yellow"), name = "Hill 3") |>
+      add_lines(x = ~ gen, y = y_var, line = list(color = "#107361"), name = "Hill (q = 1)") |>
+      add_lines(x = ~ gen, y = y_var_2, line = list(color = "black"), name = "Hill (q = 2)") |>
+      add_lines(x = ~ gen, y = y_var_3, line = list(color = "yellow"), name = "Hill (q = 3)") |>
       layout(
         xaxis = list(title = "Time step", rangeslider = list(visible = T), gridcolor = "grey92", zerolinecolor = "grey92"),
-        yaxis = list(title = "Hill number value", gridcolor = "grey92", zerolinecolor = "grey92"),
+        yaxis = list(title = "Hill number", gridcolor = "grey92", zerolinecolor = "grey92"),
         plot_bgcolor='white'
       )
     
@@ -128,11 +145,11 @@ plotly_ts <- function(dat, yvar) {
     y_var <- as.formula(paste0("~", yvar))
     
     if (stringr::str_detect(yvar, "1")) {
-      y_name <- "Hill 1"
+      y_name <- "Hill (q = 1)"
     } else if (stringr::str_detect(yvar, "2")) {
-      y_name <- "Hill 2"
+      y_name <- "Hill (q = 2)"
     } else if (stringr::str_detect(yvar, "3")) {
-      y_name <- "Hill 3"
+      y_name <- "Hill (q = 3)"
     }
     
     pt <- dat |>

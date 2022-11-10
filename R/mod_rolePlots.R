@@ -90,7 +90,7 @@ mod_rolePlots_server <- function(id,
                                 traits = rawTraits,
                                 hillTrait = hillTrait), 
                     moreArgs = list(hillAbund = list(q = 1:3)))
-        ss[,"gen"] <- round(allSims()$meta@experimentMeta$generations, 1)
+        ss[,"gen"] <- allSims()$meta@experimentMeta$generations
         
         return(ss)
       })
@@ -108,16 +108,6 @@ mod_rolePlots_server <- function(id,
       
       ### Abund rank fig ###
       
-      # y-axis choices 
-      output$abundYvar <- renderUI({
-        radioButtons(
-          ns("abundYvar"),
-          label = "",
-          choiceNames = c("Hill 1", "Hill 2", "Hill 3", "All Hill #s"),
-          choiceValues = c("hillAbund_1", "hillAbund_2", "hillAbund_3", "all_hill"),
-          inline = TRUE
-        )
-      })
         
         fig_abundRank <-  reactive({
           
@@ -134,9 +124,20 @@ mod_rolePlots_server <- function(id,
         })
         
         ### Abund time fig ###
+        # y-axis choices 
+        output$abundYvar <- renderUI({
+          radioButtons(
+            ns("abundYvar"),
+            label = "",
+            choiceNames = c("All Hill Numbers", "Hill (q = 1)", "Hill (q = 2)", "Hill (q = 3)"),
+            choiceValues = c("all_hill", "hillAbund_1", "hillAbund_2", "hillAbund_3"),
+            selected = "all_hill",
+            inline = TRUE
+          )
+        })
         
         fig_abundTime <-  reactive({
-          
+          req(input$abundYvar)
           plotly_ts(dat = sumstats(), yvar = input$abundYvar)
     
         }) 
