@@ -22,13 +22,13 @@ mod_rolePlots_ui <- function(id,
       type = "tabs",
       tabPanel("Abundances", 
                fluidRow(
-                 column(width = 5, 
+                 column(width = 10, 
                         plotlyOutput(ns("abundRank"))
-                        ),
-               column(width = 5, 
-                      plotlyOutput(ns("abundTime")),
-                      uiOutput(ns("abundYvar"), class = "rightAlign")
-                      )
+                         )
+               # column(width = 5, 
+               #        plotlyOutput(ns("abundTime")),
+               #        uiOutput(ns("abundYvar"), class = "rightAlign")
+               #        )
                )
                ),
       
@@ -113,7 +113,7 @@ mod_rolePlots_server <- function(id,
           
           abund_rank <- raw()$abund
           
-          p <- gg_scatter(dat = abund_rank, yvar = "abund", is_abund = TRUE)
+          p <- gg_scatter(dat = abund_rank, dat_2 = sumstats(), yvar = "abund", is_abund = TRUE)
             
           return(p)
           
@@ -129,7 +129,7 @@ mod_rolePlots_server <- function(id,
           radioButtons(
             ns("abundYvar"),
             label = "",
-            choiceNames = c("All Hill Numbers", "Hill (q = 1)", "Hill (q = 2)", "Hill (q = 3)"),
+            choiceNames = c("All Hill Numbers", "q = 1", "q = 2", "q = 3"),
             choiceValues = c("all_hill", "hillAbund_1", "hillAbund_2", "hillAbund_3"),
             selected = "all_hill",
             inline = TRUE
