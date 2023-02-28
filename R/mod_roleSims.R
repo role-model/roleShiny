@@ -33,7 +33,7 @@ mod_roleSims_server <- function(id, sims_out, is_neutral = TRUE){
     ns <- session$ns
     
     s <- reactive({
-      shinybusy::show_modal_spinner()
+      shinybusy::show_modal_spinner(text = "May take a while for larger models")
       if(is_neutral) {
         
         params <- untbParams(
@@ -47,26 +47,6 @@ mod_roleSims_server <- function(id, sims_out, is_neutral = TRUE){
           niterTimestep = 10
         )
         
-        
-        
-        # params <- roleParams(
-        #   individuals_local = input$j,
-        #   individuals_meta = input$jm,
-        #   species_meta = input$sm,
-        #   speciation_local = input$nu,
-        #   speciation_meta = 1,
-        #   extinction_meta = 0.8,
-        #   trait_sigma = 1,
-        #   env_sigma = 1,
-        #   comp_sigma = 1,
-        #   dispersal_prob = input$m,
-        #   mutation_rate = 0.01,
-        #   equilib_escape = 1,
-        #   num_basepairs = 250,
-        #   init_type = 'oceanic_island',
-        #   niter = input$iter
-        # )
-        # 
     
         exp <- roleModel(params)
         
