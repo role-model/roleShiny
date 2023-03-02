@@ -14,10 +14,6 @@ mod_roleControls_ui <- function(id){
   ns <- NS(id)
   tagList(
     div(
-      br(),
-      br(),
-      br(),
-      br(),
       h2("Run the simulation"),
       actionButton(ns("playBtn"), icon("play"), class = "btn-primary btn-lg"),
       # actionButton(ns("pauseBtn"), icon("pause")),

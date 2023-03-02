@@ -6,10 +6,10 @@
 #'
 #' @noRd 
 #'
-#' @import shiny plotly roleR ggplot2 highcharter
+#' @import shiny plotly roleR ggplot2 highcharter magrittr
 #' @importFrom dplyr left_join
 #' 
-
+library(magrittr)
 
 mod_rolePlots_ui <- function(id,
                              has_traits = FALSE,
@@ -17,16 +17,18 @@ mod_rolePlots_ui <- function(id,
                              ){
   ns <- NS(id)
   tagList(
+    tags$head(tags$style(".rightAlign{float:right;}")),
     tabsetPanel(
       type = "tabs",
       tabPanel("Abundances", 
                fluidRow(
-                 column(width = 5, 
+                 column(width = 10, 
                         plotlyOutput(ns("abundRank"))
-                        ),
-               column(width = 5, 
-                      plotlyOutput(ns("abundTime"))
-                      )
+                         )
+               # column(width = 5, 
+               #        plotlyOutput(ns("abundTime")),
+               #        uiOutput(ns("abundYvar"), class = "rightAlign")
+               #        )
                )
                ),
       
@@ -88,7 +90,7 @@ mod_rolePlots_server <- function(id,
                                 traits = rawTraits,
                                 hillTrait = hillTrait), 
                     moreArgs = list(hillAbund = list(q = 1:3)))
-        ss[,"gen"] <- round(allSims()$meta@experimentMeta$generations, 1)
+        ss[,"gen"] <- allSims()$meta@experimentMeta$generations
         
         return(ss)
       })
@@ -105,13 +107,13 @@ mod_rolePlots_server <- function(id,
       })  
       
       ### Abund rank fig ###
-        
+      
         
         fig_abundRank <-  reactive({
           
           abund_rank <- raw()$abund
           
-          p <- gg_scatter(dat = abund_rank, yvar = "abund", is_abund = TRUE)
+          p <- gg_scatter(dat = abund_rank, dat_2 = sumstats(), yvar = "abund", is_abund = TRUE)
             
           return(p)
           
@@ -122,10 +124,21 @@ mod_rolePlots_server <- function(id,
         })
         
         ### Abund time fig ###
+        # y-axis choices 
+        output$abundYvar <- renderUI({
+          radioButtons(
+            ns("abundYvar"),
+            label = "",
+            choiceNames = c("All Hill Numbers", "q = 1", "q = 2", "q = 3"),
+            choiceValues = c("all_hill", "hillAbund_1", "hillAbund_2", "hillAbund_3"),
+            selected = "all_hill",
+            inline = TRUE
+          )
+        })
         
         fig_abundTime <-  reactive({
-          
-          plotly_ts(dat = sumstats(), yvar = "hillAbund_1")
+          req(input$abundYvar)
+          plotly_ts(dat = sumstats(), yvar = input$abundYvar)
     
         }) 
         

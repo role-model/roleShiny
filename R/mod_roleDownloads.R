@@ -11,17 +11,18 @@
 #' @importFrom uuid UUIDgenerate
 #' @importFrom zip zip
 #' @importFrom readr read_csv write_csv
+#' @importFrom shinybusy show_modal_spinner remove_modal_spinner
 #'
 
 
 report_path <- tempfile(fileext = ".Rmd")
-file.copy(here::here("inst/templates/report.Rmd"),
+file.copy(here::here("inst", "templates", "report.Rmd"),
           report_path,
           overwrite = TRUE)
 
 render_report <- function(input, output, params) {
   rmarkdown::render(
-    here::here("inst/templates/report.Rmd"),
+    here::here("inst", "templates", "report.Rmd"),
     output_file = output,
     params = params,
     envir = new.env(parent = globalenv())
@@ -110,18 +111,27 @@ mod_roleDownloads_server <- function(id, allSims) {
       #### NEED TO USE uuid PACKAGE TO APPLY A UNIQUE NAME TO THE DOWNLOAD
       output$downSim <- downloadHandler(
         filename = function() {
-          paste("sim-", file_suffix(), ".rds", sep = "")
+          paste("sim-", file_suffix(), "-", sim_id, ".rds", sep = "")
         },
         content = function(file) {
-          saveRDS(allSims(), file)
+          
+          saveRDS(as, file)
         }
       )
+      
+      observeEvent(input$downSim, {
+          showModal(modalDialog(
+            title = "This might take a minute",
+            easyClose = TRUE,
+            footer = NULL
+          ))
+      })
       
       
       output$downCSVs <- downloadHandler(
         filename = function() {
           
-          paste("spreadsheets_", sim_id(), ".zip", sep = "")
+          paste("spreadsheets-", sim_id(), ".zip", sep = "")
         },
         content = function(file) {
           # create tempdir to write files temporarily
@@ -196,7 +206,7 @@ mod_roleDownloads_server <- function(id, allSims) {
       
       output$downPlots <- downloadHandler(
         filename = function() {
-          paste("plots-", Sys.Date(), ".csv", sep = "")
+          paste("plots-", sim_id(), ".csv", sep = "")
         },
         content = function(file) {
           write.csv(mtcars, file)
