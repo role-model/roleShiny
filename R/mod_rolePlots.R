@@ -83,21 +83,18 @@ mod_rolePlots_server <- function(id,
       
       sumstats <- reactive({
 
-        ss <- getSumStats(allSims()$mod, 
+        ss <- getSumStats(allSims(), 
                     funs = list(abund = rawAbundance, 
                                 hillAbund = hillAbund, 
                                 rich = richness,
                                 traits = rawTraits,
                                 hillTrait = hillTrait), 
                     moreArgs = list(hillAbund = list(q = 1:3)))
-        ss[,"gen"] <- allSims()$meta@experimentMeta$generations
+        ss[,"gen"] <- allSims()@info$generations
         
         return(ss)
       })
       
-      meta <- reactive({
-        slot(allSims()$meta, "experimentMeta")
-      })
       
       raw <- reactive({
         abund <- tidy_raw_rank(sumstats(), "abund")

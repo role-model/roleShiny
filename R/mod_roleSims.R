@@ -34,6 +34,7 @@ mod_roleSims_server <- function(id, sims_out, is_neutral = TRUE){
     
     s <- reactive({
       shinybusy::show_modal_spinner(text = "May take a while for larger models")
+      
       if(is_neutral) {
         
         params <- untbParams(
@@ -47,15 +48,9 @@ mod_roleSims_server <- function(id, sims_out, is_neutral = TRUE){
           niterTimestep = 10
         )
         
-    
         exp <- roleModel(params)
         
-        # temporary fix to add metadata
-        exp_2 <- as(exp, "roleExperiment")
-        
-        m <- iterModel(exp)
-        
-        final <- list(mod = m, meta = exp_2)
+        m <- runRole(exp)
         
         
       } else if(is_neutral == FALSE) {
@@ -77,19 +72,13 @@ mod_roleSims_server <- function(id, sims_out, is_neutral = TRUE){
           niter = input$iter
         )
         
-        
         exp <- roleModel(params)
         
-        # temporary fix to add metadata
-        exp_2 <- as(exp, "roleExperiment")
-        
-        m <- iterModel(exp)
-        
-        final <- list(mod = m, meta = exp_2)
+        m <- runRole(exp)
       }
       
       shinybusy::remove_modal_spinner()
-      return(final)
+      return(m)
       
       }) %>%
       bindEvent(input$playBtn)
