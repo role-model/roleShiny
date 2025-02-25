@@ -1,0 +1,71 @@
+# R/graphs.R
+library(shiny)
+
+# Graph UI Module
+mod_graphs_ui <- function(id) {
+  ns <- NS(id)
+  tagList(
+    plotOutput(ns("plot1")),
+    plotOutput(ns("plot2")),
+    plotOutput(ns("plot3")),
+    plotOutput(ns("plot4")),
+    plotOutput(ns("plot5"))
+  )
+}
+
+# Graph Server Module
+mod_graphs_server <- function(id, slider_values, run_clicked) {
+  moduleServer(id, function(input, output, session) {
+    
+    # Create a reactive object to track whether the button was clicked
+    graphs_ready <- reactiveVal(FALSE)
+    
+    observeEvent(run_clicked(), {
+      # Mark the graphs as ready after the "Run" button is clicked
+      graphs_ready(TRUE)
+    })
+    
+    # Render the plots only if the button has been clicked
+    observe({
+      req(graphs_ready())  # Ensure that the "Run" button has been clicked
+      
+      sliders <- slider_values()  # Access the slider values
+      time_points <- c(0, 25, 50, 75, 100)  # Time points for the X-axis
+      
+      # Render Plot 1
+      output$plot1 <- renderPlot({
+        y <- rep(sliders$slider1, length(time_points))
+        plot(time_points, y, type = "l", main = "Plot 1: Horizontal Line", xlab = "Time", ylab = "Value", col = "blue", ylim = c(0, 100), xaxt = "n")
+        axis(1, at = time_points)
+      })
+      
+      # Render Plot 2
+      output$plot2 <- renderPlot({
+        y <- rep(sliders$slider2, length(time_points))
+        plot(time_points, y, type = "l", main = "Plot 2: Horizontal Line", xlab = "Time", ylab = "Value", col = "red", ylim = c(0, 100), xaxt = "n")
+        axis(1, at = time_points)
+      })
+      
+      # Render Plot 3
+      output$plot3 <- renderPlot({
+        y <- rep(sliders$slider3, length(time_points))
+        plot(time_points, y, type = "l", main = "Plot 3: Horizontal Line", xlab = "Time", ylab = "Value", col = "green", ylim = c(0, 100), xaxt = "n")
+        axis(1, at = time_points)
+      })
+      
+      # Render Plot 4
+      output$plot4 <- renderPlot({
+        y <- rep(sliders$slider4, length(time_points))
+        plot(time_points, y, type = "l", main = "Plot 4: Horizontal Line", xlab = "Time", ylab = "Value", col = "purple", ylim = c(0, 100), xaxt = "n")
+        axis(1, at = time_points)
+      })
+      
+      # Render Plot 5
+      output$plot5 <- renderPlot({
+        y <- rep(sliders$slider5, length(time_points))
+        plot(time_points, y, type = "l", main = "Plot 5: Horizontal Line", xlab = "Time", ylab = "Value", col = "orange", ylim = c(0, 100), xaxt = "n")
+        axis(1, at = time_points)
+      })
+    })
+  })
+}

@@ -1,0 +1,59 @@
+# Load Shiny
+library(shiny)
+
+# Source Sidebar and Graph Modules
+source("R/sidebar.R")
+source("R/graphs.R")
+
+# Define UI
+ui <- fluidPage(
+  titlePanel("ROLE Shiny"),
+  sidebarLayout(
+    sidebarPanel(
+      mod_sidebar_ui("sidebar1")  # Call Sidebar Module
+    ),
+    mainPanel(
+      textOutput("message"),
+      textOutput("selection"),
+      mod_graphs_ui("graphs1")  # Call Graph Module
+    )
+  )
+)
+
+# Define Server
+server <- function(input, output, session) {
+  
+  # Call Sidebar Server
+  sidebar_data <- mod_sidebar_server("sidebar1")
+  
+  # Reactive values for sliders
+  slider_values <- reactive({
+    list(
+      slider1 = input$slider1,
+      slider2 = input$slider2,
+      slider3 = input$slider3,
+      slider4 = input$slider4,
+      slider5 = input$slider5
+    )
+  })
+  
+  # Reactive value for the "Run" button click
+  run_clicked <- reactiveVal(FALSE)
+  
+  # Handle Button Click
+  observeEvent(input$runbtn, {
+    run_clicked(TRUE)  # Set to TRUE when the button is clicked
+    output$message <- renderText("Graphs have been generated!")
+  })
+  
+  # Display Selection
+  output$selection <- renderText({
+    paste("You selected:", sidebar_data$dropdown())
+  })
+  
+  # Call Graphs Module
+  mod_graphs_server("graphs1", slider_values, run_clicked)
+}
+
+# Run the App
+shinyApp(ui = ui, server = server)

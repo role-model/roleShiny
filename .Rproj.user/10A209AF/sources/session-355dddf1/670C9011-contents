@@ -1,0 +1,32 @@
+# R/sidebar.R
+library(shiny)
+
+# Sidebar UI Module
+mod_sidebar_ui <- function(id) {
+  ns <- NS(id)
+  tagList(
+    imageOutput(ns("logo")),
+    sliderInput(ns("slider1"), "Param1", min = 0, max = 100, value = 50),
+    sliderInput(ns("slider2"), "Param2", min = 0, max = 100, value = 50),
+    sliderInput(ns("slider3"), "Param3", min = 0, max = 100, value = 50),
+    sliderInput(ns("slider4"), "Param4", min = 0, max = 100, value = 50),
+    sliderInput(ns("slider5"), "Param5", min = 0, max = 100, value = 50),
+    actionButton(ns("runbtn"), "Run")
+  )
+}
+
+# Sidebar Server Module
+mod_sidebar_server <- function(id) {
+  moduleServer(id, function(input, output, session) {
+    output$logo <- renderImage( 
+      { 
+        list(src = "imgs/ROLE-logo.png", height = "65%") 
+      }, 
+      deleteFile = FALSE 
+    )
+    list(
+      dropdown = reactive(input$dropdown),
+      clicked = reactive(input$clickMe)
+    )
+  })
+}
