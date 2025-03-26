@@ -184,7 +184,7 @@ mod_rolePlots_server <- function(id,
       # }
       
     }) %>% 
-      bindEvent(input$playBtn)
+      bindEvent(input$runBtn)
   }
   
   

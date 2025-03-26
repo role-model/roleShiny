@@ -31,8 +31,7 @@ mod_roleSims_ui <- function(id){
 mod_roleSims_server <- function(id, sims_out, is_neutral = TRUE){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
-    print("not reactive testing")
-
+    
     
     s <- reactive({
       shinybusy::show_modal_spinner(text = "May take a while for larger models")
@@ -80,27 +79,11 @@ mod_roleSims_server <- function(id, sims_out, is_neutral = TRUE){
         m <- roleR::runRole(exp)
       }
       # shinybusy::remove_modal_spinner()
-      print(params)
-      print(exp)
-      print(typeof(m))
-      print("outside all testing")
       return(m)
       
     }) %>%
-      bindEvent(input$playBtn)
-
-    # observeEvent(input$playBtn, {
-    #   print(m)
-    # })
-    
-    
-    # observe({
-    #   s()
-    #   saveRDS(s(), file = sims_out)
-    # }) %>% 
-    #   bindEvent(input$playBtn)
-    
-    
+      # bindEvent(input$playBtn)
+      bindEvent(input$runBtn)
     
   })
 }
