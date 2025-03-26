@@ -31,13 +31,15 @@ mod_roleSims_ui <- function(id){
 mod_roleSims_server <- function(id, sims_out, is_neutral = TRUE){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
+    print("not reactive testing")
+
     
     s <- reactive({
       shinybusy::show_modal_spinner(text = "May take a while for larger models")
       
       if(is_neutral) {
-        
-        params <- untbParams(
+        print("testing")
+        params <- roleR::untbParams(
           individuals_local = input$j,
           individuals_meta = input$jm,
           species_meta = input$sm,
@@ -48,13 +50,14 @@ mod_roleSims_server <- function(id, sims_out, is_neutral = TRUE){
           niterTimestep = 10
         )
         
-        exp <- roleModel(params)
+        exp <- roleR::roleModel(params)
         
-        m <- runRole(exp)
+        m <- roleR::runRole(exp)
         
         
       } else if(is_neutral == FALSE) {
-        params <- roleParams(
+        print("not neutral testing")
+        params <- roleR::roleParams(
           individuals_local = input$j,
           individuals_meta = input$jm,
           species_meta = input$sm,
@@ -72,16 +75,23 @@ mod_roleSims_server <- function(id, sims_out, is_neutral = TRUE){
           niter = input$iter
         )
         
-        exp <- roleModel(params)
+        exp <- roleR::roleModel(params)
         
-        m <- runRole(exp)
+        m <- roleR::runRole(exp)
       }
-      
-      shinybusy::remove_modal_spinner()
+      # shinybusy::remove_modal_spinner()
+      print(params)
+      print(exp)
+      print(typeof(m))
+      print("outside all testing")
       return(m)
       
     }) %>%
       bindEvent(input$playBtn)
+
+    # observeEvent(input$playBtn, {
+    #   print(m)
+    # })
     
     
     # observe({

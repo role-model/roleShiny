@@ -25,7 +25,7 @@ mod_roleNeutral_ui <- function(id) {
              
              mainPanel(h2("Plots"),
                        
-                       #mod_rolePlots_ui(ns(id)),
+                       mod_rolePlots_ui(ns(id)),
                        
                        width = 9)
            ))
@@ -47,8 +47,8 @@ mod_roleNeutral_server <- function(id) {
     allSims <- mod_roleSims_server(id, sims_out = sims_out_neutral, is_neutral = TRUE)
     
     # roleReadSims, little confused on what this does
-    # allSims <-
-    #   mod_roleReadSims_server(id, sims_out = sims_out_neutral)
+    #allSims <-
+    #  mod_roleReadSims_server(id, sims_out = sims_out_neutral)
     
     # roleParams
     mod_roleParamsNeutral_server(id)
@@ -60,7 +60,7 @@ mod_roleNeutral_server <- function(id) {
     #mod_rolePlotSelects_server(id)
     
     # rolePlots: handles displaying the actual plots
-    #mod_rolePlots_server(id, allSims = allSims, sims_out = sims_out_neutral)
+    mod_rolePlots_server(id, allSims = allSims, sims_out = sims_out_neutral)
     
   })
 }

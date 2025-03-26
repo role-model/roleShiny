@@ -10,6 +10,7 @@
 #' @importFrom dplyr left_join
 #' 
 library(magrittr)
+library(plotly)
 
 mod_rolePlots_ui <- function(id,
                              has_traits = FALSE,
@@ -83,12 +84,12 @@ mod_rolePlots_server <- function(id,
       
       sumstats <- reactive({
         
-        ss <- getSumStats(allSims(), 
-                          funs = list(abund = rawAbundance, 
-                                      hillAbund = hillAbund, 
-                                      rich = richness,
-                                      traits = rawTraits,
-                                      hillTrait = hillTrait), 
+        ss <- roleR::getSumStats(allSims(), 
+                          funs = list(abund = roleR::rawAbundance, 
+                                      hillAbund = roleR::hillAbund, 
+                                      rich = roleR::richness,
+                                      traits = roleR::rawTraits,
+                                      hillTrait = roleR::hillTrait), 
                           moreArgs = list(hillAbund = list(q = 1:3)))
         ss[,"gen"] <- allSims()@info$generations
         
@@ -170,17 +171,17 @@ mod_rolePlots_server <- function(id,
         fig_traitTime()
       })
       
-      if (has_phylo) {
-        fig_phylo <- reactive({
-          
-          plotly_phylo()
-          
-        })
-        
-        output$phylo <- renderPlotly({
-          fig_phylo()
-        })
-      }
+      # if (has_phylo) {
+      #   fig_phylo <- reactive({
+      #     
+      #     plotly_phylo()
+      #     
+      #   })
+      #   
+      #   output$phylo <- renderPlotly({
+      #     fig_phylo()
+      #   })
+      # }
       
     }) %>% 
       bindEvent(input$playBtn)

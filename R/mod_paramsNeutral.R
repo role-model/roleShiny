@@ -134,86 +134,84 @@ mod_roleParamsNeutral_ui <- function(id, button) {
       value = value_sm
     ),
     
-    div(
-      roleParam(
-        id,
-        name = "j",
-        label = "J",
-        min = 0,
-        max = max_j,
-        value = value_j,
-        tip = "Number of individuals in the local community"
-      ),
-      
-      roleParamText(
-        id,
-        name = "j_t",
-        label = NULL,
-        min = 0,
-        max = max_j,
-        value = value_j
-      ),
-      
-      roleParam(
-        id,
-        name = "nu",
-        label = "&#957;",
-        min = 0,
-        max = max_nu,
-        value = value_nu,
-        tip = "The probability of local speciation",
-        isGreek = TRUE
-      ),
-      
-      roleParamText(
-        id,
-        name = "nu_t",
-        label = NULL,
-        min = 0,
-        max = max_nu,
-        value = value_nu
-      ),
-      
-      roleParam(
-        id,
-        name = "m",
-        label = "m",
-        min = 0,
-        max = max_m,
-        value = value_m,
-        tip = "The local dispersal probability"
-      ),
-      
-      roleParamText(
-        id,
-        name = "m_t",
-        label = NULL,
-        min = 0,
-        max = max_m,
-        value = value_m
-      ),
-      
-      #### simulation length parameters ####
-      roleParam(
-        id,
-        name = "iter",
-        label = "n<sub>iter</sub>",
-        min = 1,
-        max = max_iter,
-        value = value_iter,
-        tip = "The number of iterations to run"
-      ),
-      
-      roleParamText(
-        id,
-        name = "iter_t",
-        label = NULL,
-        min = 1,
-        max = max_iter,
-        value = value_iter
-      )
-      
+    roleParam(
+      id,
+      name = "j",
+      label = "J",
+      min = 0,
+      max = max_j,
+      value = value_j,
+      tip = "Number of individuals in the local community"
+    ),
+    
+    roleParamText(
+      id,
+      name = "j_t",
+      label = NULL,
+      min = 0,
+      max = max_j,
+      value = value_j
+    ),
+    
+    roleParam(
+      id,
+      name = "nu",
+      label = "&#957;",
+      min = 0,
+      max = max_nu,
+      value = value_nu,
+      tip = "The probability of local speciation",
+      isGreek = TRUE
+    ),
+    
+    roleParamText(
+      id,
+      name = "nu_t",
+      label = NULL,
+      min = 0,
+      max = max_nu,
+      value = value_nu
+    ),
+    
+    roleParam(
+      id,
+      name = "m",
+      label = "m",
+      min = 0,
+      max = max_m,
+      value = value_m,
+      tip = "The local dispersal probability"
+    ),
+    
+    roleParamText(
+      id,
+      name = "m_t",
+      label = NULL,
+      min = 0,
+      max = max_m,
+      value = value_m
+    ),
+    
+    #### simulation length parameters ####
+    roleParam(
+      id,
+      name = "iter",
+      label = "n<sub>iter</sub>",
+      min = 10,
+      max = max_iter,
+      value = value_iter,
+      tip = "The number of iterations to run"
+    ),
+    
+    roleParamText(
+      id,
+      name = "iter_t",
+      label = NULL,
+      min = 10,
+      max = max_iter,
+      value = value_iter
     )
+      
   )
 }
 

@@ -33,6 +33,10 @@ mod_roleControls_ui <- function(id){
 mod_roleControls_server <- function(id){
   moduleServer( id, function(input, output, session){
     
+    # observeEvent(input$playBtn, {
+    #   print(allSims)
+    # })
+    # 
     #observeEvent(input$playBtn, {
     # allSims <- reactiveFileReader(10, session,
     #                        filePath = "~/Desktop/test_data.csv",
