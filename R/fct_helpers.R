@@ -9,6 +9,7 @@
 
 library(dplyr)
 library(ggtree)
+library(plotly)
 
 # function to get the date and time in a reasonable format to append to the end of files for a unique filename
 file_suffix <- function() {
@@ -79,57 +80,101 @@ tidy_raw_rank <- function(ss, raw_string) {
 
 # plotting functions to make plotting easier
 ## scatterplot
+library(plotly)
+
+# Updated gg_scatter function to incorporate animated plots with plotly
 gg_scatter <- function(dat, dat_2, yvar, is_abund = TRUE) {
-  
-  # select fewer generations to make plotting easier
-  if (length(unique(dat$gen)) > 150) {
-    g <- unique(dat$gen)  
-    g_first <- g[1] # keep the first generation
-    g_last <- g[length(g)] # keep the last generation
-    g_rest <- g[-1] # sample from all except the first generation
-    s_g <- sample(g_rest, 100, replace = FALSE) # sample from the generations
-    s_g <- c(g_first, s_g, g_last)
-    
-    dat <- dat[dat$gen %in% s_g,] # filter for the sampled generations
-    
+  if (is.null(dat_2)) {
+    stop("dat_2 (output from getSumStats) is required for animation.")
   }
   
-  
+  n_frames <- min(length(dat_2[[if (is_abund) "abund" else yvar]]))
   
   if (is_abund) {
-    y_lims <- c(min(dat$abund), max(dat$abund))
-    y_lab <- "Abundance"
+    # --- Rank-abundance data prep ---
+    formatted <- lapply(seq_len(n_frames), function(i) {
+      a <- dat_2$abund[[i]]
+      a <- sort(a[a > 0], decreasing = TRUE)
+      data.frame(tt = i, r = seq_along(a), a = a)
+    })
+    dat_formatted <- do.call(rbind, formatted)
+    
+    # --- Time series data prep (hillAbund_1) ---
+    frames <- lapply(seq_len(n_frames), function(i) {
+      data.frame(tt = i,
+                 x = seq_len(i),
+                 y = dat_2$rich[1:i],
+                 frame_id = i)
+    })
+    time_data <- do.call(rbind, frames)
+    
+    p_main <- plot_ly(dat_formatted, x = ~r, y = ~a, frame = ~tt,
+                      type = 'scatter', mode = 'markers',
+                      marker = list(color = '#107361'),
+                      showlegend = FALSE) %>%
+      layout(
+        xaxis = list(title = "", showticklabels = TRUE, range = c(0, 20)),
+        yaxis = list(title = "", showticklabels = TRUE, range = c(0, 20))
+      )
+    
+    p_time <- plot_ly(time_data, x = ~x, y = ~y, frame = ~frame_id,
+                      type = 'scatter', mode = 'lines+markers',
+                      line = list(color = 'black'),
+                      marker = list(color = '#107361'),
+                      showlegend = FALSE) %>%
+      layout(
+        xaxis = list(title = "", showticklabels = TRUE, range = c(0, n_frames + 1)),
+        yaxis = list(title = "", showticklabels = TRUE, range = c(0, max(time_data$y) * 1.1))
+      )
   } else {
-    y_lims <- c(min(dat$traits), max(dat$traits))
-    y_lab = "Trait"
+    # --- Rank-trait data prep ---
+    formatted <- lapply(seq_len(n_frames), function(i) {
+      vals <- dat_2[[yvar]][[i]]
+      vals <- sort(vals, decreasing = TRUE)
+      data.frame(tt = i, r = seq_along(vals), t = vals)
+    })
+    dat_formatted <- do.call(rbind, formatted)
+    
+    # --- Time series data prep (hillTrait_1) ---
+    frames <- lapply(seq_len(n_frames), function(i) {
+      data.frame(tt = i,
+                 x = seq_len(i),
+                 y = dat_2$hillTrait_1[1:i],
+                 frame_id = i)
+    })
+    time_data <- do.call(rbind, frames)
+    
+    p_main <- plot_ly(dat_formatted, x = ~r, y = ~t, frame = ~tt,
+                      type = 'scatter', mode = 'markers',
+                      marker = list(color = '#107361'),
+                      showlegend = FALSE) %>%
+      layout(
+        xaxis = list(title = "", showticklabels = TRUE, range = c(0, max(dat_formatted$r) + 1)),
+        yaxis = list(title = "", showticklabels = TRUE, range = c(0, max(dat_formatted$t) * 1.1))
+      )
+    
+    p_time <- plot_ly(time_data, x = ~x, y = ~y, frame = ~frame_id,
+                      type = 'scatter', mode = 'lines+markers',
+                      line = list(color = 'black'),
+                      marker = list(color = '#107361'),
+                      showlegend = FALSE) %>%
+      layout(
+        xaxis = list(title = "", showticklabels = TRUE, range = c(0, n_frames + 1)),
+        yaxis = list(title = "", showticklabels = TRUE, range = c(0, max(time_data$y) * 1.1))
+      )
   }
   
-  p <- ggplot() +
-    geom_line(data = dat, aes_string(x = "rank", y = yvar, group = "gen"), color = "lightgrey", alpha = 0.1) +
-    geom_point(data = dat, aes_string(x = "rank", y = yvar, group = "gen",  frame = "gen"), color = "#107361", alpha = 1.0) +
-    labs(x = "Rank", y = y_lab, color = "Generation") +
-    #ylim(y = y_lims) + 
-    theme_bw()  +
-    theme(legend.key.size = unit(3, "mm"))
-  
-  p_int <- ggplotly(p) 
-  
-  l <- ggplot() +
-    geom_line(data = dat_2, aes_string(x = "gen", y = "hillAbund_1"), color = "black", alpha = 1.0) +
-    geom_point(data = dat_2, aes_string(x = "gen", y = "hillAbund_1", frame = "gen"), color = "#107361", alpha = 1.0) +
-    labs(x = "Generation", y = y_lab) +
-    theme_bw()  +
-    theme(legend.key.size = unit(3, "mm"))
-  
-  l_int <- ggplotly(l)
-  
-  
-  p_fin <- subplot(p_int, l_int) |>
-    animation_slider(currentvalue = list(prefix = "Gen = ", font = list(color = "black")))
+  # Combine plots without titles
+  p_combined <- subplot(p_main, p_time, nrows = 1, shareX = FALSE, titleX = TRUE) %>%
+    animation_slider(currentvalue = list(prefix = "Gen = ", font = list(color = "black"))) %>%
+    animation_opts(frame = 200, redraw = TRUE)
   
   shinybusy::remove_modal_spinner()
-  return(p_fin)
+  return(p_combined)
 }
+
+
+
 
 ## timeseries
 gg_ts <- function(dat, yvar) {
