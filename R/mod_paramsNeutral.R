@@ -8,6 +8,7 @@
 #'
 #' @import shiny
 #' @importFrom shinyBS bsTooltip bsButton
+library(dplyr)
 
 roleParamRow <- function(id, name, label = "", min = 0, max = 100000, value = 100, tip = "", isGreek = FALSE) {
   ns <- NS(id)
@@ -41,16 +42,16 @@ roleParamDrop <- function(id, name, label = NULL, selected = "oceanic_island", t
   ))
 }
 
-# Parameter defaults
-max_jm <- 10000; value_jm <- 1000
-max_j <- 1000; value_j <- 100
-max_sm <- 1000; value_sm <- 100
-max_nu <- 0.5;  value_nu <- 0.01
-max_m <- 1.0;  value_m <- 0.2
-max_iter <- 10000; value_iter <- 1000
-
 mod_roleParamsNeutral_ui <- function(id, button) {
   ns <- NS(id)
+  
+  # Parameter defaults
+  max_jm <- 10000; value_jm <- 1000
+  max_j <- 1000; value_j <- 100
+  max_sm <- 1000; value_sm <- 100
+  max_nu <- 0.5;  value_nu <- 0.01
+  max_m <- 1.0;  value_m <- 0.2
+  max_iter <- 10000; value_iter <- 1000
   
   tagList(
     h2("Parameters", style = "margin-top: 0; margin-bottom: 15px;"),
@@ -61,7 +62,8 @@ mod_roleParamsNeutral_ui <- function(id, button) {
     roleParamRow(id, "j", "J",     0, max_j, value_j, "Number of individuals in the local community"),
     roleParamRow(id, "nu", "&#957;",   0, max_nu, value_nu, "The probability of local speciation", isGreek = TRUE),
     roleParamRow(id, "m", "m",     0, max_m, value_m, "The local dispersal probability"),
-    roleParamRow(id, "iter", "n<sub>iter</sub>", 1, max_iter, value_iter, "The number of iterations to run")
+    roleParamRow(id, "iter", "n<sub>iter</sub>", 1, max_iter, value_iter, "The number of iterations to run"),
+    downloadButton(ns("downloadBtn"), "Export Parameters", class = "navbar-btn")
   )
 }
 
@@ -90,5 +92,18 @@ mod_roleParamsNeutral_server <- function(id) {
     
     observe(updateNumericInput(session, "iter_t", value = input$iter)) %>% bindEvent(input$iter)
     observe(updateSliderInput(session, "iter", value = input$iter_t)) %>% bindEvent(input$iter_t)
+    
+    ### Download Button and Handler ###
+    output$downloadBtn <- downloadHandler(
+      filename = "roleNeutral.csv",
+      content = function(file) {
+        param <- c("jm", "sm", "j", "nu", "m", "iter", "type")
+        value <- c(input$jm, input$sm, input$j, input$nu, input$m, input$iter, input$type)
+        export <- data.frame(param, value)
+        # Write the dataset to the `file` that will be downloaded
+        write.csv(export, file, row.names = FALSE, quote = FALSE)
+        # Add in time_data and dat_formatted to a export in a zipped folder
+      }
+    )
   })
 }

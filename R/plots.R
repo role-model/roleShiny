@@ -25,23 +25,23 @@ mod_rolePlots_ui <- function(id,
                fluidRow(
                  column(width = 10, 
                         plotlyOutput(ns("abundRank"))
-                 )
-                 # column(width = 5, 
-                 #        plotlyOutput(ns("abundTime")),
-                 #        uiOutput(ns("abundYvar"), class = "rightAlign")
-                 #        )
+                 ),
+                 # column(width = 5,
+                 #       plotlyOutput(ns("abundTime")),
+                 #      uiOutput(ns("abundYvar"), class = "rightAlign")
+                 #     )
                )
       ),
       
       if (has_traits) {
         tabPanel("Traits", 
                  fluidRow(
-                   column(width = 5, 
+                   column(width = 10, 
                           plotlyOutput(ns("traitRank"))
                    ),
-                   column(width = 5, 
-                          plotlyOutput(ns("traitTime"))
-                   )
+                   # column(width = 5, 
+                   #        plotlyOutput(ns("traitTime"))
+                   # )
                  )
         )
       }
@@ -60,6 +60,8 @@ mod_rolePlots_ui <- function(id,
   )
 }
 
+library(shinyjs)
+library(roleR)
 #' rolePlots Server Functions
 #'
 #' @noRd 
@@ -77,22 +79,20 @@ mod_rolePlots_server <- function(id,
     ns <- session$ns
     # nest these if() statements in an if() statement that checks if allSims() is of a certain size (or class. Maybe I can make the empty allSims its own class to clear us of having to worry about unusable data sizes)
     
+    options(warn = -1)
     
     observe({
-      
       req(allSims())
       
       sumstats <- reactive({
-        
-        ss <- roleR::getSumStats(allSims(), 
-                          funs = list(abund = roleR::rawAbundance, 
-                                      hillAbund = roleR::hillAbund, 
-                                      rich = roleR::richness,
-                                      traits = roleR::rawTraits,
-                                      hillTrait = roleR::hillTrait), 
+        ss <- getSumStats(allSims(), 
+                          funs = list(abund = rawAbundance, 
+                                      hillAbund = hillAbund, 
+                                      rich = richness,
+                                      traits = rawTraits,
+                                      hillTrait = hillTrait), 
                           moreArgs = list(hillAbund = list(q = 1:3)))
         ss[,"gen"] <- allSims()@info$generations
-        
         return(ss)
       })
       
@@ -121,43 +121,43 @@ mod_rolePlots_server <- function(id,
         fig_abundRank()
       })
       
-      ### Abund time fig ###
-      # y-axis choices 
-      output$abundYvar <- renderUI({
-        radioButtons(
-          ns("abundYvar"),
-          label = "",
-          choiceNames = c("All Hill Numbers", "q = 1", "q = 2", "q = 3"),
-          choiceValues = c("all_hill", "hillAbund_1", "hillAbund_2", "hillAbund_3"),
-          selected = "all_hill",
-          inline = TRUE
-        )
-      })
-      
-      fig_abundTime <-  reactive({
-        req(input$abundYvar)
-        plotly_ts(dat = sumstats(), yvar = input$abundYvar)
-        
-      }) 
-      
-      output$abundTime <- renderPlotly({
-        fig_abundTime()
-      })
-      
-      ### Trait rank fig ###
-      
-      fig_traitRank <- reactive({
-        
-        trait_rank <- raw()$traits
-        
-        p <- gg_scatter(dat = trait_rank, yvar = "traits", is_abund = FALSE)
-        
-        return(p)
-      })
-      
-      output$traitRank <- renderPlotly({
-        fig_traitRank()
-      })
+      # ### Abund time fig ###
+      # # y-axis choices 
+      # output$abundYvar <- renderUI({
+      #   radioButtons(
+      #     ns("abundYvar"),
+      #     label = "",
+      #     choiceNames = c("All Hill Numbers", "q = 1", "q = 2", "q = 3"),
+      #     choiceValues = c("all_hill", "hillAbund_1", "hillAbund_2", "hillAbund_3"),
+      #     selected = "all_hill",
+      #     inline = TRUE
+      #   )
+      # })
+      # 
+      # fig_abundTime <-  reactive({
+      #   req(input$abundYvar)
+      #   plotly_ts(dat = sumstats(), yvar = input$abundYvar)
+      #   
+      # }) 
+      # 
+      # output$abundTime <- renderPlotly({
+      #   fig_abundTime()
+      # })
+      # 
+      # ### Trait rank fig ### what to put for dat_2? and work on/ask about other traits stuff
+      # 
+      # fig_traitRank <- reactive({
+      #   
+      #   trait_rank <- raw()$traits
+      #   
+      #   p <- gg_scatter(dat = trait_rank, dat_2 = sumstats(), yvar = "traits", is_abund = FALSE)
+      #   
+      #   return(p)
+      # })
+      # 
+      # output$traitRank <- renderPlotly({
+      #   fig_traitRank()
+      # })
       
       ### Trait time fig ###
       

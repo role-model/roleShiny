@@ -32,12 +32,10 @@ mod_roleSims_server <- function(id, sims_out, is_neutral = TRUE){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
     
-    
     s <- reactive({
       shinybusy::show_modal_spinner(text = "May take a while for larger models")
       
       if(is_neutral) {
-        print("testing")
         params <- roleR::untbParams(
           individuals_local = input$j,
           individuals_meta = input$jm,
@@ -55,7 +53,6 @@ mod_roleSims_server <- function(id, sims_out, is_neutral = TRUE){
         
         
       } else if(is_neutral == FALSE) {
-        print("not neutral testing")
         params <- roleR::roleParams(
           individuals_local = input$j,
           individuals_meta = input$jm,
